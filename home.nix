@@ -46,6 +46,11 @@
     enable = true;
     userName = "joshmoody24";
     userEmail = "joshmoody24@gmail.com";
+    aliases = {
+      s = "status";
+      amen = "commit --amend --no-edit";
+      flease = "git push --force-with-lease";
+    };
   };
 
   programs.kitty = {
