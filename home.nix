@@ -40,7 +40,10 @@
     rtl-sdr
     owmods-cli
     krita
+    cascadia-code
   ];
+
+  fonts.fontconfig.enable = true;
 
   programs.git = {
     enable = true;
