@@ -1,6 +1,5 @@
 return {
-	"neovim/nvim-lspconfig",
-	event = { "BufReadPre", "BufNewFile" },
+	"neovim/nvim-lspconfig", event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
@@ -75,5 +74,12 @@ return {
 				})
 			end,
 		})
+
+		local lspconfig = require('lspconfig')
+
+		lspconfig.clojure_lsp.setup({
+		  cmd = { "/etc/profiles/per-user/josh/bin/clojure-lsp" },
+		})
+
 	end,
 }

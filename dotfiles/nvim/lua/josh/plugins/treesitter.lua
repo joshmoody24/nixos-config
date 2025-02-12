@@ -33,6 +33,7 @@ return {
         "gitignore",
         "sql",
         "astro",
+	"clojure",
       },
       incremental_selection = {
        enable = true,

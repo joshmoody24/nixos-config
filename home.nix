@@ -41,6 +41,9 @@
     owmods-cli
     krita
     cascadia-code
+    clojure
+    openjdk
+    clojure-lsp
   ];
 
   fonts.fontconfig.enable = true;
