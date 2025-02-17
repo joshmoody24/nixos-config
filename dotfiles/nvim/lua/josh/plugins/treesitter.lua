@@ -34,6 +34,7 @@ return {
         "sql",
         "astro",
 	"clojure",
+	"glsl",
       },
       incremental_selection = {
        enable = true,
