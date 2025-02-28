@@ -1,0 +1,40 @@
+[user]
+	email = joshmoody24@gmail.com
+	name = Josh Moody
+[core]
+	editor = nvim
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[credential]
+	helper = cache
+[alias]
+	amen = commit --amend --no-edit
+	flease = push --force-with-lease
+	s = status
+	ch = checkout
+[push]
+	default = current
+[help]
+	autocorrect = prompt
+[rerere]
+	enabled = true
+	autoUpdate = true
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+[merge]
+	conflictstyle = zdiff3
