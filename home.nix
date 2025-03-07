@@ -44,6 +44,7 @@
     clojure
     openjdk
     clojure-lsp
+    gimp
   ];
 
   fonts.fontconfig.enable = true;
