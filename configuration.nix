@@ -115,6 +115,14 @@
     nodejs
     unzip
     gcc
+    steam-run # useful for running exported godot games
+    python314Full
+  ];
+
+  # Run dynamically linked executables
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Add any missing dynamic libraries here
   ];
 
   # Flakes

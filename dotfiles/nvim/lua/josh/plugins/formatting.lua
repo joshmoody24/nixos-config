@@ -19,6 +19,8 @@ return {
 				liquid = { "prettier" },
 				lua = { "stylua" },
 				python = { "isort", "black" },
+				fennel = { "fnlfmt" },
+
 			},
 			format_on_save = {
 				lsp_fallback = true,

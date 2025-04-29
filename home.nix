@@ -31,9 +31,9 @@
     pciutils # for gnome extension Astra Monitor
     lm_sensors # temperature monitoring
     amdgpu_top
-    godot_4
     llama-cpp
     ollama-rocm
+    godot
     obsidian
     sdrpp
     gqrx
@@ -45,6 +45,22 @@
     openjdk
     clojure-lsp
     gimp
+    aseprite
+    ardour
+
+    # for old windows games
+    lutris
+    wineWowPackages.full
+    winetricks
+    cdrtools
+    gamescope
+
+    prismlauncher
+
+    fennel-ls
+    lua54Packages.fennel
+    lua54Packages.luarocks
+    fnlfmt
   ];
 
   fonts.fontconfig.enable = true;
