@@ -18,6 +18,8 @@
     };
 
     ".config/kitty/current-theme.conf".source = ./dotfiles/kitty/current-theme.conf;
+
+    ".gitconfig".source = ./dotfiles/.gitconfig;
   };
 
   # encode the file content in nix configuration file directly
