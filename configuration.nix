@@ -125,6 +125,19 @@
     # Add any missing dynamic libraries here
   ];
 
+  # Garbage collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
+  # Directory-specific environments
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
