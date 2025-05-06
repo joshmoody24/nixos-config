@@ -63,6 +63,8 @@
     lua54Packages.fennel
     lua54Packages.luarocks
     fnlfmt
+
+    claude-code
   ];
 
   fonts.fontconfig.enable = true;
