@@ -1,5 +1,6 @@
 return {
-	"neovim/nvim-lspconfig", event = { "BufReadPre", "BufNewFile" },
+	"neovim/nvim-lspconfig",
+	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
@@ -60,26 +61,5 @@ return {
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
 			end,
 		})
-
-		local capabilities = cmp_nvim_lsp.default_capabilities()
-
-		-- config for specific language servers
-		mason_lspconfig.setup_handlers({
-			function(server_name)
-				-- if server_name == "tsserver" then
-				-- 	return --  typescript tools handles this, not Mason
-				-- end
-				lspconfig[server_name].setup({
-					capabilities = capabilities,
-				})
-			end,
-		})
-
-		local lspconfig = require('lspconfig')
-
-		lspconfig.clojure_lsp.setup({
-		  cmd = { "/etc/profiles/per-user/josh/bin/clojure-lsp" },
-		})
-
 	end,
 }

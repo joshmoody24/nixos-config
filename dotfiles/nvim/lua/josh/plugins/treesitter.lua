@@ -36,6 +36,8 @@ return {
 	"clojure",
 	"glsl",
 	"fennel",
+	"elixir",
+	"heex",
       },
       incremental_selection = {
        enable = true,
