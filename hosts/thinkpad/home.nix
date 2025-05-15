@@ -5,5 +5,17 @@
 
   home.packages = lib.mkAfter (with pkgs; [
     claude-code
+    slack
+    mongodb-compass
+
+    # bazel builds
+    distrobox
+    awscli2
+    bazelisk
+    docker
   ]);
+
+  home.file = lib.mkAfter {
+    "code/redo.ini".source = ./redo.ini;
+  };
 }

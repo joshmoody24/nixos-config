@@ -38,6 +38,7 @@ return {
 	"fennel",
 	"elixir",
 	"heex",
+	"python",
       },
       incremental_selection = {
        enable = true,
