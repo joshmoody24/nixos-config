@@ -1,5 +1,5 @@
 {
-  description = "A simple NixOS flake";
+  description = "Josh's multi-machine NixOS config";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -14,18 +14,27 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-    # Please replace my-nixos with your hostname
     nixosConfigurations.unit = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        # Import the previous configuration.nix we used,
-        # so the old configuration file still takes effect
-        ./configuration.nix
+        ./hosts/unit/configuration.nix
         home-manager.nixosModules.home-manager
 	{
 	  home-manager.useGlobalPkgs = true;
 	  home-manager.useUserPackages = true;
-	  home-manager.users.josh = import ./home.nix;
+	  home-manager.users.josh = import ./hosts/unit/home.nix;
+	}
+      ];
+    };
+    nixosConfigurations."joshm-thinkpad" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/thinkpad/configuration.nix
+        home-manager.nixosModules.home-manager
+	{
+	  home-manager.useGlobalPkgs = true;
+	  home-manager.useUserPackages = true;
+	  home-manager.users.josh = import ./hosts/thinkpad/home.nix;
 	}
       ];
     };
