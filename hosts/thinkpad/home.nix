@@ -13,9 +13,16 @@
     awscli2
     bazelisk
     docker
+    lsof
   ]);
 
   home.file = lib.mkAfter {
     "code/redo.ini".source = ./redo.ini;
+    ".config/kitty/redo.session".source = ./redo.session;
+    ".bashrc.local".text = ''
+    alias bazel="distrobox enter redo -- bazelisk"
+    '';
   };
+
+  # Startup apps currently handled imperatively
 }

@@ -1,0 +1,14 @@
+# Set the layout for the current tab
+layout tall
+
+new_tab Vim
+cd ~/code/redo
+launch bash -ic "nvim; bash"
+
+new_tab Services
+cd ~/code/redo
+launch bash -ic "bazel run services; bash"
+
+new_tab Terminal
+cd ~/code/redo
+launch bash

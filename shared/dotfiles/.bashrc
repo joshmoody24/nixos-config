@@ -39,3 +39,6 @@ bind '"jk":vi-movement-mode'
 
 # custom colors
 PS1='\[\e[32m\]\u\[\e[32m\] \[\e[34m\]\W\[\e[0m\] \$ '
+
+# allow for extensions at the host level
+[ -f ~/.bashrc.local ] && source ~/.bashrc.local

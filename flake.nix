@@ -35,6 +35,7 @@
 	  home-manager.useGlobalPkgs = true;
 	  home-manager.useUserPackages = true;
 	  home-manager.users.josh = import ./hosts/thinkpad/home.nix;
+          home-manager.backupFileExtension = "backup";
 	}
       ];
     };
