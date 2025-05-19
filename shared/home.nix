@@ -21,6 +21,7 @@
   home.packages = with pkgs; [
     cascadia-code
     gimp
+    gnomeExtensions.clipboard-history
   ];
 
   fonts.fontconfig.enable = true;
