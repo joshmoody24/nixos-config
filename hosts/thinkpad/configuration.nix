@@ -41,8 +41,6 @@
     # Add any missing dynamic libraries here
   ];
 
-  virtualisation.docker.enable = true;
-
   services.envfs.enable = true;
 
   # Those blasted Nvidia drivers:
@@ -89,6 +87,19 @@
   hardware.nvidia.prime = {
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings = {
+      default-ulimits = {
+        nofile = {
+          Hard = 262144;
+          Soft = 262144;
+          Name = "nofile";
+        };
+      };
+    };
   };
 
   system.stateVersion = "24.11"; # Did you read the comment? (TL;DR doesn't need to change after first install)

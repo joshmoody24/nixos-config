@@ -14,6 +14,7 @@
     bazelisk
     docker
     lsof
+    valkey # I don't think this does anything
   ]);
 
   home.file = lib.mkAfter {
