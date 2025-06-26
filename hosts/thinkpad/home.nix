@@ -15,6 +15,8 @@
     docker
     lsof
     valkey # I don't think this does anything
+    yarn
+    ruby
   ]);
 
   home.file = lib.mkAfter {

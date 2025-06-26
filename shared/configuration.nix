@@ -50,7 +50,6 @@
     gnome-tour
     gedit
     xterm
-    epiphany
     simple-scan
   ]);
 
