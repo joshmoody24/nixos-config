@@ -92,6 +92,7 @@
   virtualisation.docker = {
     enable = true;
     daemon.settings = {
+      "selinux-enabled" = false;
       default-ulimits = {
         nofile = {
           Hard = 262144;
@@ -101,6 +102,8 @@
       };
     };
   };
+
+  security.lsm = lib.mkForce [ ];
 
   system.stateVersion = "24.11"; # Did you read the comment? (TL;DR doesn't need to change after first install)
 }
