@@ -40,6 +40,8 @@
     fnlfmt
 
     claude-code
+
+    discord
   ];
 
   home.stateVersion = "25.05";
