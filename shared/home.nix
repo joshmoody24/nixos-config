@@ -22,6 +22,7 @@
     cascadia-code
     gimp
     gnomeExtensions.clipboard-history
+    opencode
   ];
 
   fonts.fontconfig.enable = true;
