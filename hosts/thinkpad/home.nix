@@ -17,6 +17,8 @@
     valkey # I don't think this does anything
     yarn
     ruby
+
+    firefox
   ]);
 
   home.file = lib.mkAfter {
