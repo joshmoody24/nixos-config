@@ -22,7 +22,7 @@
     cascadia-code
     gimp
     gnomeExtensions.clipboard-history
-    opencode
+    gemini-cli
   ];
 
   fonts.fontconfig.enable = true;
