@@ -19,6 +19,7 @@
     ruby
 
     firefox
+    ngrok
   ]);
 
   home.file = lib.mkAfter {
