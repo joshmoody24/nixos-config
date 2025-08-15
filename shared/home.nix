@@ -23,6 +23,7 @@
     gimp
     gnomeExtensions.clipboard-history
     gemini-cli
+    onlyoffice-desktopeditors
   ];
 
   fonts.fontconfig.enable = true;
