@@ -43,8 +43,8 @@
   };
 
   # Enable GNOME Desktop Environment
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
   environment.gnome.excludePackages = (with pkgs; [
     gnome-photos
     gnome-tour
@@ -66,7 +66,7 @@
     wget
     google-chrome
     unzip
-    python314Full
+    python314
     nodejs # needed to run "npm " when installing neovim plugins
     gcc # needed to run "make" when installing neovim plugins
   ];
