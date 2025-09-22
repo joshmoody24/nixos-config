@@ -21,10 +21,6 @@ return {
 			vim.lsp.config(srv, { capabilities = capabilities })
 		end
 
-		require("lspconfig").clojure_lsp.setup({
-			cmd = { "/etc/profiles/per-user/josh/bin/clojure-lsp" },
-		})
-
 		mason_tool_installer.setup({
 			ensure_installed = {
 				-- formatters
