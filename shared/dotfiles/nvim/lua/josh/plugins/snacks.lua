@@ -6,6 +6,7 @@ return {
 	opts = {
 		bigfile = { enabled = true },
 		explorer = { enabled = true },
+		gitbrowse = { enabled = true },
 		input = { enabled = true },
 		picker = {
 			enabled = true,
@@ -39,8 +40,7 @@ return {
 		quickfile = { enabled = true },
 		-- scope = { enabled = true },
 		scroll = { enabled = true },
-		-- statuscolumn = { enabled = true },
-		-- words = { enabled = true },
+		terminal = { enabled = true },
 		styles = {
 			input = {
 				relative = "cursor",
@@ -50,10 +50,21 @@ return {
 		},
 	},
 	keys = {
+		-- Pickers
 		{ "<leader>ff", function() Snacks.picker.files() end, desc = "Find files" },
 		{ "<leader>fg", function() Snacks.picker.grep() end, desc = "Grep files" },
 		{ "<leader>fb", function() Snacks.explorer() end, desc = "File explorer" },
-		{ "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent files}" }
+		{ "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent files}" },
+		{ "<leader>fc", function() Snacks.picker.commands() end, desc = "Commands explorer" },
+		{ "<leader>fh", function() Snacks.picker.command_history() end, desc = "Commands explorer" },
+		{ "<leader>f<space>", function() Snacks.picker.smart() end, desc = "Smart find files" },
+
+		-- Terminal
+		{ "<leader>t", function() Snacks.terminal() end, desc = "Terminal" },
+
+		-- Git
+		{ "<leader>gr", function() Snacks.gitbrowse() end, desc = "Open file in browser on git remote" },
+		{ "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git log for current line" },
 	}
 }
 

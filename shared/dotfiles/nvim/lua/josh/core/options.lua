@@ -35,3 +35,5 @@ opt.splitbelow = true
 opt.mouse = "a"
 
 opt.showmode = false
+
+opt.cmdheight = 0
