@@ -24,6 +24,7 @@
     gnomeExtensions.clipboard-history
     gemini-cli
     onlyoffice-desktopeditors
+    fd
   ];
 
   fonts.fontconfig.enable = true;
