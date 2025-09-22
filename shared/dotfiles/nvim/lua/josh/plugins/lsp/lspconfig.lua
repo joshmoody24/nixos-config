@@ -58,6 +58,29 @@ return {
 
 				opts.desc = "Restart LSP"
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+
+				opts.desc = "Copy diagnostic with context"
+				keymap.set("n", "<leader>cy", function()
+					local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+					if #diagnostics > 0 then
+						local diag = diagnostics[1]
+						local filename = vim.fn.expand('%:p')
+						local line = diag.lnum + 1
+						local col = diag.col + 1
+						local message = string.format(
+							"%s:%d:%d: %s: %s",
+							filename,
+							line,
+							col,
+							diag.severity == 1 and "error" or "warning",
+							diag.message
+						)
+						vim.fn.setreg('+', message)
+						vim.notify("Copied: " .. message)
+					else
+						vim.notify("No diagnostic on current line")
+					end
+				end, opts)
 			end,
 		})
 	end,
