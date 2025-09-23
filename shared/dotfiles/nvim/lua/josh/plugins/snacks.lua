@@ -29,12 +29,18 @@ return {
 						{
 							win = "preview",
 							title = "{preview}",
-							width = 0.5,
+							width = 0.4,
 							border = "rounded",
 						},
 					},
 				}
-			end
+			end,
+			formatters = {
+				file = {
+					truncate = 60,
+					filename_first = true
+				}
+			},
 		},
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
