@@ -5,7 +5,12 @@ return {
 	---@type snacks.Config
 	opts = {
 		bigfile = { enabled = true },
-		explorer = { enabled = true },
+		explorer = {
+			enabled = true,
+			follow_file = true,
+			auto_close = true,
+			jump = { close = true },
+		},
 		gitbrowse = { enabled = true },
 		input = { enabled = true },
 		picker = {
@@ -15,6 +20,7 @@ return {
 			layout = function()
 				return {
 					reverse = true,
+					cycle = true,
 					layout = {
 						box = "horizontal",
 						backdrop = false,
@@ -38,7 +44,19 @@ return {
 			formatters = {
 				file = {
 					truncate = 60,
-					filename_first = true
+					filename_first = true,
+				}
+			},
+			sources = {
+				explorer = {
+					follow_file = true,
+					auto_close = true,
+					jump = { close = true },
+					layout = {
+						layout = {
+							position = "right",
+						}
+					}
 				}
 			},
 		},
