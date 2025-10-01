@@ -15,6 +15,8 @@
 
     ".config/kitty/current-theme.conf".source = ./dotfiles/kitty/current-theme.conf;
 
+    ".config/zellij/config.kdl".source = ./dotfiles/zellij/config.kdl;
+
     ".gitconfig".source = ./dotfiles/.gitconfig;
   };
 
@@ -25,6 +27,7 @@
     gemini-cli
     onlyoffice-desktopeditors
     fd
+    zellij
   ];
 
   fonts.fontconfig.enable = true;
