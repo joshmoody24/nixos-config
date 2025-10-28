@@ -12,7 +12,6 @@
     ollama-rocm
     godot
     obsidian
-    sdrpp
     gqrx
     rtl-sdr
     owmods-cli
