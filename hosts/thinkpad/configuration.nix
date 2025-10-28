@@ -28,7 +28,7 @@
   ]);
   
   # Enable fractional scaling
-  services.xserver.desktopManager.gnome = {
+  services.desktopManager.gnome = {
     enable = true;
     extraGSettingsOverrides = ''
       [org.gnome.mutter]
