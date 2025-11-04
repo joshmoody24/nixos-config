@@ -39,5 +39,18 @@
 	}
       ];
     };
+    nixosConfigurations."joshm-framework" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/framework/configuration.nix
+        home-manager.nixosModules.home-manager
+	{
+	  home-manager.useGlobalPkgs = true;
+	  home-manager.useUserPackages = true;
+	  home-manager.users.josh = import ./hosts/framework/home.nix;
+          home-manager.backupFileExtension = "backup";
+	}
+      ];
+    };
   };
 }
