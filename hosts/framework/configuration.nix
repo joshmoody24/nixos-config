@@ -62,6 +62,14 @@
     };
   };
 
+  # See the commented-out swap lines in hardware-configuration.nix
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 8192; # MB → 8 GiB; adjust as you like
+    }
+  ];
+
   security.lsm = lib.mkForce [ ];
 
   system.stateVersion = "25.05"; # Did you read the comment? (TL;DR doesn't need to change after first install)
