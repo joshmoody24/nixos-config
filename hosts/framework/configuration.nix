@@ -61,6 +61,7 @@
       };
     };
   };
+  users.users.josh.extraGroups = [ "docker" ];
 
   # See the commented-out swap lines in hardware-configuration.nix
   swapDevices = [

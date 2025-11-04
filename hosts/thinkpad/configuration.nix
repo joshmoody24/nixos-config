@@ -102,6 +102,7 @@
       };
     };
   };
+  users.users.josh.extraGroups = [ "docker" ];
 
   security.lsm = lib.mkForce [ ];
 
