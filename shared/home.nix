@@ -28,6 +28,9 @@
     onlyoffice-desktopeditors
     fd
     zellij
+    mitscheme
+    chickenPackages_5.chickenEggs.scheme-indent
+    rlwrap
   ];
 
   fonts.fontconfig.enable = true;

@@ -20,7 +20,13 @@ return {
 				lua = { "stylua" },
 				python = { "isort", "black" },
 				fennel = { "fnlfmt" },
-
+				scheme = { "scheme-indent" },
+			},
+			formatters = {
+				["scheme-indent"] = {
+					command = "scheme-indent",
+					stdin = true,
+				},
 			},
 			format_on_save = {
 				lsp_fallback = true,

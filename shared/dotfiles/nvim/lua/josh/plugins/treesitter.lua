@@ -36,6 +36,7 @@ return {
 	"clojure",
 	"glsl",
 	"fennel",
+	"scheme",
 	"elixir",
 	"heex",
 	"python",
