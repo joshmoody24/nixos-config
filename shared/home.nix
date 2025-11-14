@@ -25,6 +25,8 @@
     gimp
     gnomeExtensions.clipboard-history
     gemini-cli
+    codex
+    github-copilot-cli
     onlyoffice-desktopeditors
     fd
     zellij
