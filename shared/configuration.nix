@@ -69,6 +69,7 @@
     python314
     nodejs # needed to run "npm " when installing neovim plugins
     gcc # needed to run "make" when installing neovim plugins
+    jq
   ];
 
   # Garbage collection
