@@ -42,6 +42,8 @@
     claude-code
 
     discord
+
+    mgba
   ];
 
   home.stateVersion = "25.05";
