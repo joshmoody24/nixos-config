@@ -63,6 +63,12 @@
   };
   users.users.josh.extraGroups = [ "docker" ];
 
+  # Make Docker socket world-writable for Bazel subprocess compatibility
+  # This allows Docker access from Bazel tests which don't properly inherit group membership
+  systemd.services.docker.serviceConfig.ExecStartPost = [
+    "${pkgs.coreutils}/bin/chmod 666 /var/run/docker.sock"
+  ];
+
   # See the commented-out swap lines in hardware-configuration.nix
   swapDevices = [
     {
