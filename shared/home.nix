@@ -30,9 +30,11 @@
     onlyoffice-desktopeditors
     fd
     zellij
-    mitscheme
-    chickenPackages_5.chickenEggs.scheme-indent
     rlwrap
+
+    swi-prolog
+    racket
+    factor-lang
   ];
 
   fonts.fontconfig.enable = true;

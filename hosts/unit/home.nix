@@ -20,7 +20,6 @@
     clojure
     openjdk
     clojure-lsp
-    swi-prolog
     gimp
     aseprite
     ardour
