@@ -35,6 +35,11 @@
     swi-prolog
     racket
     factor-lang
+
+    # Clojure
+    clojure
+    openjdk
+    clojure-lsp
   ];
 
   fonts.fontconfig.enable = true;

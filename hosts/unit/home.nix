@@ -16,11 +16,6 @@
     rtl-sdr
     owmods-cli
     krita
-    cascadia-code
-    clojure
-    openjdk
-    clojure-lsp
-    gimp
     aseprite
     ardour
 
