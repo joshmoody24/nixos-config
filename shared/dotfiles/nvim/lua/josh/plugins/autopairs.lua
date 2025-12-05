@@ -14,7 +14,13 @@ return {
         javascript = { "template_string" },
         java = false,
       },
-  })
+    })
+
+    -- Disable ' and () autopairing for Lisp languages (paredit handles structure)
+    local cond = require("nvim-autopairs.conds")
+    local lisp_fts = { "clojure", "scheme", "lisp", "fennel", "racket" }
+    autopairs.get_rules("'")[1]:with_pair(cond.not_filetypes(lisp_fts))
+    autopairs.get_rules("(")[1]:with_pair(cond.not_filetypes(lisp_fts))
 
   local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 
