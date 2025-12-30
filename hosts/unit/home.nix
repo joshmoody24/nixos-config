@@ -38,6 +38,8 @@
     discord
 
     mgba
+
+    vintagestory
   ];
 
   home.stateVersion = "25.05";
