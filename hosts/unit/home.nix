@@ -5,7 +5,7 @@
 
   home.packages = with pkgs; [
     remmina
-    blender-hip
+    (blender.override { rocmSupport = true; })
     pciutils # for gnome extension Astra Monitor
     lm_sensors # temperature monitoring
     amdgpu_top
