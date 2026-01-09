@@ -1,0 +1,14 @@
+# Font
+font-family = Cascadia Code
+font-size = 11
+font-thicken = true
+
+# Theme
+theme = TokyoNight Night
+
+# Cursor trail
+custom-shader = cursor_tail.glsl
+custom-shader-animation = always
+
+# Window
+gtk-titlebar = true

@@ -16,6 +16,10 @@
     ".config/kitty/current-theme.conf".source = ./dotfiles/kitty/current-theme.conf;
 
     ".config/ghostty/config".source = ./dotfiles/ghostty/config;
+    ".config/ghostty/cursor_tail.glsl".source = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/sahaj-b/ghostty-cursor-shaders/main/cursor_tail.glsl";
+      sha256 = "1g9vsbsxnvcj0y6rzdkxrd4mj0ldl9aha7381g8nfs3bz829y46w";
+    };
 
     ".config/zellij/config.kdl".source = ./dotfiles/zellij/config.kdl;
 
