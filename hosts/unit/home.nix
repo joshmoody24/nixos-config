@@ -4,6 +4,7 @@
   imports = [../../shared/home.nix];
 
   home.packages = with pkgs; [
+    remmina
     blender-hip
     pciutils # for gnome extension Astra Monitor
     lm_sensors # temperature monitoring
