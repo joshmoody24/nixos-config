@@ -15,6 +15,8 @@
 
     ".config/kitty/current-theme.conf".source = ./dotfiles/kitty/current-theme.conf;
 
+    ".config/ghostty/config".source = ./dotfiles/ghostty/config;
+
     ".config/zellij/config.kdl".source = ./dotfiles/zellij/config.kdl;
 
     ".gitconfig".source = ./dotfiles/.gitconfig;
@@ -22,6 +24,7 @@
 
   home.packages = with pkgs; [
     cascadia-code
+    ghostty
     gimp
     gnomeExtensions.clipboard-history
     gnomeExtensions.blur-my-shell
