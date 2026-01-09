@@ -24,6 +24,7 @@
     cascadia-code
     gimp
     gnomeExtensions.clipboard-history
+    gnomeExtensions.blur-my-shell
     gemini-cli
     codex
     github-copilot-cli
