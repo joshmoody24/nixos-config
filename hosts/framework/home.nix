@@ -20,6 +20,8 @@
 
     firefox
     ngrok
+    caddy
+    nssTools
   ]);
 
   home.file = lib.mkAfter {
