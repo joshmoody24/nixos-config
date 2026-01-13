@@ -14,6 +14,8 @@
   networking.hostName = "joshm-framework";
 
   services.tailscale.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.fwupd.enable = true;
 
   programs.seahorse.enable = true;
   services.gnome.gnome-keyring.enable = true;
