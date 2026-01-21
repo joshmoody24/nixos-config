@@ -48,6 +48,8 @@
     clojure
     openjdk
     clojure-lsp
+
+    typescript-go
   ];
 
   fonts.fontconfig.enable = true;

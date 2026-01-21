@@ -16,7 +16,7 @@ return {
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 		mason_lspconfig.setup({
-			ensure_installed = { "html", "emmet_ls", "pyright", "lua_ls", "ts_ls" },
+			ensure_installed = { "html", "emmet_ls", "pyright", "lua_ls" },
 		})
 
 		-- Modern approach: use vim.lsp.config instead of lspconfig.server.setup()
@@ -32,33 +32,10 @@ return {
 				},
 			},
 		})
-		vim.lsp.config("ts_ls", {
+		vim.lsp.config("tsgo", {
 			capabilities = capabilities,
-			init_options = {
-				maxTsServerMemory = 8192,
-				preferences = {
-					includePackageJsonAutoImports = "off", -- reduces memory by not scanning all packages
-				},
-			},
-			settings = {
-				typescript = {
-					inlayHints = {
-						includeInlayParameterNameHints = "none", -- disable if not using inlay hints
-						includeInlayFunctionParameterTypeHints = false,
-						includeInlayVariableTypeHints = false,
-					},
-					suggestionActions = { enabled = false }, -- fewer suggestions = less work
-				},
-				javascript = {
-					inlayHints = {
-						includeInlayParameterNameHints = "none",
-						includeInlayFunctionParameterTypeHints = false,
-						includeInlayVariableTypeHints = false,
-					},
-					suggestionActions = { enabled = false },
-				},
-			},
 		})
+		vim.lsp.enable("tsgo")
 
 		mason_tool_installer.setup({
 			ensure_installed = { "prettier", "stylua", "eslint_d" },
