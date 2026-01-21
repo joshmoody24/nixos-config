@@ -37,6 +37,14 @@ return {
 		})
 		vim.lsp.enable("tsgo")
 
+		-- GDScript LSP (Godot's built-in LSP on port 6005)
+		vim.lsp.config("gdscript", {
+			capabilities = capabilities,
+			cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+			root_markers = { "project.godot", ".git" },
+		})
+		vim.lsp.enable("gdscript")
+
 		mason_tool_installer.setup({
 			ensure_installed = { "prettier", "stylua", "eslint_d" },
 		})
