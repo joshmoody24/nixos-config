@@ -31,7 +31,7 @@
     alias bazel="distrobox enter redo -- bazelisk"
     '';
     ".local/bin/open-browser-from-container" = {
-      source = ./open-browser-from-container.sh;
+      source = ../../shared/open-browser-from-container.sh;
       executable = true;
     };
     ".local/bin/redoservices" = {

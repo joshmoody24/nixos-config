@@ -28,6 +28,10 @@
     ".bashrc.local".text = ''
     alias bazel="distrobox enter redo -- bazelisk"
     '';
+    ".local/bin/open-browser-from-container" = {
+      source = ../../shared/open-browser-from-container.sh;
+      executable = true;
+    };
   };
 
   # Startup apps currently handled imperatively
