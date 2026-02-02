@@ -24,11 +24,6 @@
     ".config/zellij/config.kdl".source = ./dotfiles/zellij/config.kdl;
 
     ".gitconfig".source = ./dotfiles/.gitconfig;
-
-    ".local/share/bash-completion/completions" = {
-      source = ./dotfiles/bash-completion/completions;
-      recursive = true;
-    };
   };
 
   home.packages = with pkgs; [
