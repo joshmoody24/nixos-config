@@ -7,6 +7,7 @@
     claude-code
     slack
     mongodb-compass
+    dbeaver-bin
 
     # bazel builds
     distrobox
