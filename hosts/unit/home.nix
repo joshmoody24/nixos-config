@@ -15,7 +15,6 @@
     obsidian
     gqrx
     rtl-sdr
-    owmods-cli
     krita
     aseprite
     ardour
