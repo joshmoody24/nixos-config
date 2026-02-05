@@ -38,6 +38,7 @@
     discord
 
     mgba
+    (retroarch.withCores (cores: with cores; [ mupen64plus ]))
 
     vintagestory
   ];
