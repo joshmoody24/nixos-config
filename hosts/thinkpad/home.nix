@@ -28,6 +28,7 @@
     ".config/kitty/redo.session".source = ./redo.session;
     ".bashrc.local".text = ''
     alias bazel="distrobox enter redo -- bazelisk"
+    source /home/josh/code/redo/tools/bazel-completion.bash
     '';
     ".local/bin/open-browser-from-container" = {
       source = ../../shared/open-browser-from-container.sh;
