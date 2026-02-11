@@ -173,6 +173,8 @@
     '';
   };
 
+  services.ollama.enable = true;
+
   services.tailscale.enable = true;
   services.power-profiles-daemon.enable = true;
   services.fwupd.enable = true;
