@@ -34,6 +34,8 @@
     gnomeExtensions.blur-my-shell
     gemini-cli
     codex
+    claude-code
+    opencode
     github-copilot-cli
     onlyoffice-desktopeditors
     fd
