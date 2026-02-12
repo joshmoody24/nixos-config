@@ -33,8 +33,6 @@
     lua54Packages.luarocks
     fnlfmt
 
-    claude-code
-
     discord
 
     mgba
