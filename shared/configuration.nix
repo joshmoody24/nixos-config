@@ -95,10 +95,8 @@
       ids = [ "*" ];
       settings = {
         main = {
-          capslock = "esc";
-          # Shift+space chord activates pull-down symbols (momentary)
-          "leftshift+space" = "layer(symbols)";
-          "rightshift+space" = "layer(symbols)";
+          # Tap capslock = escape, hold = symbols layer
+          capslock = "overload(symbols, esc)";
           # Bottom row mods (tap = letter, hold = modifier + hjkl nav)
           z = "overloadt(ctrl_nav, z, 200)";
           x = "overloadt(alt_nav, x, 200)";
