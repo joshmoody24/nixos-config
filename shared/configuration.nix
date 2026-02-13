@@ -126,7 +126,7 @@
 
         # Alt + nav (hold x)
         "alt_nav:A" = {
-          h = "A-left"; j = "A-down"; k = "A-up"; l = "A-right";
+          h = "left"; j = "down"; k = "up"; l = "right";
         };
 
         # Half-QWERTY mode: hold space = mirror, tap space = space (key-up)
