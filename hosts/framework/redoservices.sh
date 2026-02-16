@@ -12,6 +12,7 @@ exec distrobox enter redo -- bazelisk run services \
     redo-shopify-server \
     redo-public-server \
     redo-admin-server \
+    redo-customer-portal-server \
     redo-merchant-app-vite \
     redo-admin-app-vite \
     redo-return-app-vite \
