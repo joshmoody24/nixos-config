@@ -95,16 +95,30 @@
       ids = [ "*" ];
       settings = {
         main = {
-          # Tap capslock = escape, hold = symbols layer
-          capslock = "overload(symbols, esc)";
-          # Bottom row mods (tap = letter, hold = modifier + hjkl nav)
-          z = "overloadt(ctrl_nav, z, 200)";
-          x = "overloadt(alt_nav, x, 200)";
-          # x+c toggles half-QWERTY mode (changes space behavior)
-          "q+w" = "toggle(halfqwerty_mode)";
+          # Tap capslock = escape, hold = home row mods + vim nav
+          capslock = "overload(caps_mods, esc)";
+          # Right alt = symbols/numbers layer (old capslock behavior)
+          rightalt = "layer(symbols)";
+          # q+r toggles half-QWERTY mode (changed from q+w to avoid gaming conflicts)
+          "q+r" = "toggle(halfqwerty_mode)";
         };
 
-        # Pull-down number/symbol layer
+        # Home row mods + vim navigation (hold capslock)
+        # Left hand: modifiers | Right hand: navigation
+        # Combine freely: caps+a+h = ctrl+left, caps+s+l = shift+right, etc.
+        "caps_mods" = {
+          a = "leftcontrol";
+          s = "leftshift";
+          d = "leftalt";
+          f = "leftmeta";
+          space = "layer(symbols)";
+          h = "left";
+          j = "down";
+          k = "up";
+          l = "right";
+        };
+
+        # Pull-down number/symbol layer (hold right alt)
         "symbols" = {
           capslock = "capslock";
           a = "!"; s = "@"; d = "#"; f = "$"; g = "%";
@@ -117,19 +131,9 @@
           n = "]"; m = "{"; "," = "}"; "." = "\\"; "/" = "|";
         };
 
-        # Ctrl + nav (hold z)
-        "ctrl_nav:C" = {
-          h = "C-left"; j = "C-down"; k = "C-up"; l = "C-right";
-        };
-
-        # Alt + nav (hold x)
-        "alt_nav:A" = {
-          h = "left"; j = "down"; k = "up"; l = "right";
-        };
-
         # Half-QWERTY mode: hold space = mirror, tap space = space (key-up)
         "halfqwerty_mode" = {
-          "q+w" = "toggle(halfqwerty_mode)";
+          "q+r" = "toggle(halfqwerty_mode)";
           space = "overload(mirror, space)";
           capslock = "enter";
           "`" = "backspace";
