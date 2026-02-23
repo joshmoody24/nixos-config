@@ -1,0 +1,25 @@
+[sso-session sso]
+sso_start_url = https://redo.awsapps.com/start/#
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+[default]
+sso_session = sso
+sso_account_id = 260890374087
+sso_role_name = Developer
+
+[profile development]
+sso_session = sso
+sso_account_id = 703671896727
+sso_role_name = Developer
+region = us-east-1
+
+[profile dev]
+sso_session = sso
+source_profile = development
+role_arn = arn:aws:iam::703671896727:role/RedoDevelopment
+
+[profile redo]
+sso_session = sso
+source_profile = default
+role_arn = arn:aws:iam::260890374087:role/RedoDevelopment

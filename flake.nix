@@ -1,5 +1,5 @@
 {
-  description = "Josh's multi-machine config (NixOS + Ubuntu)";
+  description = "Josh's multi-machine config";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -31,18 +31,25 @@
       ];
     };
 
+    nixosConfigurations."joshm-framework" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/framework/configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.josh = import ./hosts/framework/home.nix;
+          home-manager.backupFileExtension = "backup";
+        }
+      ];
+    };
+
     # Standalone home-manager (Ubuntu)
     homeConfigurations."josh@joshm-thinkpad" = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [
         ./hosts/thinkpad/home.nix
-      ];
-    };
-
-    homeConfigurations."josh@joshm-framework" = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      modules = [
-        ./hosts/framework/home.nix
       ];
     };
   };
