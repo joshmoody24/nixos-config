@@ -6,7 +6,7 @@
     ../../shared/work.nix
   ];
 
-  nixGL.packages = inputs.nixgl.packages;
-  nixGL.defaultWrapper = "mesa";
-  nixGL.installScripts = ["mesa"];
+  targets.genericLinux.nixGL.packages = inputs.nixgl.packages;
+  targets.genericLinux.nixGL.defaultWrapper = "mesa";
+  targets.genericLinux.nixGL.installScripts = ["mesa"];
 }

@@ -32,7 +32,7 @@
     xclip
     git
     wget
-    (config.lib.nixGL.wrap google-chrome)
+    (config.lib.nixGL.wrap (google-chrome.override { commandLineArgs = "--no-sandbox"; }))
     (config.lib.nixGL.wrap firefox)
     gnome-tweaks
     unzip
