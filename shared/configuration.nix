@@ -56,21 +56,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    neovim
-    ripgrep
-    xclip
-    git
-    wget
-    google-chrome
-    unzip
-    python314
-    nodejs # needed to run "npm " when installing neovim plugins
-    gcc # needed to run "make" when installing neovim plugins
-    jq
-  ];
+  environment.systemPackages = with pkgs; [];
 
   # Garbage collection
   nix.gc = {
@@ -82,11 +68,6 @@
   # Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Directory-specific environments
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
 
   # Keyboard remapping with keyd
   services.keyd = {

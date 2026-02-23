@@ -27,6 +27,20 @@
   };
 
   home.packages = with pkgs; [
+    neovim
+    ripgrep
+    xclip
+    git
+    wget
+    google-chrome
+    firefox
+    gnome-tweaks
+    unzip
+    python314
+    nodejs
+    gcc
+    jq
+
     cascadia-code
     ghostty
     gimp
@@ -55,6 +69,11 @@
   ];
 
   fonts.fontconfig.enable = true;
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   programs.git.enable = true; # config in dotfiles/.gitconfig
 

@@ -18,7 +18,6 @@
     yarn
     ruby
 
-    firefox
     ngrok
     caddy
     nssTools

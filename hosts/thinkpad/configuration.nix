@@ -23,7 +23,6 @@
   services.xserver.enable = true;
 
   environment.systemPackages = lib.mkAfter (with pkgs; [
-    gnome-tweaks # helpful for UI tweaks
     steam-run
   ]);
   
