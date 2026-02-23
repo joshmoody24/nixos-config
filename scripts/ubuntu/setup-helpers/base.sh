@@ -4,6 +4,11 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 NIX_DAEMON_SH="/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
 
+# Ensure curl is available
+if ! command -v curl &>/dev/null; then
+  sudo apt install -y curl
+fi
+
 # Install Nix
 if ! command -v nix &>/dev/null; then
   if [ -f "$NIX_DAEMON_SH" ]; then
@@ -25,11 +30,13 @@ fi
 
 # Apply home-manager
 echo "Applying home-manager configuration..."
-nix run home-manager -- switch --flake "$REPO_DIR#josh@$(hostname)"
+nix run home-manager -- switch -b backup --flake "$REPO_DIR#josh@$(hostname)"
 
-# Install and configure keyd
+# Install and configure keyd (needs PPA on Ubuntu 24.04)
 if ! command -v keyd &>/dev/null; then
   echo "Installing keyd..."
+  sudo add-apt-repository -y ppa:keyd-team/ppa
+  sudo apt update
   sudo apt install -y keyd
 fi
 echo "Copying keyd configuration..."

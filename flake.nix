@@ -36,7 +36,6 @@
       inherit pkgs;
       modules = [
         ./hosts/thinkpad/home.nix
-        { home.backupFileExtension = "backup"; }
       ];
     };
 
@@ -44,7 +43,6 @@
       inherit pkgs;
       modules = [
         ./hosts/framework/home.nix
-        { home.backupFileExtension = "backup"; }
       ];
     };
   };
