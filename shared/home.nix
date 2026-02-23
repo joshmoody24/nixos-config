@@ -32,8 +32,8 @@
     xclip
     git
     wget
-    google-chrome
-    firefox
+    (config.lib.nixGL.wrap google-chrome)
+    (config.lib.nixGL.wrap firefox)
     gnome-tweaks
     unzip
     python314
@@ -42,7 +42,7 @@
     jq
 
     cascadia-code
-    ghostty
+    (config.lib.nixGL.wrap ghostty)
     gimp
     gnomeExtensions.clipboard-history
     gnomeExtensions.blur-my-shell
@@ -79,6 +79,7 @@
 
   programs.kitty = {
     enable = true;
+    package = config.lib.nixGL.wrap pkgs.kitty;
     extraConfig = builtins.readFile ./dotfiles/kitty/kitty.conf;
   };
 

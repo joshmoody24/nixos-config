@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
@@ -48,6 +52,7 @@
     # Standalone home-manager (Ubuntu)
     homeConfigurations."josh@joshm-thinkpad" = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
+      extraSpecialArgs = { inherit inputs; };
       modules = [
         ./hosts/thinkpad/home.nix
       ];
