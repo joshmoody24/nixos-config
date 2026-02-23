@@ -1,0 +1,32 @@
+127.0.0.1 app.getredo.localhost app-vite.getredo.localhost
+127.0.0.1 returns.getredo.localhost returns-vite.getredo.localhost
+127.0.0.1 admin.getredo.localhost admin-vite.getredo.localhost
+127.0.0.1 api.getredo.localhost
+127.0.0.1 merchant-server.getredo.localhost
+127.0.0.1 admin-server.getredo.localhost
+127.0.0.1 shopify-server.getredo.localhost
+127.0.0.1 customer-portal.getredo.localhost
+127.0.0.1 chat-widget.getredo.localhost chat-widget-vite.getredo.localhost chat-widget-page.getredo.localhost
+127.0.0.1 temporal.getredo.localhost
+127.0.0.1 public-server.getredo.localhost
+127.0.0.1 marketplace.getredo.localhost marketplace-server.getredo.localhost
+127.0.0.1 loop-server.getredo.localhost
+127.0.0.1 storefront.getredo.localhost
+127.0.0.1 notice-server.getredo.localhost
+127.0.0.1 effect-api.getredo.localhost
+::1 app.getredo.localhost app-vite.getredo.localhost
+::1 returns.getredo.localhost returns-vite.getredo.localhost
+::1 admin.getredo.localhost admin-vite.getredo.localhost
+::1 api.getredo.localhost
+::1 merchant-server.getredo.localhost
+::1 admin-server.getredo.localhost
+::1 shopify-server.getredo.localhost
+::1 customer-portal.getredo.localhost
+::1 chat-widget.getredo.localhost chat-widget-vite.getredo.localhost chat-widget-page.getredo.localhost
+::1 temporal.getredo.localhost
+::1 public-server.getredo.localhost
+::1 marketplace.getredo.localhost marketplace-server.getredo.localhost
+::1 loop-server.getredo.localhost
+::1 storefront.getredo.localhost
+::1 notice-server.getredo.localhost
+::1 effect-api.getredo.localhost

@@ -1,0 +1,111 @@
+{
+	local_certs
+	grace_period 1s
+}
+
+app.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3003
+}
+app-vite.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:13003
+}
+returns.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3002
+}
+returns-vite.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:13012
+}
+admin.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3005
+}
+admin-vite.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:13005
+}
+api.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8888 {
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-Host {host}
+	}
+}
+merchant-server.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8007 {
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-Host {host}
+	}
+}
+admin-server.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8005 {
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-Host {host}
+	}
+}
+shopify-server.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8004 {
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-Host {host}
+	}
+}
+loop-server.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8006
+}
+marketplace.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3013
+}
+marketplace-server.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8018
+}
+chat-widget.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3008
+}
+chat-widget-vite.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:13008
+}
+chat-widget-page.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3009
+}
+temporal.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8233
+}
+customer-portal.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8002 {
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-Host {host}
+	}
+}
+public-server.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:8001 {
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-Host {host}
+	}
+}
+storefront.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3010
+}
+notice-server.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:2930
+}
+effect-api.getredo.localhost {
+	tls internal
+	reverse_proxy localhost:3001
+}
