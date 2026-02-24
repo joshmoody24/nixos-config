@@ -56,7 +56,11 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    git
+    wget
+    neovim
+  ];
 
   # Garbage collection
   nix.gc = {
