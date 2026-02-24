@@ -2,8 +2,18 @@
 
 {
   home.packages = lib.mkAfter (with pkgs; [
-    slack
-    mongodb-compass
+    (symlinkJoin {
+      name = "slack";
+      paths = [ slack ];
+      buildInputs = [ makeWrapper ];
+      postBuild = ''wrapProgram $out/bin/slack --add-flags "--no-sandbox"'';
+    })
+    (symlinkJoin {
+      name = "mongodb-compass";
+      paths = [ mongodb-compass ];
+      buildInputs = [ makeWrapper ];
+      postBuild = ''wrapProgram $out/bin/mongodb-compass --add-flags "--no-sandbox"'';
+    })
     dbeaver-bin
 
     distrobox
