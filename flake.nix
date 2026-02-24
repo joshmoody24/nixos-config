@@ -20,10 +20,10 @@
       inherit system;
       config.allowUnfree = true;
     };
-    thinkpadPkgs = import nixpkgs {
+    ubuntuPkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
-      overlays = [ (import ./hosts/thinkpad/overlay.nix) ];
+      overlays = [ (import ./shared/ubuntu-overlay.nix) ];
     };
   in {
     # NixOS
@@ -40,23 +40,17 @@
       ];
     };
 
-    nixosConfigurations."joshm-framework" = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+    # Standalone home-manager (Ubuntu)
+    homeConfigurations."josh@joshm-framework" = home-manager.lib.homeManagerConfiguration {
+      pkgs = ubuntuPkgs;
+      extraSpecialArgs = { inherit inputs; };
       modules = [
-        ./hosts/framework/configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.josh = import ./hosts/framework/home.nix;
-          home-manager.backupFileExtension = "backup";
-        }
+        ./hosts/framework/home.nix
       ];
     };
 
-    # Standalone home-manager (Ubuntu)
     homeConfigurations."josh@joshm-thinkpad" = home-manager.lib.homeManagerConfiguration {
-      pkgs = thinkpadPkgs;
+      pkgs = ubuntuPkgs;
       extraSpecialArgs = { inherit inputs; };
       modules = [
         ./hosts/thinkpad/home.nix

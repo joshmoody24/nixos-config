@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
@@ -6,8 +6,7 @@
     ../../shared/work.nix
   ];
 
-  home.packages = with pkgs; [
-    distrobox
-    docker
-  ];
+  targets.genericLinux.nixGL.packages = inputs.nixgl.packages;
+  targets.genericLinux.nixGL.defaultWrapper = "mesa";
+  targets.genericLinux.nixGL.installScripts = ["mesa"];
 }
