@@ -1,33 +1,22 @@
 { config, pkgs, lib, ... }:
 
 {
+  # Note: rust, yarn, and caddy are intentionally not installed via nix here —
+  # they are managed by the redo setup script (linux-setup.sh)
   home.packages = lib.mkAfter (with pkgs; [
-    (symlinkJoin {
-      name = "slack";
-      paths = [ slack ];
-      buildInputs = [ makeWrapper ];
-      postBuild = ''wrapProgram $out/bin/slack --add-flags "--no-sandbox"'';
-    })
-    (symlinkJoin {
-      name = "mongodb-compass";
-      paths = [ mongodb-compass ];
-      buildInputs = [ makeWrapper ];
-      postBuild = ''wrapProgram $out/bin/mongodb-compass --add-flags "--no-sandbox"'';
-    })
+    slack
+    mongodb-compass
     dbeaver-bin
 
     awscli2
     bazelisk
     lsof
     valkey
-    yarn
     ruby
-    rustup
 
     ngrok
     mongosh
     cloudflared
-    caddy
     nssTools
   ]);
 

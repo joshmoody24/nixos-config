@@ -7,8 +7,12 @@ launch bash -ic "nvim; bash"
 
 new_tab Services
 cd ~/code/redo
-launch bash -ic "redoservices; bash"
+launch bash -ic "bazel run service-manager; bash"
 
 new_tab Terminal
 cd ~/code/redo
 launch bash
+
+new_tab Claude
+cd ~/code/redo
+launch bash -ic "claude; bash"

@@ -20,6 +20,11 @@
       inherit system;
       config.allowUnfree = true;
     };
+    thinkpadPkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+      overlays = [ (import ./hosts/thinkpad/overlay.nix) ];
+    };
   in {
     # NixOS
     nixosConfigurations.unit = nixpkgs.lib.nixosSystem {
@@ -51,7 +56,7 @@
 
     # Standalone home-manager (Ubuntu)
     homeConfigurations."josh@joshm-thinkpad" = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
+      pkgs = thinkpadPkgs;
       extraSpecialArgs = { inherit inputs; };
       modules = [
         ./hosts/thinkpad/home.nix
