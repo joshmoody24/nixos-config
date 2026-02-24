@@ -42,3 +42,12 @@ if ! grep -q "$SYSCTL_LINE" "$SYSCTL_CONF" 2>/dev/null; then
   sudo sysctl -p "$SYSCTL_CONF"
   echo "unprivileged port binding enabled (ports 80+)."
 fi
+
+# --- Allow unprivileged user namespaces (needed for Nix-installed Chrome/Electron sandboxing) ---
+USERNS_CONF="/etc/sysctl.d/99-userns.conf"
+USERNS_LINE="kernel.apparmor_restrict_unprivileged_userns=0"
+if ! grep -q "$USERNS_LINE" "$USERNS_CONF" 2>/dev/null; then
+  echo "$USERNS_LINE" | sudo tee "$USERNS_CONF" >/dev/null
+  sudo sysctl -p "$USERNS_CONF"
+  echo "unprivileged user namespaces enabled (Chrome/Electron sandbox)."
+fi
