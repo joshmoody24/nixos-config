@@ -1,8 +1,21 @@
 # .bashrc
 
+# Include nix profile in data dirs so bash-completion can find
+# completions for nix-installed packages (e.g. git)
+if [ -d ~/.nix-profile/share ]; then
+    export XDG_DATA_DIRS="$HOME/.nix-profile/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}:/usr/local/share:/usr/share"
+fi
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
+elif [ -f /etc/bash.bashrc ]; then
+    . /etc/bash.bashrc
+fi
+
+# Enable bash completion (commented out in Ubuntu's /etc/bash.bashrc by default)
+if [ -z "$BASH_COMPLETION_VERSINFO" ] && [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
 fi
 
 # User specific environment
