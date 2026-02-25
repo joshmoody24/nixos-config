@@ -43,7 +43,7 @@ echo "Copying keyd configuration..."
 sudo mkdir -p /etc/keyd
 sudo cp "$REPO_DIR/shared/dotfiles/keyd/default.conf" /etc/keyd/default.conf
 sudo systemctl enable --now keyd
-sudo keyd reload
+sudo systemctl restart keyd
 
 # Install Tailscale
 if ! command -v tailscale &>/dev/null; then
