@@ -39,6 +39,7 @@
     python314
     nodejs
     gcc
+    tree-sitter
     jq
 
     cascadia-code
