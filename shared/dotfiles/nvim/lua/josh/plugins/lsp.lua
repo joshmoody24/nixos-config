@@ -37,6 +37,15 @@ return {
 		})
 		vim.lsp.enable("tsgo")
 
+		-- MDX Language Server
+		vim.lsp.config("mdx", {
+			capabilities = capabilities,
+			cmd = { "mdx-language-server", "--stdio" },
+			filetypes = { "mdx" },
+			root_markers = { "package.json", ".git" },
+		})
+		vim.lsp.enable("mdx")
+
 		-- GDScript LSP (Godot's built-in LSP on port 6005)
 		vim.lsp.config("gdscript", {
 			capabilities = capabilities,

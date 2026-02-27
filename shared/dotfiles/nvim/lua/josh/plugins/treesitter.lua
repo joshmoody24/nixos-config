@@ -35,10 +35,18 @@ return {
       "gdscript",
     })
 
+    vim.filetype.add({
+      extension = {
+        mdx = 'mdx',
+      }
+    })
+
     vim.api.nvim_create_autocmd("FileType", {
       callback = function(args)
         pcall(vim.treesitter.start, args.buf)
       end,
     })
+
+    vim.treesitter.language.register("markdown", "mdx")
   end
 }
