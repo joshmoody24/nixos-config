@@ -24,6 +24,10 @@
     ".config/zellij/config.kdl".source = ./dotfiles/zellij/config.kdl;
 
     ".gitconfig".source = ./dotfiles/.gitconfig;
+
+    ".claude/CLAUDE.md".source = ./dotfiles/agents/AGENTS.md;
+    ".codex/AGENTS.md".source = ./dotfiles/agents/AGENTS.md;
+    ".gemini/GEMINI.md".source = ./dotfiles/agents/AGENTS.md;
   };
 
   home.packages = with pkgs; [
