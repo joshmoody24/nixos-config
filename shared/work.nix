@@ -16,12 +16,25 @@
 
     ngrok
     mongosh
+    pnpm
     cloudflared
     nssTools
   ]);
 
   home.file = lib.mkAfter {
     ".config/kitty/redo.session".source = ./dotfiles/redo/redo.session;
+
+    # Wrapper so `corepack enable` is a no-op (Nix store is immutable)
+    ".local/bin/corepack" = {
+      executable = true;
+      text = ''
+        #!/usr/bin/env bash
+        if [[ "''${1:-}" == "enable" ]]; then
+          exit 0
+        fi
+        exec "$(dirname "$(readlink -f "$(which nodejs)")")/corepack" "$@"
+      '';
+    };
     ".bashrc.local".text = ''
       if command -v distrobox &>/dev/null; then
         alias bazel="distrobox enter redo -- bazelisk"
