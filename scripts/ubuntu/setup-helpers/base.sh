@@ -32,6 +32,13 @@ fi
 echo "Applying home-manager configuration..."
 nix run home-manager -- switch -b backup --flake "$REPO_DIR#josh@$(hostname)"
 
+# Sudo: don't re-prompt for password during the session
+SUDO_TIMEOUT='Defaults timestamp_timeout=-1'
+if ! grep -qxF "$SUDO_TIMEOUT" /etc/sudoers.d/timeout 2>/dev/null; then
+  echo "Configuring sudo timeout..."
+  echo "$SUDO_TIMEOUT" | sudo tee /etc/sudoers.d/timeout > /dev/null
+fi
+
 # Install and configure keyd (needs PPA on Ubuntu 24.04)
 if ! command -v keyd &>/dev/null; then
   echo "Installing keyd..."

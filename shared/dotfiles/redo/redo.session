@@ -7,7 +7,7 @@ launch bash -ic "nvim; bash"
 
 new_tab Services
 cd ~/code/redo
-launch bash -ic "bazel run service-manager; bash"
+launch bash -ic "bazel run service-manager -- --y; bash"
 
 new_tab Terminal
 cd ~/code/redo
