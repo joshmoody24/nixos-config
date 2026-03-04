@@ -21,6 +21,7 @@ return {
 				python = { "isort", "black" },
 				fennel = { "fnlfmt" },
 				scheme = { "scheme-indent" },
+				clojure = { "cljfmt" },
 			},
 			formatters = {
 				["scheme-indent"] = {

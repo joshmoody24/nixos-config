@@ -69,8 +69,11 @@
     clojure
     openjdk
     clojure-lsp
+    cljfmt
 
     typescript-go
+
+    llmfit
   ];
 
   fonts.fontconfig.enable = true;
