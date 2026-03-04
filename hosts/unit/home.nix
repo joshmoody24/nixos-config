@@ -13,7 +13,7 @@
     ollama-rocm
     godot
     obsidian
-    gqrx
+    # gqrx # temporarily disabled - gr-osmosdr broken with Boost 1.89.0
     rtl-sdr
     krita
     aseprite
