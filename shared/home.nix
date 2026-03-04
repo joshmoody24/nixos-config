@@ -77,7 +77,7 @@
   ];
 
   home.sessionVariables = {
-    OLLAMA_CONTEXT_LENGTH = "64000";
+    OLLAMA_CONTEXT_LENGTH = "24576";
   };
 
   fonts.fontconfig.enable = true;
