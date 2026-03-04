@@ -76,6 +76,10 @@
     llmfit
   ];
 
+  home.sessionVariables = {
+    OLLAMA_CONTEXT_LENGTH = "64000";
+  };
+
   fonts.fontconfig.enable = true;
 
   programs.direnv = {
