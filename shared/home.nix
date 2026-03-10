@@ -42,6 +42,7 @@
     unzip
     python314
     nodejs
+    tsx
     gcc
     tree-sitter
     jq

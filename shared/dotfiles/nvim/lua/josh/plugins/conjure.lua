@@ -1,11 +1,14 @@
 return {
 	{
 		"Olical/conjure",
-		ft = { "clojure", "python", "fennel", "scheme", "racket" },
+		ft = { "clojure", "python", "fennel", "scheme", "racket", "javascript", "typescript" },
 		lazy = true,
 		init = function()
 			-- Set configuration options here
 			vim.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"
+			-- Route TypeScript files to the JavaScript stdio client, use tsx for TS support
+			vim.g["conjure#filetype#typescript"] = "conjure.client.javascript.stdio"
+			vim.g["conjure#client#javascript#stdio#typescript_cmd"] = "tsx"
 			-- MIT Scheme is the default
 
 			-- Auto-start nREPL for Clojure
