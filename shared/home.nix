@@ -74,12 +74,11 @@
 
     typescript-go
 
+    (pkgs.llm.withPlugins { llm-ollama = true; })
     llmfit
   ];
 
-  home.sessionVariables = {
-    OLLAMA_CONTEXT_LENGTH = "24576";
-  };
+  home.sessionVariables = {};
 
   fonts.fontconfig.enable = true;
 

@@ -10,7 +10,7 @@
     lm_sensors # temperature monitoring
     amdgpu_top
     llama-cpp
-    ollama-rocm
+
     godot
     obsidian
     # gqrx # temporarily disabled - gr-osmosdr broken with Boost 1.89.0

@@ -36,6 +36,8 @@
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="plugdev", MODE="0666"
   '';
 
+  services.ollama.acceleration = "rocm";
+
   programs.steam.enable = true;
 
   environment.systemPackages = lib.mkAfter (with pkgs; [

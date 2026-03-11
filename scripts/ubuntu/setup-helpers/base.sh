@@ -88,4 +88,25 @@ UNIT
   systemctl --user enable --now nix-gc.timer
 fi
 
+# Install Ollama
+if ! command -v ollama &>/dev/null; then
+  echo "Installing Ollama..."
+  curl -fsSL https://ollama.com/install.sh | sh
+fi
+
+# Configure Ollama environment from shared config
+OLLAMA_ENV_FILE="$REPO_DIR/shared/ollama.env"
+OLLAMA_OVERRIDE_DIR="/etc/systemd/system/ollama.service.d"
+OLLAMA_OVERRIDE="$OLLAMA_OVERRIDE_DIR/override.conf"
+OLLAMA_OVERRIDE_CONTENT="[Service]
+$(sed '/^\s*$/d' "$OLLAMA_ENV_FILE" | while IFS= read -r line; do echo "Environment=\"$line\""; done)"
+
+if [ ! -f "$OLLAMA_OVERRIDE" ] || [ "$(cat "$OLLAMA_OVERRIDE")" != "$OLLAMA_OVERRIDE_CONTENT" ]; then
+  echo "Configuring Ollama service..."
+  sudo mkdir -p "$OLLAMA_OVERRIDE_DIR"
+  echo "$OLLAMA_OVERRIDE_CONTENT" | sudo tee "$OLLAMA_OVERRIDE" > /dev/null
+  sudo systemctl daemon-reload
+fi
+sudo systemctl enable --now ollama
+
 echo "Base setup done!"

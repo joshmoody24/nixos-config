@@ -11,6 +11,5 @@
   targets.genericLinux.nixGL.installScripts = ["mesa"];
 
   home.packages = with pkgs; [
-    ollama
   ];
 }
