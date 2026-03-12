@@ -4,6 +4,9 @@ return {
 		ft = { "clojure", "python", "fennel", "scheme", "racket", "javascript", "typescript" },
 		lazy = true,
 		init = function()
+			-- Disable Conjure's K mapping so LSP hover works
+			vim.g["conjure#mapping#doc_word"] = false
+
 			-- Set configuration options here
 			vim.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"
 			-- Route TypeScript files to the JavaScript stdio client, use tsx for TS support
