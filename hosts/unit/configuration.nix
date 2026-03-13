@@ -36,7 +36,7 @@
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="plugdev", MODE="0666"
   '';
 
-  services.ollama.acceleration = "rocm";
+  services.ollama.package = pkgs.ollama-rocm;
 
   programs.steam.enable = true;
 
