@@ -1,5 +1,10 @@
 # .bashrc
 
+# Source home-manager session variables (EDITOR, VISUAL, etc.)
+if [ -f ~/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
+    . ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+fi
+
 # Include nix profile in data dirs so bash-completion can find
 # completions for nix-installed packages (e.g. git)
 if [ -d ~/.nix-profile/share ]; then

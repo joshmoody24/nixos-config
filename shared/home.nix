@@ -78,7 +78,10 @@
     llmfit
   ];
 
-  home.sessionVariables = {};
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
 
   fonts.fontconfig.enable = true;
 

@@ -69,7 +69,7 @@ Description=Nix garbage collection
 
 [Service]
 Type=oneshot
-ExecStart=nix-collect-garbage --delete-older-than 30d
+ExecStart=/nix/var/nix/profiles/default/bin/nix-collect-garbage --delete-older-than 30d
 UNIT
 
   cat > ~/.config/systemd/user/nix-gc.timer <<'UNIT'

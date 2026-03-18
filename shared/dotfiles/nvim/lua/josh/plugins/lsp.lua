@@ -34,6 +34,9 @@ return {
 		})
 		vim.lsp.config("tsgo", {
 			capabilities = capabilities,
+			init_options = {
+				maxTsServerMemory = 12288, -- 12GB cap
+			},
 		})
 		vim.lsp.enable("tsgo")
 
