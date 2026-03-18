@@ -34,6 +34,14 @@ return {
 		})
 		vim.lsp.config("tsgo", {
 			capabilities = capabilities,
+			root_dir = function(bufnr, on_dir)
+				-- Anchor at the nearest tsconfig.json (each package has one, monorepo root does not)
+				-- rather than the default lock-file detection which always finds the monorepo root
+				local root = vim.fs.root(bufnr, { "tsconfig.json" })
+					or vim.fs.root(bufnr, { "yarn.lock", "package-lock.json", ".git" })
+					or vim.fn.getcwd()
+				on_dir(root)
+			end,
 			init_options = {
 				maxTsServerMemory = 12288, -- 12GB cap
 			},
