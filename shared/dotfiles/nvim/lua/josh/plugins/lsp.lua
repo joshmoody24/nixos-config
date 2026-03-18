@@ -58,7 +58,7 @@ return {
 		vim.lsp.enable("gdscript")
 
 		mason_tool_installer.setup({
-			ensure_installed = { "prettier", "stylua", "eslint_d" },
+			ensure_installed = { "prettierd", "stylua", "eslint_d" },
 		})
 	end,
 }
