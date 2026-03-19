@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Migrate ollama models from user directory to system service directory.
 # Safe to run multiple times — skips if no user models exist.
 set -euo pipefail
