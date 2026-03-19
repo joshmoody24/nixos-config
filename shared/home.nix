@@ -73,6 +73,7 @@
     cljfmt
 
     typescript-go
+    ast-grep
 
     (pkgs.llm.withPlugins { llm-ollama = true; })
     llmfit
