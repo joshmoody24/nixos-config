@@ -24,7 +24,7 @@
 
     # for old windows games
     lutris
-    wineWowPackages.full
+    wineWow64Packages.full
     winetricks
     cdrtools
     gamescope
