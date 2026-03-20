@@ -4,6 +4,9 @@
   imports = [../../shared/home.nix];
 
   home.packages = with pkgs; [
+    google-chrome
+    firefox
+
     remmina
     (blender.override { rocmSupport = true; })
     pciutils # for gnome extension Astra Monitor
