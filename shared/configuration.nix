@@ -82,70 +82,9 @@ in
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
 
-  # Keyboard remapping with keyd
-  services.keyd = {
-    enable = true;
-    keyboards.default = {
-      ids = [ "*" ];
-      settings = {
-        main = {
-          # Tap capslock = escape, hold = home row mods + vim nav
-          capslock = "overload(caps_mods, esc)";
-          # Right alt = symbols/numbers layer (old capslock behavior)
-          rightalt = "layer(symbols)";
-          # q+r toggles half-QWERTY mode (changed from q+w to avoid gaming conflicts)
-          "q+r" = "toggle(halfqwerty_mode)";
-        };
-
-        # Home row mods + vim navigation (hold capslock)
-        # Left hand: modifiers | Right hand: navigation
-        # Combine freely: caps+a+h = ctrl+left, caps+s+l = shift+right, etc.
-        "caps_mods" = {
-          a = "leftcontrol";
-          s = "leftshift";
-          d = "leftalt";
-          f = "leftmeta";
-          space = "layer(symbols)";
-          h = "left";
-          j = "down";
-          k = "up";
-          l = "right";
-        };
-
-        # Pull-down number/symbol layer (hold right alt)
-        "symbols" = {
-          capslock = "capslock";
-          a = "!"; s = "@"; d = "#"; f = "$"; g = "%";
-          h = "^"; j = "&"; k = "*"; l = "("; ";" = ")";
-          apostrophe = "_";
-          q = "1"; w = "2"; e = "3"; r = "4"; t = "5";
-          y = "6"; u = "7"; i = "8"; o = "9"; p = "0";
-          leftbrace = "-"; rightbrace = "=";
-          z = "`"; x = "~"; c = "-"; v = "="; b = "[";
-          n = "]"; m = "{"; "," = "}"; "." = "\\"; "/" = "|";
-        };
-
-        # Half-QWERTY mode: hold space = mirror, tap space = space (key-up)
-        "halfqwerty_mode" = {
-          "q+r" = "toggle(halfqwerty_mode)";
-          space = "overload(mirror, space)";
-          capslock = "enter";
-          "`" = "backspace";
-        };
-
-        # Mirror layer (activated by holding space in halfqwerty_mode)
-        "mirror" = {
-          "`" = "backspace";
-          q = "p"; w = "o"; e = "i"; r = "u"; t = "y";
-          a = ";"; s = "l"; d = "k"; f = "j"; g = "h";
-          z = "."; x = ","; c = "m"; v = "n";
-          p = "q"; o = "w"; i = "e"; u = "r"; y = "t";
-          ";" = "a"; l = "s"; k = "d"; j = "f"; h = "g";
-          "." = "z"; "," = "x"; m = "c"; n = "v";
-        };
-      };
-    };
-  };
+  # Keyboard remapping with keyd (config lives in dotfiles/keyd/default.conf)
+  services.keyd.enable = true;
+  environment.etc."keyd/default.conf".source = ./dotfiles/keyd/default.conf;
 
   services.ollama = {
     enable = true;
