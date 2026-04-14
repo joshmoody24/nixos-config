@@ -10,6 +10,7 @@
 
     awscli2
     bazelisk
+    (pkgs.writeShellScriptBin "bazel" "exec bazelisk \"$@\"")
     lsof
     valkey
     ruby
@@ -36,11 +37,6 @@
       '';
     };
     ".bashrc.local".text = ''
-      if command -v distrobox &>/dev/null; then
-        alias bazel="distrobox enter redo -- bazelisk"
-      else
-        alias bazel="bazelisk"
-      fi
       source /home/josh/code/redo/tools/bazel-completion.bash
     '';
     ".aws/config".source = ./dotfiles/redo/aws-config;
