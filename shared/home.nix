@@ -56,6 +56,7 @@
     codex
     claude-code
     opencode
+    gh
     github-copilot-cli
     onlyoffice-desktopeditors
     fd
