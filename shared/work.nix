@@ -55,6 +55,5 @@
     ".bashrc.local".text = ''
       source /home/josh/code/redo/tools/bazel-completion.bash
     '';
-    ".aws/config".source = ./dotfiles/redo/aws-config;
-  };
+};
 }
