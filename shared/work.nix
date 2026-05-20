@@ -17,6 +17,7 @@
 
     ngrok
     mongosh
+    clickhouse
     pnpm
     cloudflared
     nssTools
