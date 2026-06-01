@@ -76,6 +76,13 @@ in
         exec "${pkgs.nodejs}/bin/corepack" yarnpkg "$@"
       '';
     };
+    ".local/bin/mintlify" = {
+      executable = true;
+      text = ''
+        #!/usr/bin/env bash
+        exec "${pkgs.nodejs}/bin/npx" mintlify "$@"
+      '';
+    };
     ".bashrc.local".text = ''
       completion="''${REDO_ROOT:-$HOME/code/redo}/tools/bazel-completion.bash"
       [ -f "$completion" ] && source "$completion"
