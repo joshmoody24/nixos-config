@@ -2,6 +2,10 @@
 
 When writing in this codebase, here are guidelines for writing code that Josh Moody (the active developer) is most likely to approve.
 
+## Comments
+
+Write few comments. Code should be self-documenting through good naming. Only comment to explain _why_ something non-obvious is done, never _what_ the code does. Do not narrate or restate logic that is clear from reading the code. Prefer no comment over a redundant one. Keep any comment you do write short. A helpful analogy is that comments should be in "third normal form" in a sense: any given fact should exist exactly once in the code. If a comment would need to be updated for every code change, then it's not sufficiently normalized.
+
 ## Favor Immutability
 
 Mutable variables are harder to reason about. When tempted to use `let`, find a way to use `const` instead. For example:
@@ -13,7 +17,7 @@ let result: int | null = null;
 try {
   result = foo();
 } catch {
-  console.error("Failed to foo")
+  console.error("Failed to foo");
 }
 ```
 
@@ -25,7 +29,7 @@ const result = (() => {
   try {
     return foo();
   } catch {
-    console.error("Failed to foo")
+    console.error("Failed to foo");
     return null;
   }
 })();

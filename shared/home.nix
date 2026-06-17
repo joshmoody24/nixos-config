@@ -26,6 +26,7 @@
     ".gitconfig".source = ./dotfiles/.gitconfig;
 
     ".claude/CLAUDE.md".source = ./dotfiles/agents/AGENTS.md;
+    ".claude/hooks/comment-guard.js".source = ./dotfiles/claude/hooks/comment-guard.js;
     ".codex/AGENTS.md".source = ./dotfiles/agents/AGENTS.md;
     ".gemini/GEMINI.md".source = ./dotfiles/agents/AGENTS.md;
   };
