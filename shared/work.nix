@@ -15,16 +15,27 @@
     valkey
     ruby
 
-    ngrok
+    # ngrok is wrapped below so the declarative theme config is always merged.
     mongosh
     clickhouse
     pnpm
     cloudflared
     nssTools
+
+    # Wrap ngrok to merge the Nix-managed theme config (later --config wins).
+    (pkgs.writeShellScriptBin "ngrok" ''
+      args=()
+      default="$HOME/.config/ngrok/ngrok.yml"
+      theme="$HOME/.config/ngrok/theme.yml"
+      [ -f "$default" ] && args+=(--config "$default")
+      [ -f "$theme" ] && args+=(--config "$theme")
+      exec "${pkgs.ngrok}/bin/ngrok" "''${args[@]}" "$@"
+    '')
   ]);
 
   home.file = lib.mkAfter {
     ".config/kitty/redo.session".source = ./dotfiles/redo/redo.session;
+    ".config/ngrok/theme.yml".source = ./dotfiles/redo/ngrok-theme.yml;
 
     # Wrapper so `corepack enable` is a no-op (Nix store is immutable).
     # All shims reference pkgs.nodejs directly so they update automatically
