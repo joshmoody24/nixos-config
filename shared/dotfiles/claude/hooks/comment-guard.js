@@ -6,9 +6,25 @@ const MAX_BLOCK_LINES = 2; // consecutive comment lines allowed before blocking
 const MAX_LINE_CHARS = 120; // failsafe: max comment-text chars on a single line
 
 const EXTS = new Set([
-  "ts", "tsx", "js", "jsx", "mjs", "cjs",
-  "c", "h", "cpp", "cc", "hpp", "go", "rs",
-  "java", "cs", "swift", "kt", "scala", "php",
+  "ts",
+  "tsx",
+  "js",
+  "jsx",
+  "mjs",
+  "cjs",
+  "c",
+  "h",
+  "cpp",
+  "cc",
+  "hpp",
+  "go",
+  "rs",
+  "java",
+  "cs",
+  "swift",
+  "kt",
+  "scala",
+  "php",
 ]);
 
 const canPrecedeRegex = (ch) =>
@@ -34,9 +50,14 @@ const scanComments = (src) => {
 
     switch (state) {
       case "normal":
-        if (c === "/" && next === "/") { state = "line"; i++; }
-        else if (c === "/" && next === "*") { state = "block"; add(line, 0); i++; }
-        else if (c === "/" && canPrecedeRegex(lastSig)) state = "regex";
+        if (c === "/" && next === "/") {
+          state = "line";
+          i++;
+        } else if (c === "/" && next === "*") {
+          state = "block";
+          add(line, 0);
+          i++;
+        } else if (c === "/" && canPrecedeRegex(lastSig)) state = "regex";
         else if (c === "'") state = "sq";
         else if (c === '"') state = "dq";
         else if (c === "`") state = "tpl";
@@ -63,8 +84,10 @@ const scanComments = (src) => {
         break;
       case "block":
         add(line, 0);
-        if (c === "*" && next === "/") { state = "normal"; i++; }
-        else if (!/\s/.test(c)) add(line, 1);
+        if (c === "*" && next === "/") {
+          state = "normal";
+          i++;
+        } else if (!/\s/.test(c)) add(line, 1);
         break;
     }
   }
@@ -114,7 +137,8 @@ const main = () => {
   if (!EXTS.has(ext)) process.exit(0);
 
   const text = (() => {
-    if (Array.isArray(ti.edits)) return ti.edits.map((e) => e.new_string || "").join("\n");
+    if (Array.isArray(ti.edits))
+      return ti.edits.map((e) => e.new_string || "").join("\n");
     return ti.new_string ?? ti.content ?? "";
   })();
   if (!text) process.exit(0);
@@ -125,8 +149,8 @@ const main = () => {
   process.stderr.write(
     `Comment guard blocked this edit to ${path}:\n` +
       found.map((v) => `  - ${v}`).join("\n") +
-      `\n\nPer AGENTS.md, keep comments minimal and short. Remove or condense ` +
-      `the flagged comment(s), then retry. Explain *why*, never *what*.\n`,
+      `\n\nKeep comments short. Remove or condense ` +
+      `the flagged comment(s), then retry. Err on the side of removal.\n`,
   );
   process.exit(2);
 };
@@ -135,6 +159,8 @@ try {
   main();
 } catch (e) {
   // Never block edits on a hook bug; fail open.
-  process.stderr.write(`comment-guard hook error (failing open): ${e.message}\n`);
+  process.stderr.write(
+    `comment-guard hook error (failing open): ${e.message}\n`,
+  );
   process.exit(0);
 }
