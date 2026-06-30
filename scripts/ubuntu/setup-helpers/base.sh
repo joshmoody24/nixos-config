@@ -109,4 +109,50 @@ if [ ! -f "$OLLAMA_OVERRIDE" ] || [ "$(cat "$OLLAMA_OVERRIDE")" != "$OLLAMA_OVER
 fi
 sudo systemctl enable --now ollama
 
+# zram: compressed swap in RAM (fewer OOMs on large type checks)
+if ! dpkg -s zram-tools &>/dev/null; then
+  echo "Installing zram-tools..."
+  sudo apt install -y zram-tools
+fi
+
+ZRAMSWAP_CONFIG='ALGO=zstd
+PERCENT=50
+PRIORITY=100'
+if [ "$(cat /etc/default/zramswap 2>/dev/null)" != "$ZRAMSWAP_CONFIG" ]; then
+  echo "Configuring zramswap..."
+  echo "$ZRAMSWAP_CONFIG" | sudo tee /etc/default/zramswap > /dev/null
+  sudo systemctl restart zramswap
+fi
+
+# Tuning for zram-backed swap: prefer compressing pages over evicting code
+ZRAM_SYSCTL='vm.swappiness=180
+vm.watermark_boost_factor=0
+vm.watermark_scale_factor=125
+vm.page-cluster=0'
+if [ "$(cat /etc/sysctl.d/99-zram.conf 2>/dev/null)" != "$ZRAM_SYSCTL" ]; then
+  echo "Configuring zram sysctl..."
+  echo "$ZRAM_SYSCTL" | sudo tee /etc/sysctl.d/99-zram.conf > /dev/null
+  sudo sysctl --system > /dev/null
+fi
+
+# earlyoom: kill the offending process early instead of freezing on kernel OOM
+if ! dpkg -s earlyoom &>/dev/null; then
+  echo "Installing earlyoom..."
+  sudo apt install -y earlyoom
+fi
+
+EARLYOOM_CONFIG="EARLYOOM_ARGS=\"-r 60 -m 5 -s 5 --avoid '(^|/)(systemd|Xorg|gnome-shell|sshd)\$' --prefer '(^|/)(node|tsc|tsserver|esbuild)\$'\""
+if [ "$(cat /etc/default/earlyoom 2>/dev/null)" != "$EARLYOOM_CONFIG" ]; then
+  echo "Configuring earlyoom..."
+  echo "$EARLYOOM_CONFIG" | sudo tee /etc/default/earlyoom > /dev/null
+  sudo systemctl restart earlyoom
+fi
+sudo systemctl enable --now earlyoom
+
+# Ubuntu's systemd-oomd competes with earlyoom; disable it
+if systemctl is-enabled systemd-oomd &>/dev/null; then
+  echo "Disabling systemd-oomd in favor of earlyoom..."
+  sudo systemctl disable --now systemd-oomd
+fi
+
 echo "Base setup done!"
