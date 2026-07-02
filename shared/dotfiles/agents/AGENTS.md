@@ -82,12 +82,8 @@ In general, favor a declarative approach to code that looks more like functional
 
 Avoid duplicating large quantities of code. If you notice yourself having written very similar code in more than one place, please proactively de-duplicate. This also applies to pre-existing code. Many problems in this codebase have been solved before. Look for existing utility functions before implementing your own.
 
-## Running Unit and Integration Tests
-
-`--test-filter` only supports substrings from the file path, not individual test names.
-
 ## Fast Iteration
 
-Look for ways to run a node or bazel repl to test code immediately. The faster the verification loop the better.
+Look for ways to test code immediately. The faster the verification loop the better.
 
-Avoid type checking packages downstream of `redo/server`, because the build times are too long for the benefit to be worthwhile. Similarly, avoid building packages in general due to the lack of value. Reasoning from first principles about correctness and writing tests is the most useful way to ensure correctness. Type checking packages before `server` like `redo/model` is acceptable if done judiciously.
+Avoid type checking packages downstream of `redo/model`, because the build times are too long for the benefit to be worthwhile. Similarly, avoid building packages in general due to the lack of value. Reasoning from first principles about correctness and writing tests is the most useful way to ensure correctness. Type checking packages before and including `redo/model` is acceptable if done judiciously.

@@ -26,7 +26,6 @@
     ".gitconfig".source = ./dotfiles/.gitconfig;
 
     ".claude/CLAUDE.md".source = ./dotfiles/agents/AGENTS.md;
-    ".claude/hooks/comment-guard.js".source = ./dotfiles/claude/hooks/comment-guard.js;
     ".codex/AGENTS.md".source = ./dotfiles/agents/AGENTS.md;
     ".gemini/GEMINI.md".source = ./dotfiles/agents/AGENTS.md;
   };
@@ -124,18 +123,6 @@
       ControlPersist = "no";
     };
   };
-
-  # Merge the comment-guard hook into the mutable ~/.claude/settings.json so the
-  # file stays editable by Claude Code's UI while nix owns the hooks key.
-  home.activation.claudeCommentHook =
-    lib.hm.dag.entryAfter [ "writeBoundary" "linkGeneration" ] ''
-      settings="$HOME/.claude/settings.json"
-      hooks='[{"matcher":"Edit|Write|MultiEdit","hooks":[{"type":"command","command":"node '"$HOME"'/.claude/hooks/comment-guard.js"}]}]'
-      $DRY_RUN_CMD mkdir -p "$HOME/.claude"
-      [ -f "$settings" ] || echo '{}' > "$settings"
-      ${pkgs.jq}/bin/jq --argjson h "$hooks" '.hooks.PreToolUse = $h' "$settings" > "$settings.tmp" \
-        && $DRY_RUN_CMD mv "$settings.tmp" "$settings"
-    '';
 
   # Let home Manager install and manage itself.
   programs.home-manager.enable = true;
