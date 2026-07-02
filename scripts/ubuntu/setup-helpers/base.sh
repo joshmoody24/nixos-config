@@ -149,10 +149,14 @@ if [ "$(cat /etc/default/earlyoom 2>/dev/null)" != "$EARLYOOM_CONFIG" ]; then
 fi
 sudo systemctl enable --now earlyoom
 
-# Ubuntu's systemd-oomd competes with earlyoom; disable it
-if systemctl is-enabled systemd-oomd &>/dev/null; then
-  echo "Disabling systemd-oomd in favor of earlyoom..."
-  sudo systemctl disable --now systemd-oomd
-fi
+# Ubuntu's systemd-oomd kills whole session cgroups (logs you out); mask the
+# service and its triggering socket so nothing pulls it back up, leaving
+# earlyoom in charge
+for unit in systemd-oomd.service systemd-oomd.socket; do
+  if [ "$(systemctl is-enabled "$unit" 2>/dev/null)" != "masked" ]; then
+    echo "Masking $unit in favor of earlyoom..."
+    sudo systemctl mask --now "$unit"
+  fi
+done
 
 echo "Base setup done!"
