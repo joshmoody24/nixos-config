@@ -27,9 +27,13 @@ if ! command -v caddy &>/dev/null; then
   sudo apt install -y caddy
 fi
 
-sudo cp "$REPO_DIR/shared/dotfiles/redo/caddy/Caddyfile" /etc/caddy/Caddyfile
-sudo systemctl enable --now caddy
-sudo systemctl reload caddy
+# don runs caddy itself (tools/caddy), so keep the distro caddy.service off —
+# it squats on ports 2019/443 and blocks don's caddy.
+sudo systemctl disable --now caddy 2>/dev/null || true
+
+# Let don's caddy (run as your user) bind :443, which the service did for us.
+sudo setcap cap_net_bind_service=+ep "$(command -v caddy)"
+
 echo "Trusting Caddy's local CA..."
 caddy trust
 
