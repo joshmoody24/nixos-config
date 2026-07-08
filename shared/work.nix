@@ -5,7 +5,7 @@
   # they are managed by the redo setup script (linux-setup.sh)
   home.packages = lib.mkAfter (with pkgs; [
     slack
-    mongodb-compass
+    (config.lib.nixGL.wrap mongodb-compass)
     dbeaver-bin
 
     awscli2
