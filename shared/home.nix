@@ -7,7 +7,6 @@
   home.file = {
     ".bashrc".source = ./dotfiles/.bashrc;
 
-    ".config/nvim/init.lua".source = ./dotfiles/nvim/init.lua;
     ".config/nvim/lua" = {
       source = ./dotfiles/nvim/lua;
       recursive = true;
@@ -30,8 +29,20 @@
     ".gemini/GEMINI.md".source = ./dotfiles/agents/AGENTS.md;
   };
 
+  programs.neovim = {
+    enable = true;
+    withRuby = false;
+    withPython3 = false;
+    extraLuaConfig = builtins.readFile ./dotfiles/nvim/init.lua;
+    plugins = with pkgs.vimPlugins.nvim-treesitter-parsers; [
+      json javascript typescript tsx yaml html css
+      markdown markdown_inline bash dockerfile lua vim
+      gitignore sql astro clojure glsl fennel scheme
+      elixir heex python gdscript vimdoc query
+    ];
+  };
+
   home.packages = with pkgs; [
-    neovim
     ripgrep
     xclip
     git
