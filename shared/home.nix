@@ -33,7 +33,7 @@
     enable = true;
     withRuby = false;
     withPython3 = false;
-    extraLuaConfig = builtins.readFile ./dotfiles/nvim/init.lua;
+    initLua = builtins.readFile ./dotfiles/nvim/init.lua;
     plugins = with pkgs.vimPlugins.nvim-treesitter-parsers; [
       json javascript typescript tsx yaml html css
       markdown markdown_inline bash dockerfile lua vim
