@@ -73,15 +73,55 @@ return {
 			},
 		},
 	},
-	keys = {
+	keys = function()
+		local test_globs = {
+			"*.spec.ts",
+			"*.spec.tsx",
+			"*.spec.js",
+			"*.test.ts",
+			"*.test.tsx",
+			"*.test.js",
+		}
+
+		local function is_test_file(path)
+			return path:match("%.spec%.[tj]sx?$") ~= nil or path:match("%.test%.[tj]sx?$") ~= nil
+		end
+
+		if vim.g.filter_tests == nil then
+			vim.g.filter_tests = true
+		end
+
+		-- `exclude` stops fd/rg from reading test files; `filter.filter` catches
+		-- smart-picker sources (recent, buffers) that ignore `exclude`.
+		local function with_filter(opts)
+			opts = opts or {}
+			if vim.g.filter_tests then
+				opts.exclude = vim.list_extend(vim.deepcopy(test_globs), opts.exclude or {})
+				opts.filter = opts.filter or {}
+				opts.filter.filter = function(item)
+					return not is_test_file(item.file or item.text or "")
+				end
+			end
+			return opts
+		end
+
+		return {
 		-- Pickers
-		{ "<leader>ff", function() Snacks.picker.files() end, desc = "Find files" },
-		{ "<leader>fg", function() Snacks.picker.grep() end, desc = "Grep files" },
+		{ "<leader>ff", function() Snacks.picker.files(with_filter()) end, desc = "Find files" },
+		{ "<leader>fg", function() Snacks.picker.grep(with_filter()) end, desc = "Grep files" },
 		{ "<leader>fb", function() Snacks.explorer() end, desc = "File explorer" },
-		{ "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent files}" },
+		{ "<leader>fr", function() Snacks.picker.recent(with_filter()) end, desc = "Recent files}" },
 		{ "<leader>fc", function() Snacks.picker.commands() end, desc = "Commands explorer" },
 		{ "<leader>fh", function() Snacks.picker.command_history() end, desc = "Commands explorer" },
-		{ "<leader>f<space>", function() Snacks.picker.smart() end, desc = "Smart find files" },
+		{ "<leader>f<space>", function() Snacks.picker.smart(with_filter()) end, desc = "Smart find files" },
+		{
+			"<leader>ut",
+			function()
+				vim.g.filter_tests = not vim.g.filter_tests
+				Snacks.notify(vim.g.filter_tests and "Hiding test files" or "Showing test files", { title = "Pickers" })
+			end,
+			desc = "Toggle test file filtering",
+		},
 
 		-- Terminal
 		{ "<leader>t", function() Snacks.terminal() end, desc = "Terminal" },
@@ -133,6 +173,7 @@ return {
 		-- Git
 		{ "<leader>gr", function() Snacks.gitbrowse() end, desc = "Open file in browser on git remote" },
 		{ "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git log for current line" },
-	}
+		}
+	end,
 }
 
