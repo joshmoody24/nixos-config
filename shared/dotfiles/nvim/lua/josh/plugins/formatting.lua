@@ -30,19 +30,13 @@ return {
 					stdin = true,
 				},
 			},
-			format_on_save = {
-				lsp_fallback = true,
-				async = false,
-				timeout_ms = 5000,
+			format_after_save = {
+				lsp_format = "fallback",
 			},
-
-			vim.keymap.set({ "n", "v" }, "<leader>mp", function()
-				conform.format({
-					lsp_fallback = true,
-					async = false,
-					timeout_ms = 1000,
-				})
-			end, { desc = "Format file or range (in visual mode)" }),
 		})
+
+		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
+			conform.format({ lsp_format = "fallback", async = false, timeout_ms = 5000 })
+		end, { desc = "Format file or range (in visual mode)" })
 	end,
 }
