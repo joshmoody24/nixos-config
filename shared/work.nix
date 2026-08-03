@@ -37,6 +37,10 @@
   home.file = lib.mkAfter {
     ".config/kitty/redo.session".source = ./dotfiles/redo/redo.session;
     ".config/ngrok/theme.yml".source = ./dotfiles/redo/ngrok-theme.yml;
+    ".local/bin/rsql" = {
+      source = ./dotfiles/redo/rsql;
+      executable = true;
+    };
 
     # Wrapper so `corepack enable` is a no-op (Nix store is immutable).
     # All shims reference pkgs.nodejs directly so they update automatically
@@ -66,7 +70,8 @@
       '';
     };
     ".bashrc.local".text = ''
-      source /home/josh/code/redo/tools/bazel-completion.bash
+      completion="''${REDO_ROOT:-$HOME/code/redo}/tools/bazel-completion.bash"
+      [ -f "$completion" ] && source "$completion"
     '';
 };
 }

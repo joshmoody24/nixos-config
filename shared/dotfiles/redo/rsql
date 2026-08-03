@@ -1,0 +1,182 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+config_file="${XDG_CONFIG_HOME:-$HOME/.config}/rsql/config"
+
+redo_root() {
+  if [[ -z "${REDO_ROOT:-}" && -f "$config_file" ]]; then
+    source "$config_file"
+  fi
+
+  if [[ -z "${REDO_ROOT:-}" || ! -f "$REDO_ROOT/conf.sh" ]]; then
+    REDO_ROOT=$(prompt_for_root) || exit 1
+    mkdir -p "$(dirname "$config_file")"
+    printf 'REDO_ROOT=%q\n' "$REDO_ROOT" >"$config_file"
+    echo "Saved REDO_ROOT to $config_file" >&2
+  fi
+
+  printf '%s' "$REDO_ROOT"
+}
+
+prompt_for_root() {
+  local path
+  { exec 3</dev/tty; } 2>/dev/null || exec 3<&0
+
+  while true; do
+    read -r -u 3 -p "Path to the redo repo: " path || {
+      echo "REDO_ROOT is not configured and there is no input to prompt on." >&2
+      exit 1
+    }
+    path="${path/#\~/$HOME}"
+    if [[ -f "$path/conf.sh" ]]; then
+      (cd "$path" && pwd)
+      return
+    fi
+    echo "No conf.sh found in '$path'." >&2
+  done
+}
+
+# conf.sh defines the whole dev environment; only the connection escapes.
+connection_args() {
+  (
+    cd "$1"
+    unset CRDB_URL DB_USER
+    source conf.sh >/dev/null 2>&1
+    if [[ -n "${CRDB_URL:-}" ]]; then
+      printf '%s\n' --url "$CRDB_URL"
+      [[ -n "${DB_USER:-}" ]] && printf '%s\n' --user "$DB_USER"
+    fi
+  )
+}
+
+run_sql() {
+  local root
+  root=$(redo_root)
+
+  local conn=()
+  while IFS= read -r arg; do conn+=("$arg"); done < <(connection_args "$root")
+
+  (
+    cd "$root"
+    bazel run --ui_event_filters=-info,-stdout,-stderr --noshow_progress \
+      sql -- "${conn[@]+"${conn[@]}"}" "$@"
+  )
+}
+
+guard_sql() {
+  local stripped
+  stripped=$(printf '%s' "$1" | sed -E "s/--.*//; s/'([^']|'')*'/''/g" | tr '\n' ' ')
+
+  local statement
+  while IFS= read -r statement; do
+    if [[ "$statement" =~ ^[[:space:]]*[Dd][Ee][Ll][Ee][Tt][Ee][[:space:]] ]] &&
+      [[ ! "$statement " =~ [[:space:]][Ww][Hh][Ee][Rr][Ee][[:space:]\(] ]]; then
+      echo "Refusing to run DELETE without a WHERE clause: $statement" >&2
+      return 1
+    fi
+  done < <(printf '%s\n' "$stripped" | tr ';' '\n')
+}
+
+# tsv is the scripting default; its header is stripped so output pipes cleanly.
+run_query() {
+  guard_sql "$1"
+  if [[ "$format" == "tsv" ]]; then
+    run_sql --format=tsv --execute "$1" | tail -n +2
+  else
+    run_sql --format="$format" --execute "$1"
+  fi
+}
+
+sql_identifier() {
+  local value="${1:?missing SQL identifier}"
+  if [[ ! "$value" =~ ^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$ ]]; then
+    echo "Invalid SQL identifier: $value" >&2
+    return 1
+  fi
+  printf '%s' "$value"
+}
+
+usage() {
+  cat <<'EOF'
+usage: rsql [-f FORMAT | -p] <command> [args]
+
+  shell [args...]        interactive session (raw cockroach sql)
+  query 'select 1'       run a statement
+  file query.sql         run a file
+  tables                 list base tables (pipe to grep to filter)
+  views                  list views
+  cols TABLE             show columns from TABLE
+  count TABLE            row count
+
+formats: tsv (default, header stripped), csv, json, table, records
+  -p picks the most readable format for the command.
+
+config: REDO_ROOT from the environment, else
+  ${XDG_CONFIG_HOME:-~/.config}/rsql/config, else prompts and saves it.
+EOF
+}
+
+format=""
+pretty=false
+while [[ "${1:-}" == -* ]]; do
+  case "$1" in
+    -f|--format) format="${2:?usage: -f FORMAT}"; shift 2 ;;
+    -p|--pretty) pretty=true; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
+  esac
+done
+
+command="${1:-help}"
+[[ $# -gt 0 ]] && shift
+
+# Wide result sets read better as records, single-column lists as a table.
+set_format() {
+  if [[ -z "$format" ]]; then
+    if [[ "$pretty" == true ]]; then format="$1"; else format=tsv; fi
+  fi
+}
+
+case "$command" in
+  shell)
+    for arg in "$@"; do
+      [[ "$arg" == --execute=* ]] && guard_sql "${arg#--execute=}"
+    done
+    run_sql "$@"
+    ;;
+  query|q)
+    set_format records
+    run_query "$*"
+    ;;
+  file)
+    guard_sql "$(<"${1:?usage: rsql file query.sql}")"
+    run_sql --file "$1"
+    ;;
+  tables)
+    set_format table
+    run_query "select table_name from information_schema.tables
+      where table_schema = 'public' and table_type = 'BASE TABLE'
+      order by table_name"
+    ;;
+  views)
+    set_format table
+    run_query "select table_name from information_schema.views
+      where table_schema = 'public' order by table_name"
+    ;;
+  cols|desc)
+    set_format table
+    run_query "show columns from $(sql_identifier "${1:?usage: rsql cols TABLE}")"
+    ;;
+  count)
+    set_format table
+    run_query "select count(*) from $(sql_identifier "${1:?usage: rsql count TABLE}")"
+    ;;
+  help)
+    usage
+    ;;
+  *)
+    echo "Unknown rsql command: $command" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
