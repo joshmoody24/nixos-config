@@ -108,8 +108,8 @@ usage: rsql [-f FORMAT | -p] <command> [args]
   cols TABLE             show columns from TABLE
   count TABLE            row count
 
-formats: tsv (default, header stripped), csv, json, table, records
-  -p picks the most readable format for the command.
+formats: tsv (piped default, header stripped), csv, json, table, records
+  The most readable format is used on a terminal; -p forces it through a pipe.
 
 config: REDO_ROOT from the environment, else
   ${XDG_CONFIG_HOME:-~/.config}/rsql/config, else prompts and saves it.
@@ -133,7 +133,7 @@ command="${1:-help}"
 # Wide result sets read better as records, single-column lists as a table.
 set_format() {
   if [[ -z "$format" ]]; then
-    if [[ "$pretty" == true ]]; then format="$1"; else format=tsv; fi
+    if [[ "$pretty" == true || -t 1 ]]; then format="$1"; else format=tsv; fi
   fi
 }
 
