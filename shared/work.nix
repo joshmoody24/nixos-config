@@ -11,6 +11,7 @@
     awscli2
     bazelisk
     (pkgs.writeShellScriptBin "bazel" "exec bazelisk \"$@\"")
+    coder
     lsof
     valkey
     ruby
