@@ -46,6 +46,7 @@
     ripgrep
     xclip
     git
+    delta
     wget
     (config.lib.nixGL.wrap google-chrome)
     (config.lib.nixGL.wrap firefox)
