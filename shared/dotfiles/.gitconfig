@@ -21,6 +21,8 @@
 	flease = push --force-with-lease
 	s = status
 	ch = checkout
+	stack = log --oneline --decorate origin/main..HEAD
+	rd = range-diff @{push}...HEAD
 [push]
 	default = current
 [help]
