@@ -69,6 +69,7 @@
     claude-code
     opencode
     gh
+    glab
     github-copilot-cli
     onlyoffice-desktopeditors
     fd
