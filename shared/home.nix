@@ -64,7 +64,7 @@
     gimp
     gnomeExtensions.clipboard-history
     gnomeExtensions.blur-my-shell
-    gemini-cli
+    antigravity-cli
     codex
     claude-code
     opencode
