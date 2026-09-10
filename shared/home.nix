@@ -86,7 +86,7 @@
     clojure-lsp
     cljfmt
 
-    typescript-go
+    typescript
     ast-grep
 
     (pkgs.llm.withPlugins { llm-ollama = true; })

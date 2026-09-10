@@ -32,8 +32,8 @@ return {
 				},
 			},
 		})
-		vim.lsp.config("tsgo", { capabilities = capabilities })
-		vim.lsp.enable("tsgo")
+		vim.lsp.config("tsc", { capabilities = capabilities })
+		vim.lsp.enable("tsc")
 
 		-- MDX Language Server
 		vim.lsp.config("mdx", {

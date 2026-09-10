@@ -55,7 +55,6 @@ in
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
   environment.gnome.excludePackages = (with pkgs; [
-    gnome-photos
     gnome-tour
     gedit
     xterm
