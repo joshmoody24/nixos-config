@@ -31,9 +31,11 @@
     #media-session.enable = true;
   };
 
-  # Make RTL SDR work for non root users in the plugdev group
   services.udev.extraRules = ''
+    # Make RTL SDR work for non root users in the plugdev group
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="plugdev", MODE="0666"
+    # Remove the Ryzen iGPU so Vulkan games can't pick it over the RX 7900
+    ACTION=="add", SUBSYSTEM=="pci", KERNEL=="0000:12:00.0", ATTR{remove}="1"
   '';
 
   services.ollama.package = pkgs.ollama-rocm;
