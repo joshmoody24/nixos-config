@@ -7,6 +7,10 @@ return {
 			-- Disable Conjure's K mapping so LSP hover works
 			vim.g["conjure#mapping#doc_word"] = false
 
+			-- Don't auto-start REPLs on buffer load; Conjure's scheduled start
+			-- crashes if the buffer is no longer current. Start with ;cs instead
+			vim.g["conjure#client_on_load"] = false
+
 			-- Set configuration options here
 			vim.g["conjure#filetype#fennel"] = "conjure.client.fennel.stdio"
 			-- Route TypeScript files to the JavaScript stdio client, use tsx for TS support
