@@ -4,7 +4,23 @@
   home.username = "josh";
   home.homeDirectory = "/home/josh";
 
+  news.display = "silent";
+
   home.file = {
+    # Lets `home-manager switch` (no args) find the flake and pick josh@$(hostname).
+    ".config/home-manager/flake.nix".text = let
+      repoPath = "${config.home.homeDirectory}/code/nixos-config";
+    in ''
+      {
+        description = "Home Manager entrypoint (managed by nixos-config)";
+
+        inputs.nixos-config.url = "path:${repoPath}";
+
+        outputs = { nixos-config, ... }: {
+          homeConfigurations = nixos-config.homeConfigurations;
+        };
+      }
+    '';
     ".bashrc".source = ./dotfiles/.bashrc;
 
     ".config/nvim/lua" = {
