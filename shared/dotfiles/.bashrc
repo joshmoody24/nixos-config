@@ -52,6 +52,7 @@ function set_cursor_shape() {
   esac
 }
 
+shopt -s globstar
 set -o vi
 bind '"jk":vi-movement-mode'
 
