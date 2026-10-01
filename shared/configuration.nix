@@ -92,4 +92,13 @@ in
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.openssh.settings = {
+    PasswordAuthentication = false;
+    KbdInteractiveAuthentication = false;
+  };
+  users.users.josh.openssh.authorizedKeys.keyFiles = [ ./dotfiles/ssh/josh.pub ];
+
+  services.tailscale.enable = true;
+  # Reaching this machine is a tailnet-only affair; nothing is opened on the LAN.
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
 }

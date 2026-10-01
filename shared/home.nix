@@ -139,17 +139,34 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    settings."*" = {
-      ForwardAgent = false;
-      AddKeysToAgent = "no";
-      Compression = false;
-      ServerAliveInterval = 0;
-      ServerAliveCountMax = 3;
-      HashKnownHosts = false;
-      UserKnownHostsFile = "~/.ssh/known_hosts";
-      ControlMaster = "no";
-      ControlPath = "~/.ssh/master-%r@%n:%p";
-      ControlPersist = "no";
+
+    settings = let
+      tailnet = name: {
+        # Stale registrations hold the unsuffixed names, so the live machines are -1.
+        HostName = "joshm-${name}-1";
+        User = "josh";
+        # Keep long remote jobs alive across lid closes and Wi-Fi hops.
+        ServerAliveInterval = 30;
+        ServerAliveCountMax = 6;
+        ControlMaster = "auto";
+        ControlPersist = "10m";
+      };
+    in {
+      framework = tailnet "framework";
+      thinkpad = tailnet "thinkpad";
+
+      "*" = {
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
+      };
     };
   };
 

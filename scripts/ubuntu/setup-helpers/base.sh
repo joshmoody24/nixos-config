@@ -58,6 +58,29 @@ if ! command -v tailscale &>/dev/null; then
   curl -fsSL https://tailscale.com/install.sh | sh
 fi
 
+# sshd, for reaching this machine over the tailnet
+if ! dpkg -s openssh-server &>/dev/null; then
+  echo "Installing openssh-server..."
+  sudo apt install -y openssh-server
+fi
+
+# The JumpCloud agent owns ~/.ssh/authorized_keys, so our own keys go in a
+# second file. It lives under /etc because sshd's StrictModes rejects keys
+# resolving into the group-writable /nix/store.
+echo "Installing SSH authorized keys..."
+sudo install -D -m 444 -o root -g root \
+  "$REPO_DIR/shared/dotfiles/ssh/josh.pub" /etc/ssh/authorized_keys.d/josh
+
+SSHD_CONFIG='AuthorizedKeysFile .ssh/authorized_keys /etc/ssh/authorized_keys.d/%u
+PasswordAuthentication no
+KbdInteractiveAuthentication no'
+if [ "$(sudo cat /etc/ssh/sshd_config.d/10-nixos-config.conf 2>/dev/null)" != "$SSHD_CONFIG" ]; then
+  echo "Configuring sshd..."
+  echo "$SSHD_CONFIG" | sudo tee /etc/ssh/sshd_config.d/10-nixos-config.conf > /dev/null
+  sudo systemctl restart ssh
+fi
+sudo systemctl enable --now ssh
+
 # Nix garbage collection (weekly, delete older than 30 days)
 if ! systemctl --user is-enabled nix-gc.timer &>/dev/null 2>&1; then
   echo "Setting up nix garbage collection timer..."
