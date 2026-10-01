@@ -34,8 +34,18 @@ sudo systemctl disable --now caddy 2>/dev/null || true
 # Let don's caddy (run as your user) bind :443, which the service did for us.
 sudo setcap cap_net_bind_service=+ep "$(command -v caddy)"
 
-echo "Trusting Caddy's local CA..."
-caddy trust
+# `caddy trust` asks a running caddy's admin API for the CA, but don's caddy is
+# not up during setup, so install the root from disk instead. It only exists
+# once caddy has run at least once.
+CADDY_ROOT="$HOME/.local/share/caddy/pki/authorities/local/root.crt"
+CADDY_TRUSTED="/usr/local/share/ca-certificates/caddy-local-root.crt"
+if [ ! -f "$CADDY_ROOT" ]; then
+  echo "Caddy's local CA does not exist yet; re-run this after the first 'don start'."
+elif ! cmp -s "$CADDY_ROOT" "$CADDY_TRUSTED"; then
+  echo "Trusting Caddy's local CA..."
+  sudo install -m 444 -o root -g root "$CADDY_ROOT" "$CADDY_TRUSTED"
+  sudo update-ca-certificates
+fi
 
 # --- Docker ---
 if ! command -v docker &>/dev/null; then
