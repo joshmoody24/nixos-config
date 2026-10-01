@@ -1,0 +1,14 @@
+layout {
+    tab name="Vim" focus=true {
+        pane command="nvim"
+    }
+    tab name="App" {
+        pane
+    }
+    tab name="Terminal" {
+        pane
+    }
+    tab name="Agent" {
+        pane
+    }
+}

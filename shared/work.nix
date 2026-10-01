@@ -36,7 +36,6 @@
   ]);
 
   home.file = lib.mkAfter {
-    ".config/kitty/redo.session".source = ./dotfiles/redo/redo.session;
     ".config/ngrok/theme.yml".source = ./dotfiles/redo/ngrok-theme.yml;
     ".local/bin/rsql" = {
       source = ./dotfiles/redo/rsql;

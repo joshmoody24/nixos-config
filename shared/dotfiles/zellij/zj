@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Attach to the zellij session for this context, creating it from the dev layout
+# if it does not exist yet. Exited sessions are resurrected by attaching.
+set -euo pipefail
+
+if [ -n "${ZELLIJ:-}" ]; then
+  echo "Already inside zellij session '${ZELLIJ_SESSION_NAME:-?}'." >&2
+  exit 1
+fi
+
+session="${1:-$(basename "$PWD")}"
+
+if zellij ls -sn 2>/dev/null | grep -qxF "$session"; then
+  exec zellij attach "$session"
+fi
+
+exec zellij -s "$session" -n dev

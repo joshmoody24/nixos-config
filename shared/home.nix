@@ -37,6 +37,18 @@
     };
 
     ".config/zellij/config.kdl".source = ./dotfiles/zellij/config.kdl;
+    ".config/zellij/layouts" = {
+      source = ./dotfiles/zellij/layouts;
+      recursive = true;
+    };
+    ".local/bin/zj" = {
+      source = ./dotfiles/zellij/zj;
+      executable = true;
+    };
+
+    # Startup: one kitty window hosting a zellij session, so a crash or a closed
+    # terminal costs no history.
+    ".config/autostart/kitty.desktop".source = ./dotfiles/autostart/kitty.desktop;
 
     ".gitconfig".source = ./dotfiles/.gitconfig;
 
