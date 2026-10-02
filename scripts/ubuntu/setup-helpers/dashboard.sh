@@ -7,6 +7,7 @@ REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 DOTFILES="$REPO_DIR/shared/dotfiles/dashboard"
 STATE_DIR=/var/lib/redo-dashboard
 TALK="$STATE_DIR/dashboard.deque"
+RENDERED_MARKER="rendered by redo-dashboard"
 
 if ! id dash &>/dev/null; then
   echo "Creating dash user..."
@@ -19,7 +20,10 @@ sudo usermod --shell /bin/bash dash
 
 # Rendered output is world-readable; only josh's collectors write it.
 sudo install -d -m 755 -o josh -g josh "$STATE_DIR"
-if [ ! -f "$TALK" ]; then
+
+# Until a collector has run, the kiosk shows the placeholder. render marks its
+# own output, so refreshing the placeholder here can never clobber real data.
+if ! grep -q "$RENDERED_MARKER" "$TALK" 2>/dev/null; then
   sudo install -m 644 -o josh -g josh "$DOTFILES/placeholder.deque" "$TALK"
 fi
 
