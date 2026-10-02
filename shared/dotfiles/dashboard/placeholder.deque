@@ -6,23 +6,27 @@ warm: #e0af68
 muted: #545c7e
 accent: #7aa2f7
 
-// Slide 1 is the only one the kiosk ever shows on its own: deque never
-// auto-advances. Slide 2 is reachable by keyboard when you want detail.
-// No `>` steps anywhere: they stay hidden until a keypress.
+// Slide 1 is the only one the kiosk shows on its own: deque never advances by
+// itself. Slide 2 is reachable by keyboard. No `>` steps anywhere: they stay
+// hidden until a keypress.
+//
+// One table, not one per group: separate tables are each centred on their own
+// widths, so nothing shares a left edge. The first column carries the type.
 
 ---
+## placeholder
 
 # 3 things
 
-| !4821 | checkout rate limits | {bad}your approval{/} |
-| !4799 | drop legacy session table | {good}ready to merge{/} |
-| 09:30 | standup | {warm}in 10 min{/} |
+| {muted}mr{/} | !4821 | checkout rate limits | {bad}your approval{/} |
+| {muted}mr{/} | !4799 | drop legacy session table | {good}ready to merge{/} |
+| {muted}cal{/} | 09:30 | standup | {warm}in 10 min{/} |
 
 ---
-## detail
+## placeholder
 
 # quiet
 
-| merge requests | {good}ok{/} | 08:14 |
-| calendar | {good}ok{/} | 08:14 |
-| slack | {muted}off{/} | |
+| {muted}mr{/} | merge requests | {good}ok{/} | 08:14 |
+| {muted}cal{/} | calendar | {good}ok{/} | 08:14 |
+| {muted}slack{/} | slack | {muted}off{/} | |
