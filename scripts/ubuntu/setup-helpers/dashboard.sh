@@ -53,7 +53,23 @@ if ! sudo -u dash -H "$NIX" profile list "${NIX_FLAGS[@]}" 2>/dev/null | grep -q
   sudo -u dash -H "$NIX" profile install "$DEQUE" "${NIX_FLAGS[@]}"
 fi
 
-sudo install -m 755 "$DOTFILES/kiosk.sh" /usr/local/bin/redo-dashboard-kiosk
+# The kiosk script lives where josh can rewrite it, so font and terminal tweaks
+# need no sudo. GDM's session file is root-owned and never has to change again.
+KIOSK="$STATE_DIR/kiosk.sh"
+install -m 755 "$DOTFILES/kiosk.sh" "$KIOSK"
+sudo install -m 755 /dev/stdin /usr/local/bin/redo-dashboard-kiosk <<LAUNCHER
+#!/bin/sh
+exec $KIOSK
+LAUNCHER
+
+# Restarting the display is how a kiosk change takes effect; needing a password
+# for it would mean needing to be sitting at the machine.
+SUDO_GDM="josh ALL=(root) NOPASSWD: /usr/bin/systemctl restart gdm, /usr/bin/systemctl restart gdm.service"
+if [ "$(sudo cat /etc/sudoers.d/redo-dashboard 2>/dev/null)" != "$SUDO_GDM" ]; then
+  echo "Allowing josh to restart the display..."
+  echo "$SUDO_GDM" | sudo tee /etc/sudoers.d/redo-dashboard > /dev/null
+  sudo chmod 440 /etc/sudoers.d/redo-dashboard
+fi
 sudo install -D -m 644 "$DOTFILES/dashboard.desktop" \
   /usr/share/wayland-sessions/dashboard.desktop
 
