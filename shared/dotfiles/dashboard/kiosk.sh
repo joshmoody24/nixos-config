@@ -14,7 +14,9 @@ export REDO_DASHBOARD_FONT="${REDO_DASHBOARD_FONT:-DejaVu Sans Mono:size=28}"
 
 # Anything that ends deque, a stray keypress included, would otherwise leave a
 # dead screen until the next reboot: GDM only autologs in once per boot.
-exec cage -- bash -c '
+# -s allows VT switching: without it cage swallows ctrl+alt+F1 and the only way
+# out of the kiosk is a reboot. The other VTs still demand a password.
+exec cage -s -- bash -c '
   while true; do
     if [ -f "$REDO_DASHBOARD_TALK" ]; then
       foot --font="$REDO_DASHBOARD_FONT" \
