@@ -10,8 +10,12 @@ TALK="$STATE_DIR/dashboard.deque"
 
 if ! id dash &>/dev/null; then
   echo "Creating dash user..."
-  sudo useradd --create-home --shell /usr/sbin/nologin --comment "Dashboard kiosk" dash
+  # A real shell: GDM starts the session through it. dash has no password and
+  # no authorized keys, so this is not a way in.
+  sudo useradd --create-home --shell /bin/bash --comment "Dashboard kiosk" dash
 fi
+
+sudo usermod --shell /bin/bash dash
 
 # Rendered output is world-readable; only josh's collectors write it.
 sudo install -d -m 755 -o josh -g josh "$STATE_DIR"
@@ -29,10 +33,20 @@ for pkg in cage foot; do
 done
 
 # deque touches no GPU, so it comes from the flake. dash cannot see josh's
-# profile, so it gets its own.
-if ! sudo -u dash -H nix profile list 2>/dev/null | grep -q deque; then
+# profile, so it gets its own; the build happens as josh because dash cannot
+# read $REPO_DIR either, and store paths are world-readable. nix is addressed
+# absolutely because sudo's secure_path does not include it, and dash has no
+# nix.conf enabling the experimental commands.
+NIX=/nix/var/nix/profiles/default/bin/nix
+NIX_FLAGS=(--extra-experimental-features nix-command --extra-experimental-features flakes)
+
+echo "Building deque..."
+DEQUE="$("$NIX" build "${NIX_FLAGS[@]}" --no-link --print-out-paths "$REPO_DIR#deque")"
+
+if ! sudo -u dash -H "$NIX" profile list "${NIX_FLAGS[@]}" 2>/dev/null | grep -q "$DEQUE"; then
   echo "Installing deque into dash's profile..."
-  sudo -u dash -H nix profile install "$REPO_DIR#deque"
+  sudo -u dash -H "$NIX" profile remove deque "${NIX_FLAGS[@]}" &>/dev/null || true
+  sudo -u dash -H "$NIX" profile install "$DEQUE" "${NIX_FLAGS[@]}"
 fi
 
 sudo install -m 755 "$DOTFILES/kiosk.sh" /usr/local/bin/redo-dashboard-kiosk
