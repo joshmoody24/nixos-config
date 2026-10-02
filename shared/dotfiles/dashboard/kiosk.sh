@@ -6,15 +6,20 @@
 # deque comes from nix, and it touches no GPU.
 set -uo pipefail
 
-talk="${REDO_DASHBOARD_TALK:-/var/lib/redo-dashboard/dashboard.deque}"
-deque="$HOME/.nix-profile/bin/deque"
+export REDO_DASHBOARD_TALK="${REDO_DASHBOARD_TALK:-/var/lib/redo-dashboard/dashboard.deque}"
+export REDO_DASHBOARD_DEQUE="$HOME/.nix-profile/bin/deque"
 
 # foot defaults to 8pt, which is unreadable on a 2560x1600 panel across a room.
-font="${REDO_DASHBOARD_FONT:-DejaVu Sans Mono:size=28}"
+export REDO_DASHBOARD_FONT="${REDO_DASHBOARD_FONT:-DejaVu Sans Mono:size=28}"
 
-# deque exits if the talk is missing; waiting beats a crash loop on a cold boot.
-until [ -f "$talk" ]; do
-  sleep 5
-done
-
-exec cage -- foot --font="$font" "$deque" "$talk"
+# Anything that ends deque, a stray keypress included, would otherwise leave a
+# dead screen until the next reboot: GDM only autologs in once per boot.
+exec cage -- bash -c '
+  while true; do
+    if [ -f "$REDO_DASHBOARD_TALK" ]; then
+      foot --font="$REDO_DASHBOARD_FONT" \
+        "$REDO_DASHBOARD_DEQUE" "$REDO_DASHBOARD_TALK"
+    fi
+    sleep 2
+  done
+'
