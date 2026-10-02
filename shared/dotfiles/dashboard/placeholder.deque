@@ -1,0 +1,15 @@
+cursor: off
+calm: on
+
+// One slide, one headline, no `>` steps: deque never auto-advances, reveals
+// steps only on a keypress, and on reload jumps to the slide that changed.
+
+---
+
+# 3 things
+
+!4821 checkout rate limits — your approval
+!4799 drop legacy session table — ready to merge
+09:30 standup, in 10 minutes
+
+stale: last updated 08:14

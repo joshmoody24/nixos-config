@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Dashboard
+Comment=Actionable-only kiosk
+Exec=/usr/local/bin/redo-dashboard-kiosk
+Type=Application
+DesktopNames=Dashboard

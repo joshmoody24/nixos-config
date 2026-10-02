@@ -21,6 +21,8 @@
       config.allowUnfree = true;
       overlays = [
         (final: prev: {
+          deque = final.callPackage ./shared/pkgs/deque.nix { };
+
           # The rewritten wrap-gapps-hook needs $output in scope, which stdenv
           # only sets during fixupPhase — skipped by mongodb-compass's buildCommand.
           mongodb-compass = prev.mongodb-compass.overrideAttrs (old: {
@@ -33,6 +35,8 @@
       ];
     };
   in {
+    packages.${system} = { inherit (pkgs) deque; };
+
     # NixOS
     nixosConfigurations.unit = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
