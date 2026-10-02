@@ -1,15 +1,28 @@
 cursor: off
 calm: on
+good: #9ece6a
+bad: #f7768e
+warm: #e0af68
+muted: #545c7e
+accent: #7aa2f7
 
-// One slide, one headline, no `>` steps: deque never auto-advances, reveals
-// steps only on a keypress, and on reload jumps to the slide that changed.
+// Slide 1 is the only one the kiosk ever shows on its own: deque never
+// auto-advances. Slide 2 is reachable by keyboard when you want detail.
+// No `>` steps anywhere: they stay hidden until a keypress.
 
 ---
 
 # 3 things
 
-!4821 checkout rate limits — your approval
-!4799 drop legacy session table — ready to merge
-09:30 standup, in 10 minutes
+| !4821 | checkout rate limits | {bad}your approval{/} |
+| !4799 | drop legacy session table | {good}ready to merge{/} |
+| 09:30 | standup | {warm}in 10 min{/} |
 
-stale: last updated 08:14
+---
+## detail
+
+# quiet
+
+| merge requests | {good}ok{/} | 08:14 |
+| calendar | {good}ok{/} | 08:14 |
+| slack | {muted}off{/} | |
