@@ -9,9 +9,12 @@ set -uo pipefail
 talk="${REDO_DASHBOARD_TALK:-/var/lib/redo-dashboard/dashboard.deque}"
 deque="$HOME/.nix-profile/bin/deque"
 
+# foot defaults to 8pt, which is unreadable on a 2560x1600 panel across a room.
+font="${REDO_DASHBOARD_FONT:-DejaVu Sans Mono:size=24}"
+
 # deque exits if the talk is missing; waiting beats a crash loop on a cold boot.
 until [ -f "$talk" ]; do
   sleep 5
 done
 
-exec cage -- foot "$deque" "$talk"
+exec cage -- foot --font="$font" "$deque" "$talk"
