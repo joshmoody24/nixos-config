@@ -65,10 +65,25 @@ if ! grep -q "^AutomaticLogin=dash" "$GDM_CONF"; then
 import sys, re
 path = sys.argv[1]
 text = open(path).read()
-daemon = "[daemon]\nAutomaticLoginEnable=true\nAutomaticLogin=dash\nAutomaticLoginSession=dashboard.desktop\n"
+daemon = "[daemon]\nAutomaticLoginEnable=true\nAutomaticLogin=dash\n"
 text = re.sub(r"\[daemon\]\n", daemon, text, count=1)
 open(path, "w").write(text)
 PY
+fi
+
+# Which session GDM starts comes from AccountsService, not custom.conf; without
+# this dash lands in the stock GNOME session.
+sudo sed -i '/^AutomaticLoginSession=/d' "$GDM_CONF"
+
+ACCOUNTS_USER=/var/lib/AccountsService/users/dash
+ACCOUNTS_RECORD="[User]
+Session=dashboard
+XSession=dashboard
+SystemAccount=false"
+if [ "$(sudo cat "$ACCOUNTS_USER" 2>/dev/null)" != "$ACCOUNTS_RECORD" ]; then
+  echo "Pointing dash at the dashboard session..."
+  sudo install -d -m 775 /var/lib/AccountsService/users
+  echo "$ACCOUNTS_RECORD" | sudo tee "$ACCOUNTS_USER" > /dev/null
 fi
 
 echo "Dashboard setup done! Reboot to land in the kiosk."
