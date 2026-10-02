@@ -4,6 +4,7 @@
   imports = [
     ../../shared/home.nix
     ../../shared/work.nix
+    ../../shared/dashboard-services.nix
   ];
 
   targets.genericLinux.nixGL.packages = inputs.nixgl.packages;

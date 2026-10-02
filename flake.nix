@@ -11,6 +11,10 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    redo-dashboard = {
+      url = "git+ssh://git@github.com/joshmoody24/redo-dashboard.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:

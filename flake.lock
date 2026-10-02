@@ -75,11 +75,32 @@
         "type": "github"
       }
     },
+    "redo-dashboard": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790971159,
+        "narHash": "sha256-eTMCoP1W7S0B6sO8MO3PLlf81OaMRryc7DSQYCTYAgg=",
+        "ref": "refs/heads/main",
+        "rev": "596db2f80ed87bdbc8297cfe7b70c79c94f4d7ae",
+        "revCount": 10,
+        "type": "git",
+        "url": "ssh://git@github.com/joshmoody24/redo-dashboard.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/joshmoody24/redo-dashboard.git"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixgl": "nixgl",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "redo-dashboard": "redo-dashboard"
       }
     },
     "systems": {
