@@ -30,7 +30,7 @@ let
 in
 {
   systemd.user.services = {
-    redo-dashboard-calendar = service { script = "collectors/calendar.py"; };
+    redo-dashboard-calendar = service { script = "collectors/calendar_feed.py"; };
     redo-dashboard-gitlab = service { script = "collectors/gitlab.py"; };
     redo-dashboard-render = service {
       script = "render.py";

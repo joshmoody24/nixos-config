@@ -50,6 +50,11 @@
     # terminal costs no history.
     ".config/autostart/kitty.desktop".source = ./dotfiles/autostart/kitty.desktop;
 
+    ".local/bin/dashboard" = {
+      source = ./dotfiles/dashboard/dashboard;
+      executable = true;
+    };
+
     ".gitconfig".source = ./dotfiles/.gitconfig;
 
     ".claude/CLAUDE.md".source = ./dotfiles/agents/AGENTS.md;

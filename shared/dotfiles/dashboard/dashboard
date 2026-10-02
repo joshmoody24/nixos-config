@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# What the thinkpad is showing, and the data behind it. Reads locally when run
+# on the thinkpad, over the tailnet otherwise.
+set -euo pipefail
+
+talk=/var/lib/redo-dashboard/dashboard.deque
+state="$HOME/.local/state/redo-dashboard"
+
+run() {
+  if [ -f "$talk" ]; then
+    eval "$1"
+  else
+    ssh thinkpad "$1"
+  fi
+}
+
+case "${1:-screen}" in
+  screen)
+    run "cat $talk"
+    ;;
+  json)
+    run "jq -s 'add' $state/*.json"
+    ;;
+  slack)
+    run "jq -r '.candidates[] | [.score, .where, .user, .why, (.text|gsub(\"\\\\s+\";\" \")|.[0:70])] | @tsv' $state/slack.json" |
+      column -t -s $'\t'
+    ;;
+  sources)
+    run "for f in $state/*.json; do printf '%-10s %s\n' \"\$(basename \$f .json)\" \"\$(jq -r .collected_at \$f)\"; done"
+    ;;
+  *)
+    echo "usage: dashboard [screen|json|slack|sources]" >&2
+    exit 1
+    ;;
+esac
