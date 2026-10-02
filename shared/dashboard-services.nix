@@ -1,16 +1,20 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  dashboard = inputs.redo-dashboard.packages.${pkgs.system};
+  # Dependencies come from the pinned flake, the code from the working clone:
+  # editing a collector takes effect on the next tick, with no rebuild and no
+  # restart. Point `source` at the flake instead to freeze it.
+  python = lib.getExe inputs.redo-dashboard.packages.${pkgs.system}.python;
+  source = "${config.home.homeDirectory}/code/redo-dashboard";
   talk = "/var/lib/redo-dashboard/dashboard.deque";
 
-  service = package: environment: {
-    Unit.Description = "redo-dashboard ${package.name}";
+  service = { script, environment ? [ ] }: {
+    Unit.Description = "redo-dashboard ${baseNameOf script}";
     Service = {
       Type = "oneshot";
       EnvironmentFile = "%h/.config/redo-dashboard/env";
       Environment = environment;
-      ExecStart = lib.getExe package;
+      ExecStart = "${python} ${source}/${script}";
     };
   };
 
@@ -26,9 +30,12 @@ let
 in
 {
   systemd.user.services = {
-    redo-dashboard-calendar = service dashboard.calendar [ ];
-    redo-dashboard-gitlab = service dashboard.gitlab [ ];
-    redo-dashboard-render = service dashboard.render [ "REDO_DASHBOARD_TALK=${talk}" ];
+    redo-dashboard-calendar = service { script = "collectors/calendar.py"; };
+    redo-dashboard-gitlab = service { script = "collectors/gitlab.py"; };
+    redo-dashboard-render = service {
+      script = "render.py";
+      environment = [ "REDO_DASHBOARD_TALK=${talk}" ];
+    };
   };
 
   systemd.user.timers = {
