@@ -32,6 +32,7 @@ in
   systemd.user.services = {
     redo-dashboard-calendar = service { script = "collectors/calendar_feed.py"; };
     redo-dashboard-gitlab = service { script = "collectors/gitlab.py"; };
+    redo-dashboard-slack = service { script = "collectors/slack.py"; };
     redo-dashboard-render = service {
       script = "render.py";
       environment = [ "REDO_DASHBOARD_TALK=${talk}" ];
@@ -43,6 +44,8 @@ in
     # poll is a full download: fetched rarely, expanded into a window.
     redo-dashboard-calendar = timer "10m";
     redo-dashboard-gitlab = timer "2m";
+    # Scoring is a local LLM call per unread message, so not too eagerly.
+    redo-dashboard-slack = timer "10m";
     # render touches no network, so it can run often and keep "in 8 min" honest.
     redo-dashboard-render = timer "30s";
   };
