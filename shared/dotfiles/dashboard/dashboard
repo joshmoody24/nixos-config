@@ -22,7 +22,10 @@ case "${1:-screen}" in
     run "jq -s 'add' $state/*.json"
     ;;
   slack)
-    run "jq -r '.candidates[] | [.score, .where, .user, .why, (.text|gsub(\"\\\\s+\";\" \")|.[0:70])] | @tsv' $state/slack.json" |
+    # Collected on demand: there is no timer, so the file would otherwise be
+    # whatever was scored last.
+    run "cd ~/code/redo-dashboard && set -a && . ~/.config/redo-dashboard/env && set +a && nix run .#slack" >&2
+    run "jq -r '.candidates[] | [.score, .where, .user, .why, (.text|gsub(\"\\\\s+\";\" \")|.[0:60])] | @tsv' $state/slack.json" |
       column -t -s $'\t'
     ;;
   sources)
