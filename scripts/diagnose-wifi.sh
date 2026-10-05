@@ -2,6 +2,10 @@
 # Why the tailnet keeps dropping while the machine stays up. Read-only.
 set -uo pipefail
 
+out=/tmp/wifi-diagnosis.txt
+exec > >(tee "$out") 2>&1
+trap 'echo; echo "saved to $out"' EXIT
+
 iface="$(nmcli -t -f DEVICE,TYPE device | awk -F: '$2=="wifi"{print $1; exit}')"
 echo "=== wifi interface: ${iface:-none found} ==="
 
