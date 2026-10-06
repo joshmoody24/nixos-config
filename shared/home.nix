@@ -55,11 +55,6 @@
       executable = true;
     };
 
-    ".local/bin/llm-serve" = {
-      source = ./dotfiles/llm/llm-serve;
-      executable = true;
-    };
-
     ".gitconfig".source = ./dotfiles/.gitconfig;
 
     ".claude/CLAUDE.md".source = ./dotfiles/agents/AGENTS.md;
@@ -131,8 +126,6 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
-    LLAMA_BASE_URL = "http://127.0.0.1:8080";
-    LLAMA_API_KEY = "local";
   };
 
   fonts.fontconfig.enable = true;
