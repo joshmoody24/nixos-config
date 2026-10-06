@@ -35,10 +35,14 @@ KV_KIB_PER_TOKEN="${KV_KIB_PER_TOKEN:-32}"
 
 vram_gib() { awk '{printf "%.2f", $1/1073741824}' "$DRM_DEV/$1"; }
 
-# One context size covers whichever model the router loads, so budget for the largest.
-biggest=$(find "$MODELS_DIR" -name '*.gguf' -printf '%s\n' 2>/dev/null | sort -rn | head -1)
-[ -n "$biggest" ] || { echo "no .gguf files under $MODELS_DIR" >&2; exit 1; }
-weights_gib=$(awk -v b="$biggest" 'BEGIN{printf "%.2f", b/1073741824}')
+# One context size covers whichever model the router loads, so budget for the
+# heaviest directory: a multimodal model loads its projector alongside the weights.
+heaviest=$(for d in "$MODELS_DIR" "$MODELS_DIR"/*/; do
+  [ -d "$d" ] || continue
+  find "$d" -maxdepth 1 -name '*.gguf' -printf '%s\n' 2>/dev/null | awk '{s+=$1} END{if(s) print s}'
+done | sort -rn | head -1)
+[ -n "$heaviest" ] || { echo "no .gguf files under $MODELS_DIR" >&2; exit 1; }
+weights_gib=$(awk -v b="$heaviest" 'BEGIN{printf "%.2f", b/1073741824}')
 
 budget_ctx() {
   awk -v t="$(vram_gib mem_info_vram_total)" -v r="$RESERVE_GIB" -v w="$weights_gib" \
