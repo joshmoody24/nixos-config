@@ -33,7 +33,7 @@ fi
 # UPDATE THIS if the access point is replaced or the desk moves: find the
 # strongest with `nmcli -f SSID,BSSID,SIGNAL device wifi list | grep REDO`.
 WIFI_SSID=REDO
-WIFI_BSSID=
+WIFI_BSSID=96:ED:E1:04:B3:6B
 
 if [ -n "$WIFI_BSSID" ]; then
   if [ "$(nmcli -g 802-11-wireless.bssid connection show "$WIFI_SSID" 2>/dev/null)" != "$WIFI_BSSID" ]; then
