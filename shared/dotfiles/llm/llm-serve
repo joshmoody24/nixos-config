@@ -9,9 +9,15 @@ set -euo pipefail
 
 MODELS_DIR="${MODELS_DIR:-$HOME/models}"
 PROFILE="${1:-solo}"
-PORT="${PORT:-9931}"
+PORT="${PORT:-8080}"
 
 [ -d "$MODELS_DIR" ] || { echo "no model directory: $MODELS_DIR" >&2; exit 1; }
+
+# One router serves every client; a second process would only fail to bind.
+if curl -sf --max-time 2 "http://127.0.0.1:$PORT/health" >/dev/null 2>&1; then
+  echo "already serving on :$PORT  -> in pi: /model to select" >&2
+  exit 0
+fi
 
 # The 7900 XT drives the display, so overcommitting VRAM takes the screen down.
 RESERVE_GIB="${RESERVE_GIB:-3}"
@@ -59,21 +65,39 @@ esac
 
 [ "$CTX" -gt 0 ] || { echo "no VRAM headroom for $weights_gib GiB of weights plus a ${RESERVE_GIB} GiB reserve" >&2; exit 1; }
 
+# pi reads the server URL from inside the stored credential, not the environment,
+# so seeding this replaces running /login by hand. Merged, to leave other
+# providers' credentials alone.
+PI_AUTH="${PI_AUTH:-$HOME/.pi/agent/auth.json}"
+mkdir -p "$(dirname "$PI_AUTH")"
+PORT="$PORT" PI_AUTH="$PI_AUTH" python3 - <<'PY'
+import json, os, pathlib
+path = pathlib.Path(os.environ["PI_AUTH"])
+try: doc = json.loads(path.read_text())
+except Exception: doc = {}
+doc["llama.cpp"] = {"type": "api_key", "key": "local",
+                    "env": {"LLAMA_BASE_URL": f"http://127.0.0.1:{os.environ['PORT']}"}}
+path.write_text(json.dumps(doc, indent=2) + "\n")
+path.chmod(0o600)
+PY
+
 echo "VRAM $(vram_gib mem_info_vram_used)/$(vram_gib mem_info_vram_total) GiB in use, reserving ${RESERVE_GIB} GiB" >&2
-echo "router on :$PORT  ctx=$CTX slots=$NP  -> in pi: /llama to load, /model to select" >&2
+echo "router on :$PORT  ctx=$CTX slots=$NP  -> in pi: /model to select" >&2
 
 # Passing -m would start single-model mode instead of the router.
+# Without a sleep timeout a loaded model holds VRAM until explicitly unloaded;
+# sleeping models wake on the next request.
 # effort defaults to xhigh, which truncates before answering; low gains nothing.
 # Hybrid-attention models need the checkpoint flags to rewind a cached prompt.
 exec llama-server \
   --models-dir "$MODELS_DIR" \
-  --no-models-autoload \
   --host 127.0.0.1 --port "$PORT" \
   --device "${DEVICE:-Vulkan0}" \
   -ngl 99 --jinja -fa on \
   --cache-type-k "${KV:-q8_0}" --cache-type-v "${KV:-q8_0}" \
   --cache-ram "${CACHE_RAM:-4096}" \
   --ctx-checkpoints 32 --checkpoint-min-step 0 \
+  --sleep-idle-seconds "${SLEEP_IDLE:-120}" \
   -c "$CTX" -np "$NP" \
   --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.0 \
   --chat-template-kwargs "{\"reasoning_effort\":\"${EFFORT:-medium}\"}" \

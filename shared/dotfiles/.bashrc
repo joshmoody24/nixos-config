@@ -1,9 +1,13 @@
 # .bashrc
 
-# Source home-manager session variables (EDITOR, VISUAL, etc.)
-if [ -f ~/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
-    . ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-fi
+# Source home-manager session variables (EDITOR, VISUAL, etc.). Standalone
+# home-manager puts these under ~/.nix-profile; as a NixOS module it uses
+# /etc/profiles/per-user.
+for _hm_vars in ~/.nix-profile/etc/profile.d/hm-session-vars.sh \
+                "/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh"; do
+    [ -f "$_hm_vars" ] && . "$_hm_vars" && break
+done
+unset _hm_vars
 
 # Include nix profile in data dirs so bash-completion can find
 # completions for nix-installed packages (e.g. git)

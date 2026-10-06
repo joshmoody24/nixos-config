@@ -131,7 +131,8 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
-    LLAMA_BASE_URL = "http://127.0.0.1:9931";
+    LLAMA_BASE_URL = "http://127.0.0.1:8080";
+    LLAMA_API_KEY = "local";
   };
 
   fonts.fontconfig.enable = true;
