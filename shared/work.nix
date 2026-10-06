@@ -19,7 +19,6 @@
     # ngrok is wrapped below so the declarative theme config is always merged.
     mongosh
     postgresql
-    clickhouse
     pnpm
     cloudflared
     nssTools
