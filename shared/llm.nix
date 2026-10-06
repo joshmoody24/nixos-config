@@ -21,6 +21,7 @@ let
   llmServe = pkgs.writeShellApplication {
     name = "llm-serve";
     text = ''
+      mkdir -p "$HOME/models"
       exec ${config.llm.vulkanWrapper} ${llamaCpp}/bin/llama-server \
         --models-dir "$HOME/models" \
         --host 127.0.0.1 --port ${toString port} \
