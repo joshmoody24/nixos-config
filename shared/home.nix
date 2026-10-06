@@ -174,6 +174,7 @@
     in {
       framework = tailnet "framework";
       thinkpad = tailnet "thinkpad";
+      unit = (tailnet "unit") // { HostName = "unit"; };
 
       "*" = {
         ForwardAgent = false;

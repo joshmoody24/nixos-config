@@ -68,8 +68,8 @@ fi
 # second file. It lives under /etc because sshd's StrictModes rejects keys
 # resolving into the group-writable /nix/store.
 echo "Installing SSH authorized keys..."
-sudo install -D -m 444 -o root -g root \
-  "$REPO_DIR/shared/dotfiles/ssh/josh.pub" /etc/ssh/authorized_keys.d/josh
+cat "$REPO_DIR"/shared/dotfiles/ssh/*.pub |
+  sudo install -D -m 444 -o root -g root /dev/stdin /etc/ssh/authorized_keys.d/josh
 
 SSHD_CONFIG='AuthorizedKeysFile .ssh/authorized_keys /etc/ssh/authorized_keys.d/%u
 PasswordAuthentication no

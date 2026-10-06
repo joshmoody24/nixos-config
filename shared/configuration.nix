@@ -82,7 +82,10 @@
     PasswordAuthentication = false;
     KbdInteractiveAuthentication = false;
   };
-  users.users.josh.openssh.authorizedKeys.keyFiles = [ ./dotfiles/ssh/josh.pub ];
+  users.users.josh.openssh.authorizedKeys.keyFiles = [
+    ./dotfiles/ssh/josh.pub
+    ./dotfiles/ssh/unit.pub
+  ];
 
   services.tailscale.enable = true;
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
