@@ -1,14 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  ollamaEnv = lib.strings.splitString "\n" (builtins.readFile ./ollama.env);
-  parseEnvLine = line:
-    let parts = lib.strings.splitString "=" line;
-    in if builtins.length parts == 2
-       then { name = builtins.elemAt parts 0; value = builtins.elemAt parts 1; }
-       else null;
-  ollamaEnvVars = builtins.listToAttrs (builtins.filter (x: x != null) (map parseEnvLine ollamaEnv));
-in
 {
   time.timeZone = "America/Denver";
   
@@ -84,11 +75,6 @@ in
   # Keyboard remapping with keyd (config lives in dotfiles/keyd/default.conf)
   services.keyd.enable = true;
   environment.etc."keyd/default.conf".source = ./dotfiles/keyd/default.conf;
-
-  services.ollama = {
-    enable = true;
-    environmentVariables = ollamaEnvVars;
-  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

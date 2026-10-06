@@ -55,6 +55,11 @@
       executable = true;
     };
 
+    ".local/bin/llm-serve" = {
+      source = ./dotfiles/llm/llm-serve;
+      executable = true;
+    };
+
     ".gitconfig".source = ./dotfiles/.gitconfig;
 
     ".claude/CLAUDE.md".source = ./dotfiles/agents/AGENTS.md;
@@ -121,14 +126,12 @@
 
     typescript
     ast-grep
-
-    (pkgs.llm.withPlugins { llm-ollama = true; })
-    llmfit
   ];
 
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
+    LLAMA_BASE_URL = "http://127.0.0.1:9931";
   };
 
   fonts.fontconfig.enable = true;

@@ -38,8 +38,6 @@
     ACTION=="add", SUBSYSTEM=="pci", KERNEL=="0000:12:00.0", ATTR{remove}="1"
   '';
 
-  services.ollama.package = pkgs.ollama-rocm;
-
   programs.steam.enable = true;
 
   environment.systemPackages = lib.mkAfter (with pkgs; [

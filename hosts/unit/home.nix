@@ -12,7 +12,9 @@
     pciutils # for gnome extension Astra Monitor
     lm_sensors # temperature monitoring
     amdgpu_top
-    llama-cpp
+    # Vulkan decodes ~38% faster than ROCm at long context on RDNA 3.
+    (llama-cpp.override { vulkanSupport = true; })
+    pi-coding-agent
 
     godot
     obsidian
