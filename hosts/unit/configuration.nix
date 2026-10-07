@@ -42,6 +42,7 @@
 
   environment.systemPackages = lib.mkAfter (with pkgs; [
     steam-run # useful for running exported godot games
+    (callPackage ../../shared/pkgs/soh.nix { })
   ]);
 
   # Run dynamically linked executables
