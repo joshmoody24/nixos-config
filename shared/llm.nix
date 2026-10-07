@@ -10,6 +10,27 @@ let
   # the same number so a model behaves the same everywhere.
   contextTokens = 61440;
 
+  # Pinned to a commit so a re-upload can't change the file under the hash.
+  fromHuggingFace = { repo, rev, file, sha256 }: pkgs.fetchurl {
+    url = "https://huggingface.co/${repo}/resolve/${rev}/${file}";
+    inherit sha256;
+  };
+
+  # The router names each model after its directory and loads an mmproj file
+  # beside the weights for image input.
+  models = let
+    qwen = file: sha256: fromHuggingFace {
+      repo = "unsloth/Qwen3.8-27B-GGUF";
+      rev = "4ca720788d1e01f1bff70c033e0d0028fd02e502";
+      inherit file sha256;
+    };
+  in pkgs.linkFarm "llm-models" {
+    "Qwen3.8-27B/Qwen3.8-27B-UD-IQ4_XS.gguf" =
+      qwen "Qwen3.8-27B-UD-IQ4_XS.gguf" "40fac4050e940397dbf13087afd50f4734a11805bf9d65ef8ddd7483470e6199";
+    "Qwen3.8-27B/mmproj-F16.gguf" =
+      qwen "mmproj-F16.gguf" "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e";
+  };
+
   # Vulkan decodes ~38% faster than ROCm at long context on RDNA 3.
   llamaCpp = pkgs.llama-cpp.override { vulkanSupport = true; };
 
@@ -21,9 +42,8 @@ let
   llmServe = pkgs.writeShellApplication {
     name = "llm-serve";
     text = ''
-      mkdir -p "$HOME/models"
       exec ${config.llm.vulkanWrapper} ${llamaCpp}/bin/llama-server \
-        --models-dir "$HOME/models" \
+        --models-dir ${models} \
         --host 127.0.0.1 --port ${toString port} \
         --device Vulkan0 \
         -ngl 99 --jinja -fa on \
