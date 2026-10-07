@@ -11,30 +11,40 @@ let
   contextTokens = 61440;
 
   # Pinned to a commit so a re-upload can't change a file under its hash.
-  fromHuggingFace = repo: rev: lib.mapAttrs (file: sha256: pkgs.fetchurl {
+  fromHuggingFace = repo: rev: file: sha256: pkgs.fetchurl {
     url = "https://huggingface.co/${repo}/resolve/${rev}/${file}";
     inherit sha256;
-  });
+  };
 
+  # Each model is a router preset: llama-server flags without the dashes.
+  # ngram-mod drafts from text already in context, which agents re-emit when
+  # editing files. Drafts are verified by the full model, so speculation only
+  # changes speed, which is also why the draft cache can be quantized.
   catalog = {
-    "Qwen3.8-27B" = fromHuggingFace "unsloth/Qwen3.8-27B-GGUF" "4ca720788d1e01f1bff70c033e0d0028fd02e502" {
-      "Qwen3.8-27B-UD-IQ4_XS.gguf" = "40fac4050e940397dbf13087afd50f4734a11805bf9d65ef8ddd7483470e6199";
-      "mmproj-F16.gguf" = "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e";
+    "Qwen3.8-27B" = let
+      hf = fromHuggingFace "unsloth/Qwen3.8-27B-GGUF" "4ca720788d1e01f1bff70c033e0d0028fd02e502";
+    in {
+      model = hf "Qwen3.8-27B-UD-IQ4_XS.gguf" "40fac4050e940397dbf13087afd50f4734a11805bf9d65ef8ddd7483470e6199";
+      mmproj = hf "mmproj-F16.gguf" "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e";
+      spec-type = "draft-mtp,ngram-mod";
+      spec-draft-model = hf "MTP/mtp-Qwen3.8-27B-Q4_0.gguf" "50d9ce5a6da381bbcfb31061cf73df94a90e6faf8efeddee379a9cb8f1501c6e";
+      spec-draft-type-k = "q8_0";
+      spec-draft-type-v = "q8_0";
     };
 
     # A community distill of Qwen3.8 into a 3B-active MoE: weaker, but several
-    # times faster where memory bandwidth is the limit.
-    "Qwen3.8-35B-A3B" = fromHuggingFace "empero-ai/Qwen3.8-35B-A3B-Distill-GGUF" "b1f9d1dcc3de8aa867669b0ab919384aeeb9b8d5" {
-      "Qwen3.8-35B-A3B-IQ4_XS.gguf" = "b645af45431ef9b41f43cae51c9323b2d0ca84f23031d483d2105c643ae58d65";
-      "mmproj-Qwen3.8-35B-A3B-F16.gguf" = "4381cb5110074396c2c7b39221fffae0c31886aa95b674de8e103d97edf58b94";
+    # times faster where memory bandwidth is the limit. It ships no MTP head.
+    "Qwen3.8-35B-A3B" = let
+      hf = fromHuggingFace "empero-ai/Qwen3.8-35B-A3B-Distill-GGUF" "b1f9d1dcc3de8aa867669b0ab919384aeeb9b8d5";
+    in {
+      model = hf "Qwen3.8-35B-A3B-IQ4_XS.gguf" "b645af45431ef9b41f43cae51c9323b2d0ca84f23031d483d2105c643ae58d65";
+      mmproj = hf "mmproj-Qwen3.8-35B-A3B-F16.gguf" "4381cb5110074396c2c7b39221fffae0c31886aa95b674de8e103d97edf58b94";
+      spec-type = "ngram-mod";
     };
   };
 
-  # The router names each model after its directory and loads an mmproj file
-  # beside the weights for image input.
-  models = pkgs.linkFarm "llm-models" (lib.concatMapAttrs
-    (name: files: lib.mapAttrs' (file: path: lib.nameValuePair "${name}/${file}" path) files)
-    catalog);
+  presets = pkgs.writeText "llm-models.ini"
+    (lib.generators.toINI { } (lib.mapAttrs (_: lib.mapAttrs (_: toString)) catalog));
 
   # Vulkan decodes ~38% faster than ROCm at long context on RDNA 3.
   llamaCpp = pkgs.llama-cpp.override { vulkanSupport = true; };
@@ -51,7 +61,7 @@ let
     name = "llm-serve";
     text = ''
       exec ${config.llm.vulkanWrapper} ${llamaCpp}/bin/llama-server \
-        --models-dir ${models} \
+        --models-preset ${presets} \
         --host 127.0.0.1 --port ${toString port} \
         --device Vulkan0 \
         --models-max 1 \
