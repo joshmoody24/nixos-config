@@ -4,7 +4,7 @@
 # 9.3.0, which replaced OTRExporter/ZAPD with Torch.
 let
   pname = "soh";
-  # Shared with scripts/windows/install-soh.ps1 so friends match this version.
+  # Shared with scripts/soh/install.{sh,ps1} so friends match this version.
   release = builtins.fromJSON (builtins.readFile ./soh-release.json);
   inherit (release) version;
 

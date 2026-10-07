@@ -1,6 +1,6 @@
 # Installs or updates Ship of Harkinian on Windows, pinned to the same release as
 # Josh's NixOS config. Run it from PowerShell with:
-#   irm https://raw.githubusercontent.com/joshmoody24/nixos-config/main/scripts/windows/install-soh.ps1 | iex
+#   irm https://raw.githubusercontent.com/joshmoody24/nixos-config/main/scripts/soh/install.ps1 | iex
 
 # iex runs this in the caller's session: a scriptblock keeps our settings out of it,
 # and throwing instead of `exit` keeps their window open to read errors.
