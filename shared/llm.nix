@@ -10,26 +10,31 @@ let
   # the same number so a model behaves the same everywhere.
   contextTokens = 61440;
 
-  # Pinned to a commit so a re-upload can't change the file under the hash.
-  fromHuggingFace = { repo, rev, file, sha256 }: pkgs.fetchurl {
+  # Pinned to a commit so a re-upload can't change a file under its hash.
+  fromHuggingFace = repo: rev: lib.mapAttrs (file: sha256: pkgs.fetchurl {
     url = "https://huggingface.co/${repo}/resolve/${rev}/${file}";
     inherit sha256;
+  });
+
+  catalog = {
+    "Qwen3.8-27B" = fromHuggingFace "unsloth/Qwen3.8-27B-GGUF" "4ca720788d1e01f1bff70c033e0d0028fd02e502" {
+      "Qwen3.8-27B-UD-IQ4_XS.gguf" = "40fac4050e940397dbf13087afd50f4734a11805bf9d65ef8ddd7483470e6199";
+      "mmproj-F16.gguf" = "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e";
+    };
+
+    # A community distill of Qwen3.8 into a 3B-active MoE: weaker, but several
+    # times faster where memory bandwidth is the limit. Too big for unit's VRAM.
+    "Qwen3.8-35B-A3B" = fromHuggingFace "empero-ai/Qwen3.8-35B-A3B-Distill-GGUF" "b1f9d1dcc3de8aa867669b0ab919384aeeb9b8d5" {
+      "Qwen3.8-35B-A3B-IQ4_XS.gguf" = "b645af45431ef9b41f43cae51c9323b2d0ca84f23031d483d2105c643ae58d65";
+      "mmproj-Qwen3.8-35B-A3B-F16.gguf" = "4381cb5110074396c2c7b39221fffae0c31886aa95b674de8e103d97edf58b94";
+    };
   };
 
   # The router names each model after its directory and loads an mmproj file
   # beside the weights for image input.
-  models = let
-    qwen = file: sha256: fromHuggingFace {
-      repo = "unsloth/Qwen3.8-27B-GGUF";
-      rev = "4ca720788d1e01f1bff70c033e0d0028fd02e502";
-      inherit file sha256;
-    };
-  in pkgs.linkFarm "llm-models" {
-    "Qwen3.8-27B/Qwen3.8-27B-UD-IQ4_XS.gguf" =
-      qwen "Qwen3.8-27B-UD-IQ4_XS.gguf" "40fac4050e940397dbf13087afd50f4734a11805bf9d65ef8ddd7483470e6199";
-    "Qwen3.8-27B/mmproj-F16.gguf" =
-      qwen "mmproj-F16.gguf" "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e";
-  };
+  models = pkgs.linkFarm "llm-models" (lib.concatMapAttrs
+    (name: files: lib.mapAttrs' (file: path: lib.nameValuePair "${name}/${file}" path) files)
+    (lib.getAttrs config.llm.models catalog));
 
   # Vulkan decodes ~38% faster than ROCm at long context on RDNA 3.
   llamaCpp = pkgs.llama-cpp.override { vulkanSupport = true; };
@@ -80,6 +85,12 @@ in
     type = lib.types.str;
     default = "";
     description = "Command prefix that gives llama-server a Vulkan driver outside NixOS.";
+  };
+
+  options.llm.models = lib.mkOption {
+    type = lib.types.listOf (lib.types.enum (lib.attrNames catalog));
+    default = [ "Qwen3.8-27B" ];
+    description = "Catalog models this host serves.";
   };
 
   config = {
