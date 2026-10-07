@@ -4,12 +4,11 @@
 # 9.3.0, which replaced OTRExporter/ZAPD with Torch.
 let
   pname = "soh";
-  version = "9.3.0";
+  # Shared with scripts/windows/install-soh.ps1 so friends match this version.
+  release = builtins.fromJSON (builtins.readFile ./soh-release.json);
+  inherit (release) version;
 
-  src = fetchurl {
-    url = "https://github.com/HarbourMasters/Shipwright/releases/download/${version}/soh.appimage";
-    hash = "sha256-hQe7cEE+Ew5FLrr18Va/14AT7gFENkt5aGgOjPBkoPo=";
-  };
+  src = fetchurl { inherit (release.linux) url sha256; };
 
   contents = appimageTools.extract { inherit pname version src; };
 in

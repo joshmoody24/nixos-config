@@ -1,0 +1,11 @@
+{
+  "version": "9.3.0",
+  "linux": {
+    "url": "https://github.com/HarbourMasters/Shipwright/releases/download/9.3.0/soh.appimage",
+    "sha256": "8507bb70413e130e452ebaf5f156bfd78013ee0144364b7968680e8cf064a0fa"
+  },
+  "windows": {
+    "url": "https://github.com/HarbourMasters/Shipwright/releases/download/9.3.0/SoH-Dewey-Alpha-Win64.zip",
+    "sha256": "bf46cfc41be17f3b63901db46dac46ac2a63ed3851aa13e3ba6c9ec5d0ac2632"
+  }
+}
