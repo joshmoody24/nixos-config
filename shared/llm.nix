@@ -23,7 +23,7 @@ let
     };
 
     # A community distill of Qwen3.8 into a 3B-active MoE: weaker, but several
-    # times faster where memory bandwidth is the limit. Too big for unit's VRAM.
+    # times faster where memory bandwidth is the limit.
     "Qwen3.8-35B-A3B" = fromHuggingFace "empero-ai/Qwen3.8-35B-A3B-Distill-GGUF" "b1f9d1dcc3de8aa867669b0ab919384aeeb9b8d5" {
       "Qwen3.8-35B-A3B-IQ4_XS.gguf" = "b645af45431ef9b41f43cae51c9323b2d0ca84f23031d483d2105c643ae58d65";
       "mmproj-Qwen3.8-35B-A3B-F16.gguf" = "4381cb5110074396c2c7b39221fffae0c31886aa95b674de8e103d97edf58b94";
@@ -34,12 +34,15 @@ let
   # beside the weights for image input.
   models = pkgs.linkFarm "llm-models" (lib.concatMapAttrs
     (name: files: lib.mapAttrs' (file: path: lib.nameValuePair "${name}/${file}" path) files)
-    (lib.getAttrs config.llm.models catalog));
+    catalog);
 
   # Vulkan decodes ~38% faster than ROCm at long context on RDNA 3.
   llamaCpp = pkgs.llama-cpp.override { vulkanSupport = true; };
 
   # Passing -m would start single-model mode instead of the router.
+  # Leaving -ngl unset lets --fit split each model between VRAM and RAM to suit
+  # the host; -c is set, so every host still gets the same context. One model
+  # at a time keeps the biggest within every host's memory.
   # Without a sleep timeout a loaded model holds memory until explicitly
   # unloaded; sleeping models wake on the next request.
   # effort defaults to xhigh, which truncates before answering; low gains nothing.
@@ -51,7 +54,8 @@ let
         --models-dir ${models} \
         --host 127.0.0.1 --port ${toString port} \
         --device Vulkan0 \
-        -ngl 99 --jinja -fa on \
+        --models-max 1 \
+        --jinja -fa on \
         --cache-type-k q8_0 --cache-type-v q8_0 \
         --cache-ram 4096 \
         --ctx-checkpoints 32 --checkpoint-min-step 0 \
@@ -85,12 +89,6 @@ in
     type = lib.types.str;
     default = "";
     description = "Command prefix that gives llama-server a Vulkan driver outside NixOS.";
-  };
-
-  options.llm.models = lib.mkOption {
-    type = lib.types.listOf (lib.types.enum (lib.attrNames catalog));
-    default = [ "Qwen3.8-27B" ];
-    description = "Catalog models this host serves.";
   };
 
   config = {
