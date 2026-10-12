@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Record: Whole Screen (Ctrl+Shift+Print)
+Comment=Record the focused screen, run again to stop
+Exec=screenrec screen
+Icon=camera-video
+Keywords=record;recording;video;capture;screencast;film;movie;mp4;full;display;monitor;
+Terminal=false

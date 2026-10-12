@@ -1,0 +1,59 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 32,
+  "spacing": 12,
+  "modules-left": ["niri/workspaces", "niri/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/recording", "tray", "pulseaudio", "backlight", "network", "battery"],
+
+  "niri/workspaces": {
+    "format": "{index}"
+  },
+
+  "niri/window": {
+    "max-length": 60
+  },
+
+  "clock": {
+    "format": "{:%a %b %e   %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>"
+  },
+
+  "custom/recording": {
+    "exec": "pgrep -x wl-screenrec > /dev/null && echo 'rec' || true",
+    "interval": 2,
+    "format": "{}",
+    "on-click": "screenrec stop",
+    "tooltip": false
+  },
+
+  "tray": {
+    "spacing": 10
+  },
+
+  "pulseaudio": {
+    "format": "vol {volume}%",
+    "format-muted": "vol muted",
+    "on-click": "pavucontrol"
+  },
+
+  "backlight": {
+    "format": "bright {percent}%"
+  },
+
+  "network": {
+    "format-wifi": "{essid} {signalStrength}%",
+    "format-ethernet": "wired",
+    "format-disconnected": "offline",
+    "tooltip-format-wifi": "{essid}\n{ipaddr}\n{bandwidthDownBits} down  {bandwidthUpBits} up",
+    "on-click": "nm-connection-editor"
+  },
+
+  "battery": {
+    "states": { "warning": 25, "critical": 10 },
+    "format": "bat {capacity}%",
+    "format-charging": "chg {capacity}%",
+    "format-full": "bat full"
+  }
+}

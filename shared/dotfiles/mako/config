@@ -1,0 +1,19 @@
+font=Cascadia Code 11
+background-color=#1a1b26f0
+text-color=#c0caf5
+border-color=#414868
+border-size=2
+border-radius=8
+padding=12
+margin=12
+default-timeout=8000
+max-visible=5
+anchor=top-right
+layer=overlay
+
+[urgency=low]
+text-color=#9aa5ce
+
+[urgency=critical]
+border-color=#f7768e
+default-timeout=0

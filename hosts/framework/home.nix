@@ -5,6 +5,7 @@
     ../../shared/home.nix
     ../../shared/work.nix
     ../../shared/llm.nix
+    ../../shared/niri.nix
   ];
 
   targets.genericLinux.nixGL.packages = inputs.nixgl.packages;
@@ -14,7 +15,4 @@
   # Ubuntu's own Vulkan driver would load into Nix's glibc, which holds only
   # until the next Ubuntu update.
   llm.vulkanWrapper = lib.getExe inputs.nixgl.packages.${pkgs.system}.nixVulkanIntel;
-
-  home.packages = with pkgs; [
-  ];
 }

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Record: Region (Shift+Print)
+Comment=Record an area to a video, run again to stop
+Exec=screenrec region
+Icon=camera-video
+Keywords=record;recording;video;capture;screencast;film;movie;mp4;region;area;
+Terminal=false

@@ -1,0 +1,62 @@
+* {
+  font-family: "Cascadia Code", monospace;
+  font-size: 13px;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+window#waybar {
+  background: #16161e;
+  color: #c0caf5;
+}
+
+#workspaces button {
+  padding: 0 10px;
+  color: #545c7e;
+  background: transparent;
+}
+
+#workspaces button.focused,
+#workspaces button.active {
+  color: #7aa2f7;
+  box-shadow: inset 0 -2px #7aa2f7;
+}
+
+#workspaces button.urgent {
+  color: #f7768e;
+}
+
+#window {
+  color: #545c7e;
+}
+
+#clock {
+  color: #c0caf5;
+}
+
+#pulseaudio,
+#backlight,
+#network,
+#battery,
+#tray {
+  padding: 0 8px;
+  color: #9aa5ce;
+}
+
+#battery.warning {
+  color: #e0af68;
+}
+
+#battery.critical {
+  color: #f7768e;
+}
+
+#network.disconnected {
+  color: #f7768e;
+}
+
+#custom-recording {
+  padding: 0 8px;
+  color: #f7768e;
+}

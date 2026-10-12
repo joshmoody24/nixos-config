@@ -1,0 +1,12 @@
+daemonize
+ignore-empty-password
+indicator-caps-lock
+color=1a1b26
+inside-color=1a1b26
+ring-color=414868
+ring-ver-color=7aa2f7
+ring-wrong-color=f7768e
+key-hl-color=9ece6a
+text-color=c0caf5
+line-color=00000000
+separator-color=00000000

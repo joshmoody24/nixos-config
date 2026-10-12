@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Screenshot: Whole Screen (Ctrl+Print)
+Comment=Capture the focused screen
+Exec=niri msg action screenshot-screen
+Icon=camera-photo
+Keywords=screenshot;capture;screen;shot;grab;full;display;monitor;
+Terminal=false

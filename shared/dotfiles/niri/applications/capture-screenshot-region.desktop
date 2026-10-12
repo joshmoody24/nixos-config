@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Screenshot: Region (Print)
+Comment=Pick an area or a window with the mouse
+Exec=niri msg action screenshot
+Icon=camera-photo
+Keywords=screenshot;capture;screen;shot;grab;region;area;crop;
+Terminal=false

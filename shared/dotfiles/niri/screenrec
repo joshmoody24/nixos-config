@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+dir="$HOME/Videos/Screencasts"
+mkdir -p "$dir"
+
+action="${1:-region}"
+
+if pkill -INT -x wl-screenrec; then
+  # wl-screenrec needs a moment to finalize the container before the file is
+  # worth announcing.
+  sleep 1
+  notify-send "Recording saved" "$(ls -t "$dir" | head -1)"
+  exit 0
+fi
+
+if [ "$action" = stop ]; then
+  notify-send "Nothing is recording"
+  exit 0
+fi
+
+target=$(
+  case "$action" in
+    screen) echo "--output=$(niri msg --json focused-output | jq -r .name)" ;;
+    region) echo "--geometry=$(slurp)" ;;
+  esac
+)
+
+notify-send "Recording started" "Press the same keys again to stop"
+exec wl-screenrec "$target" --filename "$dir/Screencast from $(date '+%Y-%m-%d %H-%M-%S').mp4"

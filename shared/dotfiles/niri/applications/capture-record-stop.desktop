@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Record: Stop
+Comment=Finish the recording in progress
+Exec=screenrec stop
+Icon=media-playback-stop
+Keywords=record;recording;stop;finish;end;save;video;screencast;
+Terminal=false

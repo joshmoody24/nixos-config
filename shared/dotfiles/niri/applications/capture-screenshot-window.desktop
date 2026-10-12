@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Screenshot: Window (Alt+Print)
+Comment=Capture the focused window
+Exec=niri msg action screenshot-window
+Icon=camera-photo
+Keywords=screenshot;capture;screen;shot;grab;window;
+Terminal=false
