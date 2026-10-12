@@ -28,6 +28,12 @@
       recursive = true;
     };
 
+    # lazy.nvim rewrites this on update, so it points at the checkout rather
+    # than the store. A store copy would be read-only, and a committed lock
+    # would never reach nvim.
+    ".config/nvim/lazy-lock.json".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/code/nixos-config/shared/dotfiles/nvim/lazy-lock.json";
+
     ".config/kitty/current-theme.conf".source = ./dotfiles/kitty/current-theme.conf;
 
     ".config/ghostty/config".source = ./dotfiles/ghostty/config;
