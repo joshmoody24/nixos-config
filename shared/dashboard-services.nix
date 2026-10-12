@@ -4,7 +4,7 @@ let
   # Dependencies come from the pinned flake, the code from the working clone:
   # editing a collector takes effect on the next tick, with no rebuild and no
   # restart. Point `source` at the flake instead to freeze it.
-  python = lib.getExe inputs.redo-dashboard.packages.${pkgs.system}.python;
+  python = lib.getExe inputs.redo-dashboard.packages.${pkgs.stdenv.hostPlatform.system}.python;
   source = "${config.home.homeDirectory}/code/redo-dashboard";
   talk = "/var/lib/redo-dashboard/dashboard.deque";
 

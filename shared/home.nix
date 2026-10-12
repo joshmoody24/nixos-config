@@ -187,4 +187,8 @@
 
   # Let home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  # Generating them warns about a missing store reference, a home-manager bug,
+  # and the same options are a web search away.
+  manual.manpages.enable = false;
 }
