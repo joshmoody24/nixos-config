@@ -60,6 +60,10 @@ prefer-no-csd
 environment {
     // xwayland-satellite claims this display; X11 clients need it to find it.
     DISPLAY ":0"
+
+    // niri runs under nixGL, and handing its library path down to every app it
+    // launches would break the ones Ubuntu built.
+    LD_LIBRARY_PATH null
 }
 
 spawn-at-startup "xwayland-satellite"

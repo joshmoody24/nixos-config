@@ -2,14 +2,16 @@
 
 {
   home.packages = with pkgs; [
-    niri
+    # Nix builds look for Mesa under /run/opengl-driver, which Ubuntu has no
+    # reason to provide, so anything touching the GPU needs nixGL.
+    (config.lib.nixGL.wrap niri)
     # X11 apps have no way to reach a Wayland-only compositor without this.
     xwayland-satellite
 
-    waybar
+    (config.lib.nixGL.wrap waybar)
     mako
     fuzzel
-    swaylock
+    (config.lib.nixGL.wrap swaylock)
     swayidle
     swaybg
 
@@ -26,7 +28,7 @@
     grim
     slurp
     # niri speaks wlr-screencopy, not the newer ext-image-copy-capture.
-    wl-screenrec
+    (config.lib.nixGL.wrap wl-screenrec)
     libnotify
 
     networkmanagerapplet
