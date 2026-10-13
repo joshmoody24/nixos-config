@@ -14,6 +14,9 @@ if ! command -v nix &>/dev/null; then
   if [ -f "$NIX_DAEMON_SH" ]; then
     echo "Nix is installed but not on PATH. Sourcing nix-daemon.sh..."
     . "$NIX_DAEMON_SH"
+    # Sourcing is a no-op once a login shell has already done it, which leaves
+    # PATH unrepaired in sessions that set their own.
+    export PATH="/nix/var/nix/profiles/default/bin:$PATH"
   else
     echo "Installing Nix..."
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install

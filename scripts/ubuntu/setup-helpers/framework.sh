@@ -1,23 +1,24 @@
 #!/bin/bash
 set -euo pipefail
 
-NIRI="$HOME/.nix-profile/bin/niri"
+NIRI_SESSION_BIN="$HOME/.nix-profile/bin/niri-session"
 
-if [ ! -x "$NIRI" ]; then
+if [ ! -x "$NIRI_SESSION_BIN" ]; then
   echo "niri is not installed yet; run home-manager first."
   echo "Framework setup done!"
   exit 0
 fi
 
-# Offer niri at the login screen next to GNOME. The session runs `niri
-# --session` rather than the packaged `niri-session`, which looks for systemd
-# units that a nix profile install does not put on the user unit path. GDM's
-# PATH is also too bare for niri's spawn-at-startup to find anything, so the
-# session sets one.
+# Offer niri at the login screen next to GNOME. This runs the packaged
+# niri-session, which starts niri.service and so activates
+# graphical-session.target; Ubuntu's portal backends refuse to run without it.
+# GDM's PATH is also too bare for niri's spawn-at-startup to find anything, so
+# the session sets one. It needs the daemon profile too, which is the only place
+# the `nix` binary itself lives.
 NIRI_SESSION="[Desktop Entry]
 Name=Niri
 Comment=A scrollable-tiling Wayland compositor
-Exec=/usr/bin/env PATH=$HOME/.local/bin:$HOME/.nix-profile/bin:/usr/local/bin:/usr/bin:/bin $NIRI --session
+Exec=/usr/bin/env PATH=$HOME/.local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin $NIRI_SESSION_BIN
 Type=Application
 DesktopNames=niri"
 NIRI_SESSION_FILE=/usr/share/wayland-sessions/niri.desktop

@@ -1,10 +1,13 @@
 { config, pkgs, lib, ... }:
 
+let
+  niriWrapped = config.lib.nixGL.wrap pkgs.niri;
+in
 {
   home.packages = with pkgs; [
     # Nix builds look for Mesa under /run/opengl-driver, which Ubuntu has no
     # reason to provide, so anything touching the GPU needs nixGL.
-    (config.lib.nixGL.wrap niri)
+    niriWrapped
     # X11 apps have no way to reach a Wayland-only compositor without this.
     xwayland-satellite
 
@@ -36,6 +39,7 @@
 
   home.file = {
     ".config/niri/config.kdl".source = ./dotfiles/niri/config.kdl;
+
     ".local/bin/screenrec" = {
       source = ./dotfiles/niri/screenrec;
       executable = true;
@@ -53,6 +57,15 @@
     ".config/fuzzel/fuzzel.ini".source = ./dotfiles/fuzzel/fuzzel.ini;
     ".config/swaylock/config".source = ./dotfiles/swaylock/config;
   };
+
+  # Ubuntu's portal backends declare Requisite=graphical-session.target, so they
+  # refuse to start until something activates it. niri.service is what binds that
+  # target; `niri --session` on its own never reaches it, which left every GTK app
+  # hanging on the portal at startup.
+  home.file.".config/systemd/user/niri.service".source =
+    "${niriWrapped}/share/systemd/user/niri.service";
+  home.file.".config/systemd/user/niri-shutdown.target".source =
+    "${niriWrapped}/share/systemd/user/niri-shutdown.target";
 
   # The agent ships in libexec, where spawn-at-startup's bare name can't see it.
   home.file.".local/bin/polkit-agent".source =
