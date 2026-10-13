@@ -1,5 +1,8 @@
 {
   "layer": "top",
+  // Laptop panel only; the externals stay bare. eDP is a fixed name, unlike the
+  // DP connector numbers, which get reshuffled across reboots.
+  "output": ["eDP-1"],
   "position": "top",
   "height": 32,
   "spacing": 12,
