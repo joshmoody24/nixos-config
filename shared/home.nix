@@ -141,6 +141,39 @@
     nix-direnv.enable = true;
   };
 
+  # Was an unmanaged file that drifted to firefox on its own. Managing it means
+  # the GUI "default apps" pickers can no longer change it, since it becomes a
+  # read-only store symlink.
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = let
+      chrome = [ "google-chrome.desktop" ];
+    in {
+      "text/html" = chrome;
+      "application/xhtml+xml" = chrome;
+      "application/x-extension-htm" = chrome;
+      "application/x-extension-html" = chrome;
+      "application/x-extension-shtml" = chrome;
+      "application/x-extension-xhtml" = chrome;
+      "application/x-extension-xht" = chrome;
+      "video/webm" = chrome;
+      "x-scheme-handler/http" = chrome;
+      "x-scheme-handler/https" = chrome;
+      "x-scheme-handler/about" = chrome;
+      "x-scheme-handler/unknown" = chrome;
+      "x-scheme-handler/chrome" = chrome;
+
+      "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
+      "x-scheme-handler/slack" = [ "slack.desktop" ];
+      "x-scheme-handler/mongodb" = [ "mongodb-compass.desktop" ];
+      "x-scheme-handler/mongodb+srv" = [ "mongodb-compass.desktop" ];
+      "x-scheme-handler/grokbot" = [ "grok-bot.desktop" ];
+      "x-scheme-handler/sand" = [ "grok-bot.desktop" ];
+
+      "application/sql" = [ "nvim.desktop" ];
+    };
+  };
+
   programs.git.enable = true; # config in dotfiles/.gitconfig
 
   programs.kitty = {
