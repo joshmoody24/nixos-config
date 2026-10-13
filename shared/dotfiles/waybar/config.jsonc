@@ -6,13 +6,9 @@
   "position": "top",
   "height": 32,
   "spacing": 12,
-  "modules-left": ["niri/workspaces", "niri/window"],
+  "modules-left": ["niri/window"],
   "modules-center": ["clock"],
   "modules-right": ["custom/recording", "tray", "pulseaudio", "backlight", "network", "battery"],
-
-  "niri/workspaces": {
-    "format": "{index}"
-  },
 
   "niri/window": {
     "max-length": 60
