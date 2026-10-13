@@ -4,7 +4,10 @@
   imports = [
     ../../shared/home.nix
     ../../shared/llm.nix
+    ../../shared/niri.nix
   ];
+
+  niri.monitors = "hosts/unit/monitor.kdl";
 
   home.packages = with pkgs; [
     google-chrome

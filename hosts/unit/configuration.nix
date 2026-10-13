@@ -18,6 +18,12 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+  # Offers niri at the login screen next to GNOME, and brings the systemd units
+  # and portal config that framework.sh has to install by hand on Ubuntu.
+  programs.niri.enable = true;
+  # Without this swaylock has no PAM service and rejects every password.
+  security.pam.services.swaylock = { };
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
