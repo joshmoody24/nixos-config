@@ -46,19 +46,16 @@ layout {
 
     default-column-width { proportion 1.0; }
 
-    // The focus ring draws outside the window, so with no gaps it falls off the
-    // screen edge and cannot be seen. A border draws inside the window instead,
-    // and unlike the ring it colors unfocused windows too, which doubles as the
-    // seam between neighbours.
+    // Nothing is drawn around windows. A border would be drawn inside the
+    // window, which costs the screen edge: flinging the pointer at the top of
+    // the screen would land in the border and miss a maximised window's own
+    // controls, like Chrome's tabs. The waybar title says what has focus.
     focus-ring {
         off
     }
 
     border {
-        width 2
-        active-color "#565f89"
-        inactive-color "#292e42"
-        urgent-color "#f7768e"
+        off
     }
 
     tab-indicator {
