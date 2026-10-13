@@ -1,3 +1,8 @@
+// Display layout lives in monitor.kdl, which nwg-displays rewrites when you
+// drag monitors around. It is deliberately not managed here, so it stays
+// writable; niri refuses to load at all if it is missing.
+include "monitor.kdl"
+
 // Shipping this file replaces niri's built-in defaults wholesale, so it starts
 // as resources/default-config.kdl from the niri tag we run and deviates from
 // there. Re-diff it against upstream on a niri upgrade to catch new defaults.

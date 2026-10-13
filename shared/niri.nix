@@ -35,11 +35,20 @@ in
     libnotify
 
     networkmanagerapplet
+
+    # Drag-and-drop display arrangement, which writes monitor.kdl for us.
+    nwg-displays
+    wlr-randr
   ];
 
   home.file = {
     ".config/niri/config.kdl".source = ./dotfiles/niri/config.kdl;
 
+    # nwg-displays rewrites this when you drag monitors around, so it points at
+    # the checkout rather than the store: a store copy would be read-only, and
+    # the edits are what we want to commit.
+    ".config/niri/monitor.kdl".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/code/nixos-config/shared/dotfiles/niri/monitor.kdl";
     ".local/bin/screenrec" = {
       source = ./dotfiles/niri/screenrec;
       executable = true;
