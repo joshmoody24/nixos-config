@@ -1,0 +1,12 @@
+#!/bin/sh
+# The JumpCloud agent rewrites the account files on every sync and hands them
+# back group root. unix_chkpwd is setgid shadow and nothing else, so anything
+# authenticating as a normal user, like swaylock, then rejects every password.
+# Root authenticators such as gdm and sudo read the file directly and never
+# noticed, which is why this sat here unseen.
+set -eu
+
+for f in /etc/shadow /etc/gshadow; do
+  [ "$(stat -c %G "$f")" = shadow ] || chgrp shadow "$f"
+  [ "$(stat -c %a "$f")" = 640 ] || chmod 640 "$f"
+done

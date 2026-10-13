@@ -1,6 +1,22 @@
 #!/bin/bash
 set -euo pipefail
 
+REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+SYSTEMD_DOTFILES="$REPO_DIR/shared/dotfiles/systemd"
+
+# Keeps password checks working for programs running as you; see the script's
+# own comment. Installed before the niri check below, since it matters whether
+# or not this machine has a session yet.
+echo "Installing the shadow group repair timer..."
+sudo install -D -m 755 "$SYSTEMD_DOTFILES/restore-shadow-group" \
+  /usr/local/sbin/restore-shadow-group
+for unit in restore-shadow-group.service restore-shadow-group.timer; do
+  sudo install -D -m 644 "$SYSTEMD_DOTFILES/$unit" "/etc/systemd/system/$unit"
+done
+sudo systemctl daemon-reload
+sudo systemctl enable --now restore-shadow-group.timer
+sudo systemctl start restore-shadow-group.service
+
 NIRI_SESSION_BIN="$HOME/.nix-profile/bin/niri-session"
 
 if [ ! -x "$NIRI_SESSION_BIN" ]; then

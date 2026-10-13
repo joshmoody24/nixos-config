@@ -1,0 +1,6 @@
+[Unit]
+Description=Restore the shadow group on the account files
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/restore-shadow-group

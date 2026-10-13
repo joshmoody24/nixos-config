@@ -1,0 +1,11 @@
+[Unit]
+Description=Restore the shadow group on the account files
+
+# A path unit would be the obvious fit, but the agent changes ownership without
+# touching contents, and systemd watches for close-after-write.
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=1min
+
+[Install]
+WantedBy=timers.target
