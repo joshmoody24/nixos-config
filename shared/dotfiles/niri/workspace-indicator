@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+output=${1:?usage: workspace-indicator OUTPUT}
+
+# Niri keeps a trailing empty workspace on every output, so a quiet single
+# workspace setup still reports two. Counting windows is what tells them apart.
+emit() {
+  jq -cn \
+    --arg output "$output" \
+    --argjson workspaces "$(niri msg --json workspaces)" \
+    --argjson windows "$(niri msg --json windows)" '
+    ($windows | group_by(.workspace_id)
+      | map({ key: (.[0].workspace_id | tostring), value: length })
+      | from_entries) as $counts
+    | [$workspaces[]
+        | select(.output == $output)
+        | select(($counts[.id | tostring] // 0) > 0)
+        | { idx, is_active }]
+      | sort_by(.idx) as $occupied
+    | { text: (if ($occupied | length) > 1
+               then [$occupied[] | if .is_active then "[\(.idx)]" else "\(.idx)" end]
+                    | join(" ")
+               else "" end) }
+  '
+}
+
+emit
+# Every event reruns the query. Recomputing on an irrelevant event costs two
+# cheap IPC calls; guessing at the relevant event names costs correctness.
+niri msg --json event-stream | while read -r _; do emit; done

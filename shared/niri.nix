@@ -80,6 +80,10 @@ in
       source = ./dotfiles/niri/window-switch;
       executable = true;
     };
+    ".local/bin/workspace-indicator" = {
+      source = ./dotfiles/niri/workspace-indicator;
+      executable = true;
+    };
 
     # The capture shortcuts are rare enough to forget, so the launcher lists
     # them with their keys in the name.

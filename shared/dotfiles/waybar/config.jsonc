@@ -6,12 +6,20 @@
   "position": "top",
   "height": 32,
   "spacing": 12,
-  "modules-left": ["niri/window"],
+  "modules-left": ["custom/workspaces", "niri/window"],
   "modules-center": ["clock"],
   "modules-right": ["custom/recording", "tray", "pulseaudio", "backlight", "network", "battery"],
 
   "niri/window": {
     "max-length": 60
+  },
+
+  // Unplugging a monitor parks its workspaces on this one, where they are
+  // invisible. This appears only when that has happened.
+  "custom/workspaces": {
+    "exec": "workspace-indicator eDP-1",
+    "return-type": "json",
+    "tooltip": false
   },
 
   "clock": {
