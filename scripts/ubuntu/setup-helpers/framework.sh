@@ -5,7 +5,13 @@ NIRI_SESSION_BIN="$HOME/.nix-profile/bin/niri-session"
 
 if [ ! -x "$NIRI_SESSION_BIN" ]; then
   echo "niri is not installed yet; run home-manager first."
-  echo "Framework setup done!"
+  # Must come from apt: see the note in shared/niri.nix.
+if ! command -v swaylock &>/dev/null; then
+  echo "Installing swaylock..."
+  sudo apt install -y swaylock
+fi
+
+echo "Framework setup done!"
   exit 0
 fi
 

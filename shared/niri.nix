@@ -14,7 +14,9 @@ in
     (config.lib.nixGL.wrap waybar)
     mako
     fuzzel
-    (config.lib.nixGL.wrap swaylock)
+    # swaylock is deliberately Ubuntu's, not ours: nix's libpam only looks for
+    # modules inside its own store path, so a nix swaylock cannot load the
+    # system's pam_unix and rejects every password. framework.sh apt-installs it.
     swayidle
     swaybg
 
