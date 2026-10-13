@@ -5,13 +5,7 @@ NIRI_SESSION_BIN="$HOME/.nix-profile/bin/niri-session"
 
 if [ ! -x "$NIRI_SESSION_BIN" ]; then
   echo "niri is not installed yet; run home-manager first."
-  # Must come from apt: see the note in shared/niri.nix.
-if ! command -v swaylock &>/dev/null; then
-  echo "Installing swaylock..."
-  sudo apt install -y swaylock
-fi
-
-echo "Framework setup done!"
+  echo "Framework setup done!"
   exit 0
 fi
 
@@ -42,6 +36,12 @@ PORTALS_FILE=/usr/share/xdg-desktop-portal/niri-portals.conf
 if ! sudo cmp -s "$PORTALS_SOURCE" "$PORTALS_FILE"; then
   echo "Installing niri's portal preferences..."
   sudo cp "$PORTALS_SOURCE" "$PORTALS_FILE"
+fi
+
+# swaylock must come from apt: see the note in shared/niri.nix.
+if ! command -v swaylock &>/dev/null; then
+  echo "Installing swaylock..."
+  sudo apt install -y swaylock
 fi
 
 echo "Framework setup done!"
