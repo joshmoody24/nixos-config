@@ -104,6 +104,7 @@ binds {
     Mod+Return hotkey-overlay-title="Open a Terminal" { spawn "kitty"; }
     Mod+T      hotkey-overlay-title="Open a Terminal" { spawn "kitty"; }
     Mod+D      hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
+    Mod+Slash  hotkey-overlay-title="Switch to an Open Window" { spawn "window-switch"; }
     Mod+Y      hotkey-overlay-title="Clipboard History" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
     Mod+Alt+L  hotkey-overlay-title="Lock the Screen" { spawn "swaylock"; }
     Mod+N      hotkey-overlay-title="Dismiss Notifications" { spawn "makoctl" "dismiss" "--all"; }

@@ -76,6 +76,10 @@ in
       source = ./dotfiles/niri/screenrec;
       executable = true;
     };
+    ".local/bin/window-switch" = {
+      source = ./dotfiles/niri/window-switch;
+      executable = true;
+    };
 
     # The capture shortcuts are rare enough to forget, so the launcher lists
     # them with their keys in the name.

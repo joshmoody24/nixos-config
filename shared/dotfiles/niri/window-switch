@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Tab separated: fuzzel shows column 2 and hands back the id in column 1, so
+# titles can contain anything without confusing the selection.
+id=$(
+  niri msg --json windows \
+    | jq -r 'sort_by(.app_id, .title)[] | "\(.id)\t\(.app_id): \(.title)"' \
+    | fuzzel --dmenu --with-nth 2 --accept-nth 1 --prompt "window: "
+)
+
+[ -n "$id" ] && exec niri msg action focus-window --id "$id"
