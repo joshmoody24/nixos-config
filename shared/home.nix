@@ -200,6 +200,12 @@
     enable = true;
     enableDefaultConfig = false;
 
+    # Tools that write ssh config of their own, like `coder config-ssh`, get a
+    # file each in here instead of fighting us over ~/.ssh/config. Included
+    # first, and ssh takes the first value it is given, so their host blocks
+    # beat the catch-all below.
+    includes = [ "config.d/*" ];
+
     settings = let
       tailnet = name: {
         # Stale registrations hold the unsuffixed names, so the live machines are -1.

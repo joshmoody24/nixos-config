@@ -1,6 +1,11 @@
 { config, pkgs, lib, ... }:
 
 {
+  # So `coder config-ssh` writes into the directory ~/.ssh/config includes,
+  # rather than overwriting the nix-managed file.
+  home.sessionVariables.CODER_SSH_CONFIG_FILE =
+    "${config.home.homeDirectory}/.ssh/config.d/coder";
+
   # Note: rust and caddy are intentionally not installed via nix here —
   # they are managed by the redo setup script (linux-setup.sh)
   home.packages = lib.mkAfter (with pkgs; [
