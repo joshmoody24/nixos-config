@@ -82,10 +82,11 @@
     PasswordAuthentication = false;
     KbdInteractiveAuthentication = false;
   };
-  users.users.josh.openssh.authorizedKeys.keyFiles = [
-    ./dotfiles/ssh/josh.pub
-    ./dotfiles/ssh/unit.pub
-  ];
+  # The directory is the allowlist: dropping a .pub in there grants login on
+  # every machine, because base.sh globs the same files for the Ubuntu ones.
+  users.users.josh.openssh.authorizedKeys.keyFiles =
+    lib.filter (f: lib.hasSuffix ".pub" (baseNameOf f))
+      (lib.filesystem.listFilesRecursive ./dotfiles/ssh);
 
   services.tailscale.enable = true;
   networking.firewall.trustedInterfaces = [ "tailscale0" ];

@@ -70,6 +70,7 @@ fi
 # The JumpCloud agent owns ~/.ssh/authorized_keys, so our own keys go in a
 # second file. It lives under /etc because sshd's StrictModes rejects keys
 # resolving into the group-writable /nix/store.
+# Every .pub in there, matching the keyFiles glob in shared/configuration.nix.
 echo "Installing SSH authorized keys..."
 cat "$REPO_DIR"/shared/dotfiles/ssh/*.pub |
   sudo install -D -m 444 -o root -g root /dev/stdin /etc/ssh/authorized_keys.d/josh
