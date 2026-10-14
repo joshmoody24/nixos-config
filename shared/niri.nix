@@ -4,6 +4,25 @@ let
   # Identity outside genericLinux, so this is a no-op on NixOS.
   niriWrapped = config.lib.nixGL.wrap pkgs.niri;
   standalone = config.niri.standalone;
+
+  palette = import ./palette.nix;
+
+  # These configs carry @name@ placeholders rather than literal colors, so the
+  # palette lives in exactly one place. Only the names a file actually uses are
+  # substituted: replaceVars would be the obvious tool, but it rejects any
+  # @token@ it was not asked about, and niri's volume binds pass
+  # @DEFAULT_AUDIO_SINK@ through to wpctl.
+  themed = file:
+    let
+      contents = builtins.readFile file;
+      used = lib.filterAttrs (name: _: lib.hasInfix "@${name}@" contents) palette;
+    in
+    pkgs.substitute {
+      src = file;
+      substitutions = lib.concatLists (lib.mapAttrsToList
+        (name: color: [ "--replace-fail" "@${name}@" color ])
+        used);
+    };
 in
 {
   options.niri = {
@@ -65,7 +84,7 @@ in
   ++ lib.optional (!standalone) pkgs.swaylock;
 
   home.file = {
-    ".config/niri/config.kdl".source = ./dotfiles/niri/config.kdl;
+    ".config/niri/config.kdl".source = themed ./dotfiles/niri/config.kdl;
 
     # nwg-displays rewrites this when you drag monitors around, so it points at
     # the checkout rather than the store: a store copy would be read-only, and
@@ -92,10 +111,10 @@ in
       recursive = true;
     };
     ".config/waybar/config.jsonc".source = ./dotfiles/waybar/config.jsonc;
-    ".config/waybar/style.css".source = ./dotfiles/waybar/style.css;
-    ".config/mako/config".source = ./dotfiles/mako/config;
-    ".config/fuzzel/fuzzel.ini".source = ./dotfiles/fuzzel/fuzzel.ini;
-    ".config/swaylock/config".source = ./dotfiles/swaylock/config;
+    ".config/waybar/style.css".source = themed ./dotfiles/waybar/style.css;
+    ".config/mako/config".source = themed ./dotfiles/mako/config;
+    ".config/fuzzel/fuzzel.ini".source = themed ./dotfiles/fuzzel/fuzzel.ini;
+    ".config/swaylock/config".source = themed ./dotfiles/swaylock/config;
 
     # The agent ships in libexec, where spawn-at-startup's bare name can't see it.
     ".local/bin/polkit-agent".source =

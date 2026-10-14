@@ -59,8 +59,8 @@ layout {
     }
 
     tab-indicator {
-        active-color "#7aa2f7"
-        inactive-color "#414868"
+        active-color "#@accent@"
+        inactive-color "#@border@"
     }
 }
 
@@ -82,7 +82,7 @@ spawn-at-startup "polkit-agent"
 spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
 spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
 spawn-sh-at-startup "swayidle -w timeout 600 'swaylock -f' before-sleep 'swaylock -f'"
-spawn-sh-at-startup "swaybg -c '#1a1b26'"
+spawn-sh-at-startup "swaybg -c '#@bg@'"
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 

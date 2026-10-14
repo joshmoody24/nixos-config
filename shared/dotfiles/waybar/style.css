@@ -7,21 +7,21 @@
 }
 
 window#waybar {
-  background: #16161e;
-  color: #c0caf5;
+  background: #@barBg@;
+  color: #@fg@;
 }
 
 #custom-workspaces {
   padding: 0 8px;
-  color: #e0af68;
+  color: #@warn@;
 }
 
 #window {
-  color: #545c7e;
+  color: #@dimmer@;
 }
 
 #clock {
-  color: #c0caf5;
+  color: #@fg@;
 }
 
 #pulseaudio,
@@ -30,22 +30,22 @@ window#waybar {
 #battery,
 #tray {
   padding: 0 8px;
-  color: #9aa5ce;
+  color: #@dim@;
 }
 
 #battery.warning {
-  color: #e0af68;
+  color: #@warn@;
 }
 
 #battery.critical {
-  color: #f7768e;
+  color: #@error@;
 }
 
 #network.disconnected {
-  color: #f7768e;
+  color: #@error@;
 }
 
 #custom-recording {
   padding: 0 8px;
-  color: #f7768e;
+  color: #@error@;
 }
