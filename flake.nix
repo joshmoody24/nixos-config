@@ -11,6 +11,14 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Pinned to the commit lazy-lock.json gives the nvim plugin, so the editor
+    # and the desktop cannot drift onto different versions of the same theme.
+    # shared/theme.nix asserts the two agree.
+    tokyonight = {
+      url = "github:folke/tokyonight.nvim/cdc07ac78467a233fd62c493de29a17e0cf2b2b6";
+      flake = false;
+    };
+
     redo-dashboard = {
       url = "git+ssh://git@github.com/joshmoody24/redo-dashboard.git";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,6 +58,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = { inherit inputs; };
           home-manager.users.josh = import ./hosts/unit/home.nix;
         }
       ];

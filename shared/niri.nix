@@ -4,25 +4,7 @@ let
   # Identity outside genericLinux, so this is a no-op on NixOS.
   niriWrapped = config.lib.nixGL.wrap pkgs.niri;
   standalone = config.niri.standalone;
-
-  palette = import ./palette.nix;
-
-  # These configs carry @name@ placeholders rather than literal colors, so the
-  # palette lives in exactly one place. Only the names a file actually uses are
-  # substituted: replaceVars would be the obvious tool, but it rejects any
-  # @token@ it was not asked about, and niri's volume binds pass
-  # @DEFAULT_AUDIO_SINK@ through to wpctl.
-  themed = file:
-    let
-      contents = builtins.readFile file;
-      used = lib.filterAttrs (name: _: lib.hasInfix "@${name}@" contents) palette;
-    in
-    pkgs.substitute {
-      src = file;
-      substitutions = lib.concatLists (lib.mapAttrsToList
-        (name: color: [ "--replace-fail" "@${name}@" color ])
-        used);
-    };
+  themed = config.theme.apply;
 in
 {
   options.niri = {

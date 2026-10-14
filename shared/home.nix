@@ -1,6 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
+  imports = [ ./theme.nix ];
+
   home.username = "josh";
   home.homeDirectory = "/home/josh";
 
@@ -34,9 +36,14 @@
     ".config/nvim/lazy-lock.json".source = config.lib.file.mkOutOfStoreSymlink
       "${config.home.homeDirectory}/code/nixos-config/shared/dotfiles/nvim/lazy-lock.json";
 
-    ".config/kitty/current-theme.conf".source = ./dotfiles/kitty/current-theme.conf;
+    # Both terminals take the palette from upstream directly, so they cannot
+    # drift from each other or from nvim.
+    ".config/kitty/current-theme.conf".source =
+      "${inputs.tokyonight}/extras/kitty/tokyonight_${config.theme.style}.conf";
 
-    ".config/ghostty/config".source = ./dotfiles/ghostty/config;
+    ".config/ghostty/config".source = config.theme.apply ./dotfiles/ghostty/config;
+    ".config/ghostty/themes/tokyonight_${config.theme.style}".source =
+      "${inputs.tokyonight}/extras/ghostty/tokyonight_${config.theme.style}";
     ".config/ghostty/cursor_tail.glsl".source = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/sahaj-b/ghostty-cursor-shaders/main/cursor_tail.glsl";
       sha256 = "1g9vsbsxnvcj0y6rzdkxrd4mj0ldl9aha7381g8nfs3bz829y46w";

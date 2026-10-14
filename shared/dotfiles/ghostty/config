@@ -4,7 +4,7 @@ font-size = 11.5
 font-thicken = true
 
 # Theme
-theme = TokyoNight Night
+theme = tokyonight_@style@
 
 # Cursor trail
 custom-shader = cursor_tail.glsl
