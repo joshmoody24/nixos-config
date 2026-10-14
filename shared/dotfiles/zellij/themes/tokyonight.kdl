@@ -1,0 +1,131 @@
+// Zellij's own theme format, so its tabs and status bar match the rest of the
+// desktop. A bare `0` is zellij's transparent, which is not a colour we can
+// name; everything else comes from shared/theme.nix.
+themes {
+    tokyonight_@style@ {
+        text_unselected {
+            base "#@fg@"
+            background "#@bg@"
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@ok@"
+            emphasis_3 "#@magenta@"
+        }
+        text_selected {
+            base "#@fg@"
+            background "#@visual@"
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@ok@"
+            emphasis_3 "#@magenta@"
+        }
+        ribbon_selected {
+            base "#@barBg@"
+            background "#@accent@"
+            emphasis_0 "#@error@"
+            emphasis_1 "#@orange@"
+            emphasis_2 "#@magenta@"
+            emphasis_3 "#@barBg@"
+        }
+        ribbon_unselected {
+            base "#@dimmer@"
+            background "#@selected@"
+            emphasis_0 "#@error@"
+            emphasis_1 "#@fg@"
+            emphasis_2 "#@accent@"
+            emphasis_3 "#@magenta@"
+        }
+        table_title {
+            base "#@accent@"
+            background 0
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@ok@"
+            emphasis_3 "#@magenta@"
+        }
+        table_cell_selected {
+            base "#@fg@"
+            background "#@visual@"
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@ok@"
+            emphasis_3 "#@magenta@"
+        }
+        table_cell_unselected {
+            base "#@fg@"
+            background "#@bg@"
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@ok@"
+            emphasis_3 "#@magenta@"
+        }
+        list_selected {
+            base "#@fg@"
+            background "#@visual@"
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@ok@"
+            emphasis_3 "#@magenta@"
+        }
+        list_unselected {
+            base "#@fg@"
+            background "#@bg@"
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@ok@"
+            emphasis_3 "#@magenta@"
+        }
+        frame_selected {
+            base "#@accent@"
+            background 0
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@magenta@"
+            emphasis_3 0
+        }
+        frame_unselected {
+            base "#@selected@"
+            background 0
+            emphasis_0 "#@orange@"
+            emphasis_1 "#@cyan@"
+            emphasis_2 "#@magenta@"
+            emphasis_3 0
+        }
+        frame_highlight {
+            base "#@orange@"
+            background 0
+            emphasis_0 "#@magenta@"
+            emphasis_1 "#@orange@"
+            emphasis_2 "#@orange@"
+            emphasis_3 "#@orange@"
+        }
+        exit_code_success {
+            base "#@ok@"
+            background 0
+            emphasis_0 "#@cyan@"
+            emphasis_1 "#@gutter@"
+            emphasis_2 "#@magenta@"
+            emphasis_3 "#@accent@"
+        }
+        exit_code_error {
+            base "#@error@"
+            background 0
+            emphasis_0 "#@warn@"
+            emphasis_1 0
+            emphasis_2 0
+            emphasis_3 0
+        }
+        multiplayer_user_colors {
+            player_1 "#@magenta@"
+            player_2 "#@accent@"
+            player_3 0
+            player_4 "#@warn@"
+            player_5 "#@cyan@"
+            player_6 0
+            player_7 "#@error@"
+            player_8 0
+            player_9 0
+            player_10 0
+        }
+    }
+}

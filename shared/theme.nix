@@ -71,10 +71,18 @@ in
       dimmer = "dark3";
       border = "terminal_black";
       selected = "bg_highlight";
+      visual = "bg_visual";
+      gutter = "fg_gutter";
       accent = "blue";
       warn = "warning";
       error = "red";
       ok = "green";
+
+      # Zellij wants a handful of distinct accents for its emphasis slots, so
+      # these are named after the colour rather than a job.
+      magenta = "magenta";
+      orange = "orange";
+      cyan = "blue1";
     };
 
     theme.colors =

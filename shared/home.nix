@@ -49,7 +49,9 @@
       sha256 = "1g9vsbsxnvcj0y6rzdkxrd4mj0ldl9aha7381g8nfs3bz829y46w";
     };
 
-    ".config/zellij/config.kdl".source = ./dotfiles/zellij/config.kdl;
+    ".config/zellij/config.kdl".source = config.theme.apply ./dotfiles/zellij/config.kdl;
+    ".config/zellij/themes/tokyonight.kdl".source =
+      config.theme.apply ./dotfiles/zellij/themes/tokyonight.kdl;
     ".config/zellij/layouts" = {
       source = ./dotfiles/zellij/layouts;
       recursive = true;
