@@ -106,6 +106,7 @@
     gcc
     tree-sitter
     jq
+    deque
 
     cascadia-code
     (config.lib.nixGL.wrap ghostty)

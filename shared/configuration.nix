@@ -11,7 +11,7 @@
     packages = with pkgs; [];
   };
   
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = import ./nixpkgs.nix;
   networking.networkmanager.enable = true;
   
   i18n.defaultLocale = "en_US.UTF-8";

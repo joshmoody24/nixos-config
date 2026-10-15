@@ -28,24 +28,7 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-      overlays = [
-        (final: prev: {
-          deque = final.callPackage ./shared/pkgs/deque.nix { };
-
-          # The rewritten wrap-gapps-hook needs $output in scope, which stdenv
-          # only sets during fixupPhase — skipped by mongodb-compass's buildCommand.
-          mongodb-compass = prev.mongodb-compass.overrideAttrs (old: {
-            buildCommand = builtins.replaceStrings
-              [ "wrapGAppsHook $out/bin/mongodb-compass" ]
-              [ "output=out wrapGAppsHook" ]
-              old.buildCommand;
-          });
-        })
-      ];
-    };
+    pkgs = import nixpkgs ({ inherit system; } // import ./shared/nixpkgs.nix);
   in {
     packages.${system} = { inherit (pkgs) deque; };
 
