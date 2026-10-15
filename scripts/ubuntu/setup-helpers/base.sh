@@ -2,6 +2,7 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+. "$(dirname "$0")/lib.sh"
 NIX_DAEMON_SH="/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
 
 # Ensure curl is available
@@ -36,11 +37,7 @@ echo "Applying home-manager configuration..."
 nix run home-manager -- switch -b backup --flake "$REPO_DIR#josh@$(hostname)"
 
 # Sudo: don't re-prompt for password during the session
-SUDO_TIMEOUT='Defaults timestamp_timeout=-1'
-if ! grep -qxF "$SUDO_TIMEOUT" /etc/sudoers.d/timeout 2>/dev/null; then
-  echo "Configuring sudo timeout..."
-  echo "$SUDO_TIMEOUT" | sudo tee /etc/sudoers.d/timeout > /dev/null
-fi
+install_system_file 440 /etc/sudoers.d/timeout 'Defaults timestamp_timeout=-1'
 
 # Install and configure keyd (needs PPA on Ubuntu 24.04)
 if ! command -v keyd &>/dev/null; then
@@ -49,11 +46,10 @@ if ! command -v keyd &>/dev/null; then
   sudo apt update
   sudo apt install -y keyd
 fi
-echo "Copying keyd configuration..."
-sudo mkdir -p /etc/keyd
-sudo cp "$REPO_DIR/shared/dotfiles/keyd/default.conf" /etc/keyd/default.conf
+install_system_file 644 /etc/keyd/default.conf \
+  "$(cat "$REPO_DIR/shared/dotfiles/keyd/default.conf")" \
+  sudo systemctl restart keyd
 sudo systemctl enable --now keyd
-sudo systemctl restart keyd
 
 # Install Tailscale
 if ! command -v tailscale &>/dev/null; then
@@ -75,14 +71,11 @@ echo "Installing SSH authorized keys..."
 cat "$REPO_DIR"/shared/dotfiles/ssh/*.pub |
   sudo install -D -m 444 -o root -g root /dev/stdin /etc/ssh/authorized_keys.d/josh
 
-SSHD_CONFIG='AuthorizedKeysFile .ssh/authorized_keys /etc/ssh/authorized_keys.d/%u
+install_system_file 644 /etc/ssh/sshd_config.d/10-nixos-config.conf \
+  'AuthorizedKeysFile .ssh/authorized_keys /etc/ssh/authorized_keys.d/%u
 PasswordAuthentication no
-KbdInteractiveAuthentication no'
-if [ "$(sudo cat /etc/ssh/sshd_config.d/10-nixos-config.conf 2>/dev/null)" != "$SSHD_CONFIG" ]; then
-  echo "Configuring sshd..."
-  echo "$SSHD_CONFIG" | sudo tee /etc/ssh/sshd_config.d/10-nixos-config.conf > /dev/null
+KbdInteractiveAuthentication no' \
   sudo systemctl restart ssh
-fi
 sudo systemctl enable --now ssh
 
 # Nix garbage collection (weekly, delete older than 30 days)
@@ -121,25 +114,17 @@ if ! dpkg -s zram-tools &>/dev/null; then
   sudo apt install -y zram-tools
 fi
 
-ZRAMSWAP_CONFIG='ALGO=zstd
+install_system_file 644 /etc/default/zramswap 'ALGO=zstd
 PERCENT=50
-PRIORITY=100'
-if [ "$(cat /etc/default/zramswap 2>/dev/null)" != "$ZRAMSWAP_CONFIG" ]; then
-  echo "Configuring zramswap..."
-  echo "$ZRAMSWAP_CONFIG" | sudo tee /etc/default/zramswap > /dev/null
+PRIORITY=100' \
   sudo systemctl restart zramswap
-fi
 
 # Tuning for zram-backed swap: prefer compressing pages over evicting code
-ZRAM_SYSCTL='vm.swappiness=180
+install_system_file 644 /etc/sysctl.d/99-zram.conf 'vm.swappiness=180
 vm.watermark_boost_factor=0
 vm.watermark_scale_factor=125
-vm.page-cluster=0'
-if [ "$(cat /etc/sysctl.d/99-zram.conf 2>/dev/null)" != "$ZRAM_SYSCTL" ]; then
-  echo "Configuring zram sysctl..."
-  echo "$ZRAM_SYSCTL" | sudo tee /etc/sysctl.d/99-zram.conf > /dev/null
-  sudo sysctl --system > /dev/null
-fi
+vm.page-cluster=0' \
+  sudo sysctl --system --quiet
 
 # earlyoom: kill the offending process early instead of freezing on kernel OOM
 if ! dpkg -s earlyoom &>/dev/null; then
@@ -147,12 +132,9 @@ if ! dpkg -s earlyoom &>/dev/null; then
   sudo apt install -y earlyoom
 fi
 
-EARLYOOM_CONFIG="EARLYOOM_ARGS=\"-r 60 -m 5 -s 5 --avoid '(^|/)(systemd|Xorg|gnome-shell|sshd)\$' --prefer '(^|/)(node|tsc|tsserver|esbuild)\$'\""
-if [ "$(cat /etc/default/earlyoom 2>/dev/null)" != "$EARLYOOM_CONFIG" ]; then
-  echo "Configuring earlyoom..."
-  echo "$EARLYOOM_CONFIG" | sudo tee /etc/default/earlyoom > /dev/null
+install_system_file 644 /etc/default/earlyoom \
+  "EARLYOOM_ARGS=\"-r 60 -m 5 -s 5 --avoid '(^|/)(systemd|Xorg|gnome-shell|sshd)\$' --prefer '(^|/)(node|tsc|tsserver|esbuild)\$'\"" \
   sudo systemctl restart earlyoom
-fi
 sudo systemctl enable --now earlyoom
 
 # Ubuntu's systemd-oomd kills whole session cgroups (logs you out); mask the

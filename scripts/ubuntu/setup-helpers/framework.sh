@@ -3,6 +3,7 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 SYSTEMD_DOTFILES="$REPO_DIR/shared/dotfiles/systemd"
+. "$(dirname "$0")/lib.sh"
 
 # Keeps password checks working for programs running as you; see the script's
 # own comment. Installed before the niri check below, since it matters whether
@@ -37,12 +38,7 @@ Comment=A scrollable-tiling Wayland compositor
 Exec=/usr/bin/env PATH=$HOME/.local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin $NIRI_SESSION_BIN
 Type=Application
 DesktopNames=niri"
-NIRI_SESSION_FILE=/usr/share/wayland-sessions/niri.desktop
-
-if [ "$(sudo cat "$NIRI_SESSION_FILE" 2>/dev/null)" != "$NIRI_SESSION" ]; then
-  echo "Adding niri to the login screen..."
-  echo "$NIRI_SESSION" | sudo tee "$NIRI_SESSION_FILE" > /dev/null
-fi
+install_system_file 644 /usr/share/wayland-sessions/niri.desktop "$NIRI_SESSION"
 
 # xdg-desktop-portal is Ubuntu's, so it only looks for backend preferences
 # under /usr/share. Without this, file pickers and screen sharing pick nothing.

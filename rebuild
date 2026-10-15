@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-# Picks the nixosConfiguration named after this machine's hostname. --sudo
-# evaluates as you and elevates only to activate, so root never reads your repo.
-DIR="$(dirname "$0")"
-exec nixos-rebuild switch --flake "$DIR" --sudo "$@"
+# One entry point for both kinds of machine.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+if [ -e /etc/NIXOS ]; then
+  # Picks the nixosConfiguration named after this machine's hostname. --sudo
+  # evaluates as you and elevates only to activate, so root never reads your repo.
+  exec nixos-rebuild switch --flake "$DIR" --sudo "$@"
+fi
+
+exec "$DIR/scripts/ubuntu/apply-system.sh"

@@ -5,6 +5,7 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 DOTFILES="$REPO_DIR/shared/dotfiles/dashboard"
+. "$(dirname "$0")/lib.sh"
 STATE_DIR=/var/lib/redo-dashboard
 TALK="$STATE_DIR/dashboard.deque"
 RENDERED_MARKER="rendered by redo-dashboard"
@@ -64,12 +65,8 @@ LAUNCHER
 
 # Restarting the display is how a kiosk change takes effect; needing a password
 # for it would mean needing to be sitting at the machine.
-SUDO_GDM="josh ALL=(root) NOPASSWD: /usr/bin/systemctl restart gdm, /usr/bin/systemctl restart gdm.service"
-if [ "$(sudo cat /etc/sudoers.d/redo-dashboard 2>/dev/null)" != "$SUDO_GDM" ]; then
-  echo "Allowing josh to restart the display..."
-  echo "$SUDO_GDM" | sudo tee /etc/sudoers.d/redo-dashboard > /dev/null
-  sudo chmod 440 /etc/sudoers.d/redo-dashboard
-fi
+install_system_file 440 /etc/sudoers.d/redo-dashboard \
+  "josh ALL=(root) NOPASSWD: /usr/bin/systemctl restart gdm, /usr/bin/systemctl restart gdm.service"
 sudo install -D -m 644 "$DOTFILES/dashboard.desktop" \
   /usr/share/wayland-sessions/dashboard.desktop
 
@@ -91,15 +88,9 @@ fi
 # this dash lands in the stock GNOME session.
 sudo sed -i '/^AutomaticLoginSession=/d' "$GDM_CONF"
 
-ACCOUNTS_USER=/var/lib/AccountsService/users/dash
-ACCOUNTS_RECORD="[User]
+install_system_file 644 /var/lib/AccountsService/users/dash "[User]
 Session=dashboard
 XSession=dashboard
 SystemAccount=false"
-if [ "$(sudo cat "$ACCOUNTS_USER" 2>/dev/null)" != "$ACCOUNTS_RECORD" ]; then
-  echo "Pointing dash at the dashboard session..."
-  sudo install -d -m 775 /var/lib/AccountsService/users
-  echo "$ACCOUNTS_RECORD" | sudo tee "$ACCOUNTS_USER" > /dev/null
-fi
 
 echo "Dashboard setup done! Reboot to land in the kiosk."
