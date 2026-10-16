@@ -27,41 +27,41 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
+    inherit (nixpkgs) lib;
     system = "x86_64-linux";
     pkgs = import nixpkgs ({ inherit system; } // import ./shared/nixpkgs.nix);
+
+    hosts = import ./hosts.nix;
+    running = os: lib.filterAttrs (_: host: host.os == os) hosts;
   in {
     packages.${system} = { inherit (pkgs) deque; };
 
-    # NixOS
-    nixosConfigurations.unit = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+    # How the Ubuntu scripts turn `hostname` back into a host in this repo.
+    hostNames = lib.mapAttrs' (name: host: lib.nameValuePair host.hostname name) hosts;
+
+    nixosConfigurations = lib.mapAttrs (name: host: lib.nixosSystem {
+      inherit system;
       modules = [
-        ./hosts/unit/configuration.nix
+        ./hosts/${name}/configuration.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = { inherit inputs; };
-          home-manager.users.josh = import ./hosts/unit/home.nix;
+          home-manager.users.josh = import ./hosts/${name}/home.nix;
         }
       ];
-    };
+    }) (running "nixos");
 
-    # Standalone home-manager (Ubuntu)
-    homeConfigurations."josh@joshm-framework" = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/framework/home.nix
-      ];
-    };
-
-    homeConfigurations."josh@joshm-thinkpad" = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/thinkpad/home.nix
-      ];
-    };
+    # Ubuntu gets home-manager on its own, so these are named the way
+    # `home-manager switch` looks them up: user@hostname.
+    homeConfigurations = lib.mapAttrs'
+      (name: host: lib.nameValuePair "josh@${host.hostname}"
+        (home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./hosts/${name}/home.nix ];
+        }))
+      (running "ubuntu");
   };
 }
