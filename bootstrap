@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Run once on a new machine: installs what it is missing, including nix itself.
+# `./rebuild` is what keeps it in line with the repo afterwards.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+if [ -e /etc/NIXOS ]; then
+  echo "NixOS installs everything through ./rebuild; nothing to bootstrap." >&2
+  exit 1
+fi
+
+"$DIR/scripts/ubuntu/run.sh" bootstrap || exit $?
+echo ""
+echo "Now run ./rebuild."

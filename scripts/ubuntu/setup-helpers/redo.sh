@@ -2,73 +2,76 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+. "$(dirname "$0")/lib.sh"
 
-# --- /etc/hosts (marker-based, safe to re-run) ---
 HOSTS_FILE="$REPO_DIR/shared/dotfiles/redo/hosts/redo-hosts"
 MARKER_START="# BEGIN redo-hosts"
 MARKER_END="# END redo-hosts"
 
-if grep -q "$MARKER_START" /etc/hosts; then
-  sudo sed -i "/$MARKER_START/,/$MARKER_END/d" /etc/hosts
-fi
-echo "Updating /etc/hosts with redo entries..."
-printf '%s\n%s\n%s\n' "$MARKER_START" "$(cat "$HOSTS_FILE")" "$MARKER_END" | sudo tee -a /etc/hosts >/dev/null
-echo "redo hosts applied."
-
-# --- Caddy ---
-if ! command -v caddy &>/dev/null; then
-  echo "Installing Caddy..."
-  sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
-  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' \
-    | sudo gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' \
-    | sudo tee /etc/apt/sources.list.d/caddy-stable.list >/dev/null
-  sudo apt update
-  sudo apt install -y caddy
-fi
-
-# don runs caddy itself (tools/caddy), so keep the distro caddy.service off —
-# it squats on ports 2019/443 and blocks don's caddy.
-sudo systemctl disable --now caddy 2>/dev/null || true
-
-# Let don's caddy (run as your user) bind :443, which the service did for us.
-sudo setcap cap_net_bind_service=+ep "$(command -v caddy)"
-
-# `caddy trust` asks a running caddy's admin API for the CA, but don's caddy is
-# not up during setup, so install the root from disk instead. It only exists
-# once caddy has run at least once.
 CADDY_ROOT="$HOME/.local/share/caddy/pki/authorities/local/root.crt"
 CADDY_TRUSTED="/usr/local/share/ca-certificates/caddy-local-root.crt"
-if [ ! -f "$CADDY_ROOT" ]; then
-  echo "Caddy's local CA does not exist yet; re-run this after the first 'don start'."
-elif ! cmp -s "$CADDY_ROOT" "$CADDY_TRUSTED"; then
-  echo "Trusting Caddy's local CA..."
-  sudo install -m 444 -o root -g root "$CADDY_ROOT" "$CADDY_TRUSTED"
-  sudo update-ca-certificates
-fi
 
-# --- Docker ---
-if ! command -v docker &>/dev/null; then
-  echo "Installing Docker..."
-  sudo apt-get install -y ca-certificates curl
-  sudo install -m 0755 -d /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
-    | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
-  sudo chmod a+r /etc/apt/keyrings/docker.gpg
-  echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-  sudo apt-get update
-  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-fi
+bootstrap() {
+  if ! command -v caddy &>/dev/null; then
+    echo "Installing Caddy..."
+    apt_install debian-keyring debian-archive-keyring apt-transport-https
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' \
+      | sudo gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' \
+      | sudo tee /etc/apt/sources.list.d/caddy-stable.list >/dev/null
+    sudo apt update
+    sudo apt install -y caddy
+  fi
 
-if ! groups | grep -q '\bdocker\b'; then
-  echo "Adding $USER to docker group..."
-  sudo usermod -aG docker "$USER"
-  echo "NOTE: Log out and back in for docker group to take effect."
-fi
+  if ! command -v docker &>/dev/null; then
+    echo "Installing Docker..."
+    apt_install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+      | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  fi
 
-sudo systemctl enable --now docker
+  if ! groups | grep -q '\bdocker\b'; then
+    echo "Adding $USER to docker group..."
+    sudo usermod -aG docker "$USER"
+    echo "NOTE: Log out and back in for docker group to take effect."
+  fi
+}
 
-echo "Redo setup done!"
+apply() {
+  # Rewritten between markers, so the rest of /etc/hosts is left alone.
+  if grep -q "$MARKER_START" /etc/hosts; then
+    sudo sed -i "/$MARKER_START/,/$MARKER_END/d" /etc/hosts
+  fi
+  echo "Updating /etc/hosts with redo entries..."
+  printf '%s\n%s\n%s\n' "$MARKER_START" "$(cat "$HOSTS_FILE")" "$MARKER_END" | sudo tee -a /etc/hosts >/dev/null
+
+  # don runs caddy itself (tools/caddy), so keep the distro caddy.service off.
+  # It squats on ports 2019/443 and blocks don's caddy.
+  sudo systemctl disable --now caddy 2>/dev/null || true
+
+  # Let don's caddy (run as your user) bind :443, which the service did for us.
+  sudo setcap cap_net_bind_service=+ep "$(command -v caddy)"
+
+  # `caddy trust` asks a running caddy's admin API for the CA, but don's caddy is
+  # not up during setup, so install the root from disk instead. It only exists
+  # once caddy has run at least once.
+  if [ ! -f "$CADDY_ROOT" ]; then
+    echo "Caddy's local CA does not exist yet; re-run this after the first 'don start'."
+  elif ! cmp -s "$CADDY_ROOT" "$CADDY_TRUSTED"; then
+    echo "Trusting Caddy's local CA..."
+    sudo install -m 444 -o root -g root "$CADDY_ROOT" "$CADDY_TRUSTED"
+    sudo update-ca-certificates
+  fi
+
+  sudo systemctl enable --now docker
+}
+
+run_phase "${1:-}"

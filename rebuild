@@ -8,4 +8,4 @@ if [ -e /etc/NIXOS ]; then
   exec nixos-rebuild switch --flake "$DIR" --sudo "$@"
 fi
 
-exec "$DIR/scripts/ubuntu/apply-system.sh"
+exec "$DIR/scripts/ubuntu/run.sh" apply
