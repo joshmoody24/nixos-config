@@ -1,5 +1,15 @@
 { config, pkgs, lib, inputs, ... }:
 
+let
+  # One .md per skill, named after the skill. Claude wants each one in a
+  # directory of its own as SKILL.md, so the shape is derived rather than kept.
+  claudeSkills = lib.listToAttrs (map
+    (file: lib.nameValuePair
+      ".claude/skills/${lib.removeSuffix ".md" (baseNameOf file)}/SKILL.md"
+      { source = file; })
+    (lib.filter (lib.hasSuffix ".md")
+      (lib.filesystem.listFilesRecursive ./dotfiles/agents/skills)));
+in
 {
   imports = [ ./theme.nix ];
 
@@ -8,7 +18,7 @@
 
   news.display = "silent";
 
-  home.file = {
+  home.file = claudeSkills // {
     # Lets `home-manager switch` (no args) find the flake and pick josh@$(hostname).
     ".config/home-manager/flake.nix".text = let
       repoPath = "${config.home.homeDirectory}/code/nixos-config";
