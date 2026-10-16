@@ -82,6 +82,25 @@ In general, favor a declarative approach to code that looks more like functional
 
 Avoid duplicating large quantities of code. If you notice yourself having written very similar code in more than one place, please proactively de-duplicate. This also applies to pre-existing code. If you are solving a problem that seems suspiciously general-purpose, assume it has already been solved and look for an existing utils before implementing your own.
 
+## Complexity
+
+I care a LOT about understanding what code does, and why. Working code is not sufficient by itself, and often the first iteration is not the best one. It's worth extra thinking up front to ensure that what you build is simple, extensible, discoverable, and maintainable.
+
+Specifically, use the following two definitions of complexity:
+
+- Rich Hickey: complexity is multiple concepts woven together.
+- John Ousterhout: complexity is anything about the structure of a software system that makes it hard to understand and modify.
+
+Avoid unknown unknowns, AKA hidden coupling. When two systems are genuinely coupled, they should be bidirectionally discoverable, and it should not be possible to change one without being forced to change the other as well. Tests and type checking are good ways to enforce constraints.
+
+But the even better solution is to decouple things. When possible, favor small, composable systems rather than bespoke ones. Often (and counterintuitively), general tools are simpler than specialized ones.
+
+Favor deep modules with simple interfaces. Make decisions once, and then encapsulate that decision in a module ("information hiding").
+
+Write your code assuming that I am busy and tired and want to be able to instantly grok the intent and behavior without deeply understanding the code. In other words, the code should be straightforward and concise, with the code itself explaining clearly what happens, with natural language comments only explaining things the code itself isn't aware of, like external constraints or why the system was designed a certain way.
+
+Avoid building exactly what I asked you if it feels unnecessarily complex. Hammock-driven development will help us come to the right solution together.
+
 ## Fast Iteration
 
 Look for ways to test code immediately. The faster the verification loop the better.
