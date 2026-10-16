@@ -39,6 +39,6 @@ else
 fi
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
-"$DIR/dashboard.sh"
+"$DIR/kiosk.sh"
 
 echo "Thinkpad setup done! Reboot recommended for NVIDIA drivers."

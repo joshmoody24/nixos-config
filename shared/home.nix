@@ -108,7 +108,6 @@ in
     wget
     (config.lib.nixGL.wrap google-chrome)
     (config.lib.nixGL.wrap firefox)
-    gnome-tweaks
     unzip
     python314
     nodejs
@@ -121,8 +120,6 @@ in
     cascadia-code
     (config.lib.nixGL.wrap ghostty)
     gimp
-    gnomeExtensions.clipboard-history
-    gnomeExtensions.blur-my-shell
     antigravity-cli
     codex
     claude-code

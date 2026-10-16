@@ -10,9 +10,6 @@
   niri.monitors = "hosts/unit/monitor.kdl";
 
   home.packages = with pkgs; [
-    google-chrome
-    firefox
-
     remmina
     (blender.override { rocmSupport = true; })
     pciutils # for gnome extension Astra Monitor
@@ -47,6 +44,11 @@
     (retroarch.withCores (cores: with cores; [ mupen64plus ]))
 
     vintagestory
+
+    # This is the only machine where josh's own session is GNOME.
+    gnome-tweaks
+    gnomeExtensions.clipboard-history
+    gnomeExtensions.blur-my-shell
   ];
 
   home.stateVersion = "25.05";

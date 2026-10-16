@@ -1,5 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
+# The schedule that keeps the thinkpad's dashboard current. The kiosk that
+# displays it is set up by scripts/ubuntu/setup-helpers/kiosk.sh.
 let
   # Dependencies come from the pinned flake, the code from the working clone:
   # editing a collector takes effect on the next tick, with no rebuild and no
