@@ -1,12 +1,17 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  # Every config file goes through this, so adding a colour to one is never a
+  # thing to remember: it only replaces the role names it knows, and a file
+  # without any comes out unchanged.
+  themed = config.theme.apply;
+
   # One .md per skill, named after the skill. Claude wants each one in a
   # directory of its own as SKILL.md, so the shape is derived rather than kept.
   claudeSkills = lib.listToAttrs (map
     (file: lib.nameValuePair
       ".claude/skills/${lib.removeSuffix ".md" (baseNameOf file)}/SKILL.md"
-      { source = file; })
+      { source = themed file; })
     (lib.filter (lib.hasSuffix ".md")
       (lib.filesystem.listFilesRecursive ./dotfiles/agents/skills)));
 in
@@ -33,7 +38,7 @@ in
         };
       }
     '';
-    ".bashrc".source = ./dotfiles/.bashrc;
+    ".bashrc".source = themed ./dotfiles/.bashrc;
 
     ".config/nvim/lua" = {
       source = ./dotfiles/nvim/lua;
@@ -51,7 +56,7 @@ in
     ".config/kitty/current-theme.conf".source =
       "${inputs.tokyonight}/extras/kitty/tokyonight_${config.theme.style}.conf";
 
-    ".config/ghostty/config".source = config.theme.apply ./dotfiles/ghostty/config;
+    ".config/ghostty/config".source = themed ./dotfiles/ghostty/config;
     ".config/ghostty/themes/tokyonight_${config.theme.style}".source =
       "${inputs.tokyonight}/extras/ghostty/tokyonight_${config.theme.style}";
     ".config/ghostty/cursor_tail.glsl".source = pkgs.fetchurl {
@@ -59,32 +64,32 @@ in
       sha256 = "1g9vsbsxnvcj0y6rzdkxrd4mj0ldl9aha7381g8nfs3bz829y46w";
     };
 
-    ".config/zellij/config.kdl".source = config.theme.apply ./dotfiles/zellij/config.kdl;
+    ".config/zellij/config.kdl".source = themed ./dotfiles/zellij/config.kdl;
     ".config/zellij/themes/tokyonight.kdl".source =
-      config.theme.apply ./dotfiles/zellij/themes/tokyonight.kdl;
+      themed ./dotfiles/zellij/themes/tokyonight.kdl;
     ".config/zellij/layouts" = {
       source = ./dotfiles/zellij/layouts;
       recursive = true;
     };
     ".local/bin/zj" = {
-      source = ./dotfiles/zellij/zj;
+      source = themed ./dotfiles/zellij/zj;
       executable = true;
     };
 
     # Startup: one kitty window hosting a zellij session, so a crash or a closed
     # terminal costs no history.
-    ".config/autostart/kitty.desktop".source = ./dotfiles/autostart/kitty.desktop;
+    ".config/autostart/kitty.desktop".source = themed ./dotfiles/autostart/kitty.desktop;
 
     ".local/bin/dashboard" = {
-      source = ./dotfiles/dashboard/dashboard;
+      source = themed ./dotfiles/dashboard/dashboard;
       executable = true;
     };
 
-    ".gitconfig".source = ./dotfiles/.gitconfig;
+    ".gitconfig".source = themed ./dotfiles/.gitconfig;
 
-    ".claude/CLAUDE.md".source = ./dotfiles/agents/AGENTS.md;
-    ".codex/AGENTS.md".source = ./dotfiles/agents/AGENTS.md;
-    ".gemini/GEMINI.md".source = ./dotfiles/agents/AGENTS.md;
+    ".claude/CLAUDE.md".source = themed ./dotfiles/agents/AGENTS.md;
+    ".codex/AGENTS.md".source = themed ./dotfiles/agents/AGENTS.md;
+    ".gemini/GEMINI.md".source = themed ./dotfiles/agents/AGENTS.md;
   };
 
   programs.neovim = {

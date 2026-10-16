@@ -74,15 +74,15 @@ in
     ".config/niri/monitor.kdl".source = config.lib.file.mkOutOfStoreSymlink
       "${config.home.homeDirectory}/code/nixos-config/${config.niri.monitors}";
     ".local/bin/screenrec" = {
-      source = ./dotfiles/niri/screenrec;
+      source = themed ./dotfiles/niri/screenrec;
       executable = true;
     };
     ".local/bin/window-switch" = {
-      source = ./dotfiles/niri/window-switch;
+      source = themed ./dotfiles/niri/window-switch;
       executable = true;
     };
     ".local/bin/workspace-indicator" = {
-      source = ./dotfiles/niri/workspace-indicator;
+      source = themed ./dotfiles/niri/workspace-indicator;
       executable = true;
     };
 
@@ -92,7 +92,7 @@ in
       source = ./dotfiles/niri/applications;
       recursive = true;
     };
-    ".config/waybar/config.jsonc".source = ./dotfiles/waybar/config.jsonc;
+    ".config/waybar/config.jsonc".source = themed ./dotfiles/waybar/config.jsonc;
     ".config/waybar/style.css".source = themed ./dotfiles/waybar/style.css;
     ".config/mako/config".source = themed ./dotfiles/mako/config;
     ".config/fuzzel/fuzzel.ini".source = themed ./dotfiles/fuzzel/fuzzel.ini;

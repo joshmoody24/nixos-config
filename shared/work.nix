@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  themed = config.theme.apply;
+in
 {
   # So `coder config-ssh` writes into the directory ~/.ssh/config includes,
   # rather than overwriting the nix-managed file.
@@ -40,9 +43,9 @@
   ]);
 
   home.file = lib.mkAfter {
-    ".config/ngrok/theme.yml".source = ./dotfiles/redo/ngrok-theme.yml;
+    ".config/ngrok/theme.yml".source = themed ./dotfiles/redo/ngrok-theme.yml;
     ".local/bin/rsql" = {
-      source = ./dotfiles/redo/rsql;
+      source = themed ./dotfiles/redo/rsql;
       executable = true;
     };
 
