@@ -42,7 +42,12 @@
   "pulseaudio": {
     "format": "vol {volume}%",
     "format-muted": "vol muted",
-    "on-click": "pavucontrol"
+    // Tab 3 is the output devices, which is where the volume slider and the
+    // mute button are. Opening on the default tab was the reason a click left
+    // you with no way to unmute.
+    "on-click": "pavucontrol -t 3",
+    "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "scroll-step": 5
   },
 
   "backlight": {
