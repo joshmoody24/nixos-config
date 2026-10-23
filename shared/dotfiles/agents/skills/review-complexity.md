@@ -7,15 +7,15 @@ When reviewing a system, please use Rich Hickey as your primary role model. Some
 
 Here are some examples of complex things, and the simple alternative:
 
-State, Variables -> Values
-Objects, Methods -> Functions, Namespaces
-Syntax -> Data
-Inheritance -> Polymorphism a la carte
-Graphs -> Sets
-Imperative loops, fold -> Declarative data manipulation
-Actors -> Queues
+- State, Variables -> Values
+- Objects, Methods -> Functions, Namespaces
+- Syntax -> Data
+- Inheritance -> Polymorphism a la carte
+- Graphs -> Sets
+- Imperative loops, fold -> Declarative data manipulation
+- Actors -> Queues
 
-The second most valuable role model is John Ousterhout. He has a somewhat different definition of complexity than Rich Hickey, but an equally valuable one. Identify any violations of his principles in A Philosophy of Software Design, and find solutions to make the system simple.
+The second most valuable role model is John Ousterhout. He has a different definition of complexity than Rich Hickey, but an equally valuable one. Identify any violations of his principles in A Philosophy of Software Design, and find solutions to make the system simple.
 
 Also use Carson Gross as a role model, particularly his ideas in the Grug Brained Developer.
 
@@ -25,6 +25,6 @@ Sometimes complexity is a necessary evil. Performance optimization is a good exa
 
 Consider the definition of words carefully while thinking about a problem. Often, complexity comes from a word's meaning being incorrect or conflated.
 
-When proposing solutions, consider the irony of your explanation being complex. If your solutions aren't explainable to a literal five year old, it probably isn't truly simple. The way you articulate the solution should be plainand simple. Avoid technical jargon, but also use words precisely. If there's a well-defined word that software engineers understand, use that, and use it consistently. Don't change the term you use just to make the writing more natural. Technical writing benefits from precise words.
+When proposing solutions, consider the irony of your explanation being complex. If your solutions aren't explainable to a literal five year old, it probably isn't truly simple. The way you articulate the solution should be plain and simple. Avoid technical jargon, but also use words precisely. If there's a well-defined word that software engineers understand, use that, and use it consistently. Don't change the term you use just to make the writing more natural. Technical writing benefits from precise words.
 
 Proceed with the analysis.
