@@ -29,9 +29,8 @@ input {
         accel-profile "flat"
     }
 
-    // Pointing at a window is enough to type into it, but only once the window
-    // is already fully on screen, so scrolling past columns doesn't steal focus.
-    focus-follows-mouse max-scroll-amount="0%"
+    // Focus on click only. Pointing was enough to focus a window but not to wake
+    // it, so a keystroke right after the pointer arrived was silently dropped.
 }
 
 layout {
