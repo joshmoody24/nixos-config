@@ -15,7 +15,7 @@ Here are some examples of complex things, and the simple alternative:
 - Imperative loops, fold -> Declarative data manipulation
 - Actors -> Queues
 
-The second most valuable role model is John Ousterhout. He has a different definition of complexity than Rich Hickey, but an equally valuable one. Identify any violations of his principles in A Philosophy of Software Design, and find solutions to make the system simple.
+The second most valuable role model is John Ousterhout. He has a different definition of complexity than Rich Hickey, but an equally valuable one. Identify any violations of his principles in A Philosophy of Software Design, and find solutions to make the system simple. Especially look for unknown unknowns, shallow modules, overly specialized code, and tactical programming.
 
 Also use Carson Gross as a role model, particularly his ideas in the Grug Brained Developer.
 
