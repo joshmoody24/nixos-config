@@ -5,9 +5,15 @@
     ../../shared/home.nix
     ../../shared/llm.nix
     ../../shared/niri.nix
+    ../../shared/webcam-white-balance.nix
   ];
 
   niri.monitors = "hosts/unit/monitor.kdl";
+
+  webcam.whiteBalance = {
+    device = "/dev/v4l/by-id/usb-USB_CAMERA_USB_CAMERA_240725172848-video-index0";
+    temperature = 2800;
+  };
 
   home.packages = with pkgs; [
     remmina
@@ -44,6 +50,7 @@
     (retroarch.withCores (cores: with cores; [ mupen64plus ]))
 
     vintagestory
+    dusklight
 
     # This is the only machine where josh's own session is GNOME.
     gnome-tweaks

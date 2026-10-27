@@ -7,6 +7,7 @@
   overlays = [
     (final: prev: {
       deque = final.callPackage ./pkgs/deque.nix { };
+      dusklight = final.callPackage ./pkgs/dusklight.nix { };
     })
   ];
 }
