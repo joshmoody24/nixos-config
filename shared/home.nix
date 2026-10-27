@@ -187,6 +187,7 @@ in
 
       "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
       "x-scheme-handler/slack" = [ "slack.desktop" ];
+      "x-scheme-handler/discord" = [ "discord.desktop" ];
       "x-scheme-handler/mongodb" = [ "mongodb-compass.desktop" ];
       "x-scheme-handler/mongodb+srv" = [ "mongodb-compass.desktop" ];
       "x-scheme-handler/grokbot" = [ "grok-bot.desktop" ];
