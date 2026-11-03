@@ -8,7 +8,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixgl = {
-      url = "github:nix-community/nixGL";
+      # Back to github:nix-community/nixGL once #227 (pcre removal fix) merges.
+      url = "github:nix-community/nixGL/320297bd99179701d63e3670e64e636d6165afe2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Pinned to the commit lazy-lock.json gives the nvim plugin, so the editor
