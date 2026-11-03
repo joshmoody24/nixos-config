@@ -107,8 +107,14 @@ in
   # `niri --session` never reaches it, which leaves every GTK app hanging on the
   # portal at startup. NixOS installs these units itself.
   // lib.optionalAttrs standalone {
+    # Restarting niri mid-switch logs you out and kills the switch before it
+    # records the new generation, so every later switch restarts niri again.
+    # keep-old leaves the new niri for the next login.
     ".config/systemd/user/niri.service".source =
-      "${niriWrapped}/share/systemd/user/niri.service";
+      pkgs.runCommand "niri.service" { } ''
+        sed 's/^\[Unit\]$/[Unit]\nX-SwitchMethod=keep-old/' \
+          ${niriWrapped}/share/systemd/user/niri.service > $out
+      '';
     ".config/systemd/user/niri-shutdown.target".source =
       "${niriWrapped}/share/systemd/user/niri-shutdown.target";
   };
