@@ -132,7 +132,7 @@ in
     gh
     glab
     github-copilot-cli
-    onlyoffice-desktopeditors
+    libreoffice
     fd
     zellij
     rlwrap
