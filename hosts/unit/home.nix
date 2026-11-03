@@ -30,13 +30,6 @@
     aseprite
     ardour
 
-    # for old windows games
-    lutris
-    wineWow64Packages.full
-    winetricks
-    cdrtools
-    gamescope
-
     prismlauncher
 
     fennel-ls
