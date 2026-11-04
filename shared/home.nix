@@ -147,6 +147,9 @@ in
     clojure-lsp
     cljfmt
 
+    # Fennel
+    fennel-ls
+
     typescript
     ast-grep
   ];

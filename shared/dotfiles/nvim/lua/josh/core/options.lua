@@ -38,6 +38,9 @@ opt.showmode = false
 
 opt.cmdheight = 0
 
+-- Load per-project .nvim.lua files; nvim asks before trusting each new one
+opt.exrc = true
+
 vim.filetype.add({ extension = { mdx = "mdx" } })
 vim.treesitter.language.register("markdown", "mdx")
 

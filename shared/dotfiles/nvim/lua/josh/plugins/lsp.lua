@@ -52,6 +52,10 @@ return {
 		})
 		vim.lsp.enable("gdscript")
 
+		-- Installed by home.nix rather than mason, so it needs enabling explicitly
+		vim.lsp.config("fennel_ls", { capabilities = capabilities })
+		vim.lsp.enable("fennel_ls")
+
 		mason_tool_installer.setup({
 			ensure_installed = { "prettierd", "stylua", "eslint_d" },
 		})
