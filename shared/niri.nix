@@ -3,6 +3,13 @@
 let
   # Identity outside genericLinux, so this is a no-op on NixOS.
   niriWrapped = config.lib.nixGL.wrap pkgs.niri;
+  # niri-session copies its whole environment into systemd and dbus, so a
+  # wrapped one hands nixGL's mesa LD_LIBRARY_PATH to every app in the session,
+  # which breaks GL in non-nix apps. niri.service still runs the wrapped niri.
+  unwrappedNiriSession = lib.hiPrio (pkgs.runCommand "niri-session" { } ''
+    mkdir -p $out/bin
+    ln -s ${pkgs.niri}/bin/niri-session $out/bin/niri-session
+  '');
   standalone = config.niri.standalone;
   themed = config.theme.apply;
 in
@@ -62,7 +69,7 @@ in
     wlr-randr
   ]
   # On NixOS these come from programs.niri.enable and the system's PAM.
-  ++ lib.optional standalone niriWrapped
+  ++ lib.optionals standalone [ niriWrapped unwrappedNiriSession ]
   ++ lib.optional (!standalone) pkgs.swaylock;
 
   home.file = {
