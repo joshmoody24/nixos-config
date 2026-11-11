@@ -6,6 +6,8 @@ When writing in this codebase, here are guidelines for writing code that Josh Mo
 
 Write few comments. Code should be self-documenting through good naming. Only comment to explain _why_ something non-obvious is done, never _what_ the code does. Do not narrate or restate logic that is clear from reading the code. Prefer no comment over a redundant one. Keep any comment you do write short. A helpful analogy is that comments should be in "third normal form" in a sense: any given fact should exist exactly once in the code. If a comment would need to be updated for every code change, then it's not sufficiently normalized.
 
+`/***` comments mark notes I wrote on purpose, and my editor highlights them. Never write one yourself, it will be blocked. When you edit one, treat it with care and notify me.
+
 ## Favor Immutability
 
 Mutable variables are harder to reason about. When tempted to use `let`, find a way to use `const` instead. For example:

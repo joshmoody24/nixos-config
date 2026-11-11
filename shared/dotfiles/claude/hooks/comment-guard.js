@@ -128,6 +128,42 @@ const violations = (perLine) => {
   return out;
 };
 
+const IMPORTANT_COMMENT = /\/\*\*\*[\s\S]*?(?:\*\/|$)/g;
+
+const IMPORTANT_COMMENT_RULE =
+  "/*** comments are reserved for comments that are both important and " +
+  "human-written. Editors highlight them. Do not write them, and do not try " +
+  "to work around this rule. The friction of having a human open an editor " +
+  "and write the comment manually is a feature, not a bug.";
+
+const IMPORTANT_COMMENT_CARE =
+  "This edit changes or removes a /*** comment, which a human wrote to mark " +
+  "something important. Treat it with care: keep its meaning unless you were " +
+  "asked to change it, and tell the user what you changed.";
+
+const importantComments = (text) => text.match(IMPORTANT_COMMENT) ?? [];
+
+// "added" | "changed" | null
+const importantCommentChange = (before, after) => {
+  const was = importantComments(before);
+  const now = importantComments(after);
+  if (now.length > was.length) return "added";
+  return was.some((c) => !now.includes(c)) ? "changed" : null;
+};
+
+const applyEdit = (text, { old_string = "", new_string = "", replace_all }) =>
+  replace_all
+    ? text.replaceAll(old_string, () => new_string)
+    : text.replace(old_string, () => new_string);
+
+const beforeAndAfter = (path, ti) => {
+  const fs = require("fs");
+  const before = fs.existsSync(path) ? fs.readFileSync(path, "utf8") : "";
+  if (typeof ti.content === "string") return { before, after: ti.content };
+  const edits = Array.isArray(ti.edits) ? ti.edits : [ti];
+  return { before, after: edits.reduce(applyEdit, before) };
+};
+
 const main = () => {
   const raw = require("fs").readFileSync(0, "utf8");
   const input = JSON.parse(raw);
@@ -141,10 +177,31 @@ const main = () => {
       return ti.edits.map((e) => e.new_string || "").join("\n");
     return ti.new_string ?? ti.content ?? "";
   })();
-  if (!text) process.exit(0);
 
-  const found = violations(scanComments(text));
-  if (found.length === 0) process.exit(0);
+  const { before, after } = beforeAndAfter(path, ti);
+  const importantChange = importantCommentChange(before, after);
+  if (importantChange === "added") {
+    process.stderr.write(
+      `Comment guard blocked this edit to ${path}:\n${IMPORTANT_COMMENT_RULE}\n`,
+    );
+    process.exit(2);
+  }
+
+  const found = text ? violations(scanComments(text)) : [];
+  if (found.length === 0) {
+    if (importantChange === "changed") {
+      process.stdout.write(
+        JSON.stringify({
+          systemMessage: `Heads up: this edit changes a human-written /*** comment in ${path}.`,
+          hookSpecificOutput: {
+            hookEventName: "PreToolUse",
+            additionalContext: IMPORTANT_COMMENT_CARE,
+          },
+        }),
+      );
+    }
+    process.exit(0);
+  }
 
   process.stderr.write(
     `Comment guard blocked this edit to ${path}:\n` +

@@ -45,6 +45,11 @@ in
       recursive = true;
     };
 
+    ".config/nvim/after" = {
+      source = ./dotfiles/nvim/after;
+      recursive = true;
+    };
+
     # lazy.nvim rewrites this on update, so it points at the checkout rather
     # than the store. A store copy would be read-only, and a committed lock
     # would never reach nvim.
