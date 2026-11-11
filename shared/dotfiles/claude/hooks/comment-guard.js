@@ -148,7 +148,8 @@ const importantCommentChange = (before, after) => {
   const was = importantComments(before);
   const now = importantComments(after);
   if (now.length > was.length) return "added";
-  return was.some((c) => !now.includes(c)) ? "changed" : null;
+  const count = (list, comment) => list.filter((c) => c === comment).length;
+  return was.some((c) => count(was, c) > count(now, c)) ? "changed" : null;
 };
 
 const applyEdit = (text, { old_string = "", new_string = "", replace_all }) =>
