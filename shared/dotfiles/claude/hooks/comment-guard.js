@@ -130,26 +130,36 @@ const violations = (perLine) => {
 
 const IMPORTANT_COMMENT = /\/\*\*\*[\s\S]*?(?:\*\/|$)/g;
 
-const IMPORTANT_COMMENT_RULE =
-  "/*** comments are reserved for comments that are both important and " +
-  "human-written. Editors highlight them. Do not write them, and do not try " +
-  "to work around this rule. The friction of having a human open an editor " +
-  "and write the comment manually is a feature, not a bug.";
-
-const IMPORTANT_COMMENT_CARE =
-  "This edit changes or removes a /*** comment, which a human wrote to mark " +
-  "something important. Treat it with care: keep its meaning unless you were " +
-  "asked to change it, and tell the user what you changed.";
+const IMPORTANT_COMMENT_NOTES = {
+  added: {
+    user: "added a /*** comment",
+    agent:
+      "This edit adds a /*** comment. /*** marks a comment a human wrote and " +
+      "considers important. Unless the user gave you these exact words for " +
+      "this spot, delete it now. If you think a /*** comment would really " +
+      "help here, ask the user whether they agree and what it should say, " +
+      "then use exactly their words, fixing only formatting and typos.",
+  },
+  changed: {
+    user: "changed a human-written /*** comment",
+    agent:
+      "This edit changes or removes a /*** comment, which a human wrote to " +
+      "mark something important. Treat it with care: keep its meaning unless " +
+      "you were asked to change it, and tell the user what you changed.",
+  },
+};
 
 const importantComments = (text) => text.match(IMPORTANT_COMMENT) ?? [];
 
-// "added" | "changed" | null
-const importantCommentChange = (before, after) => {
+// Which of "added" and "changed" apply to an edit's /*** comments.
+const importantCommentChanges = (before, after) => {
   const was = importantComments(before);
   const now = importantComments(after);
-  if (now.length > was.length) return "added";
   const count = (list, comment) => list.filter((c) => c === comment).length;
-  return was.some((c) => count(was, c) > count(now, c)) ? "changed" : null;
+  return [
+    ...(now.length > was.length ? ["added"] : []),
+    ...(was.some((c) => count(was, c) > count(now, c)) ? ["changed"] : []),
+  ];
 };
 
 const applyEdit = (text, { old_string = "", new_string = "", replace_all }) =>
@@ -180,23 +190,21 @@ const main = () => {
   })();
 
   const { before, after } = beforeAndAfter(path, ti);
-  const importantChange = importantCommentChange(before, after);
-  if (importantChange === "added") {
-    process.stderr.write(
-      `Comment guard blocked this edit to ${path}:\n${IMPORTANT_COMMENT_RULE}\n`,
-    );
-    process.exit(2);
-  }
+  const notes = importantCommentChanges(before, after).map(
+    (kind) => IMPORTANT_COMMENT_NOTES[kind],
+  );
 
   const found = text ? violations(scanComments(text)) : [];
   if (found.length === 0) {
-    if (importantChange === "changed") {
+    if (notes.length > 0) {
       process.stdout.write(
         JSON.stringify({
-          systemMessage: `Heads up: this edit changes a human-written /*** comment in ${path}.`,
+          systemMessage: notes
+            .map((n) => `Heads up: an agent ${n.user} in ${path}.`)
+            .join("\n"),
           hookSpecificOutput: {
             hookEventName: "PreToolUse",
-            additionalContext: IMPORTANT_COMMENT_CARE,
+            additionalContext: notes.map((n) => n.agent).join("\n\n"),
           },
         }),
       );

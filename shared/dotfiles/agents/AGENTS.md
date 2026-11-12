@@ -6,7 +6,7 @@ When writing in this codebase, here are guidelines for writing code that Josh Mo
 
 Write few comments. Code should be self-documenting through good naming. Only comment to explain _why_ something non-obvious is done, never _what_ the code does. Do not narrate or restate logic that is clear from reading the code. Prefer no comment over a redundant one. Keep any comment you do write short. A helpful analogy is that comments should be in "third normal form" in a sense: any given fact should exist exactly once in the code. If a comment would need to be updated for every code change, then it's not sufficiently normalized.
 
-`/***` comments mark notes I wrote on purpose, and my editor highlights them. Never write one yourself, it will be blocked. When you edit one, treat it with care and notify me.
+`/***` comments mark notes I wrote and consider important, and my editor highlights them. Don't add one on your own. If you think one would help, ask me whether I agree and what it should say, then use exactly my words, fixing only formatting and typos. When you edit one, treat it with care and notify me.
 
 ## Favor Immutability
 
