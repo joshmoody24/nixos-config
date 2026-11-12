@@ -14,6 +14,29 @@ let
       { source = themed file; })
     (lib.filter (lib.hasSuffix ".md")
       (lib.filesystem.listFilesRecursive ./dotfiles/agents/skills)));
+
+  treesitterLanguages = [
+    "json" "javascript" "typescript" "tsx" "yaml" "html" "css"
+    "markdown" "markdown_inline" "bash" "dockerfile" "lua" "vim"
+    "gitignore" "sql" "astro" "clojure" "glsl" "fennel" "scheme"
+    "elixir" "heex" "python" "gdscript" "vimdoc" "query" "jsdoc" "c"
+  ];
+  # Highlight queries that the languages above inherit but that have no parser of their own.
+  treesitterQueryOnly = [ "ecma" "jsx" "html_tags" ];
+
+  treesitterParsers = pkgs.symlinkJoin {
+    name = "nvim-treesitter-parsers";
+    paths = map (lang: pkgs.vimPlugins.nvim-treesitter-parsers.${lang}) treesitterLanguages;
+  };
+
+  # lazy.nvim resets the packpath, which hides plugins home-manager installs, but it keeps the
+  # config dir. Parsers and their queries go there, from one nixpkgs so their versions match.
+  treesitterFiles = {
+    ".config/nvim/parser".source = "${treesitterParsers}/parser";
+  } // lib.listToAttrs (map
+    (lang: lib.nameValuePair ".config/nvim/queries/${lang}"
+      { source = "${pkgs.vimPlugins.nvim-treesitter}/runtime/queries/${lang}"; })
+    (treesitterLanguages ++ treesitterQueryOnly));
 in
 {
   imports = [ ./theme.nix ];
@@ -23,7 +46,7 @@ in
 
   news.display = "silent";
 
-  home.file = claudeSkills // {
+  home.file = claudeSkills // treesitterFiles // {
     # Lets `home-manager switch` (no args) find the flake and pick josh@$(hostname).
     ".config/home-manager/flake.nix".text = let
       repoPath = "${config.home.homeDirectory}/code/nixos-config";
@@ -49,10 +72,6 @@ in
       source = ./dotfiles/nvim/after;
       recursive = true;
     };
-
-    # The jsdoc grammar package ships only the parser; its highlights live in nvim-treesitter.
-    ".config/nvim/queries/jsdoc".source =
-      "${pkgs.vimPlugins.nvim-treesitter}/runtime/queries/jsdoc";
 
     # lazy.nvim rewrites this on update, so it points at the checkout rather
     # than the store. A store copy would be read-only, and a committed lock
@@ -106,12 +125,6 @@ in
     withRuby = false;
     withPython3 = false;
     initLua = builtins.readFile ./dotfiles/nvim/init.lua;
-    plugins = with pkgs.vimPlugins.nvim-treesitter-parsers; [
-      json javascript typescript tsx yaml html css
-      markdown markdown_inline bash dockerfile lua vim
-      gitignore sql astro clojure glsl fennel scheme
-      elixir heex python gdscript vimdoc query jsdoc
-    ];
   };
 
   home.packages = with pkgs; [
