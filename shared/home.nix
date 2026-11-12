@@ -50,6 +50,10 @@ in
       recursive = true;
     };
 
+    # The jsdoc grammar package ships only the parser; its highlights live in nvim-treesitter.
+    ".config/nvim/queries/jsdoc".source =
+      "${pkgs.vimPlugins.nvim-treesitter}/runtime/queries/jsdoc";
+
     # lazy.nvim rewrites this on update, so it points at the checkout rather
     # than the store. A store copy would be read-only, and a committed lock
     # would never reach nvim.
@@ -106,7 +110,7 @@ in
       json javascript typescript tsx yaml html css
       markdown markdown_inline bash dockerfile lua vim
       gitignore sql astro clojure glsl fennel scheme
-      elixir heex python gdscript vimdoc query
+      elixir heex python gdscript vimdoc query jsdoc
     ];
   };
 

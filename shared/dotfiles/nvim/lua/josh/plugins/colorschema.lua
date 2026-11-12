@@ -5,7 +5,7 @@ return {
 		require("tokyonight").setup({
 			style = "night", -- storm, moon, night, day
 			on_highlights = function(hl, c)
-				hl["@comment.important"] = { fg = c.yellow, bold = true, italic = false }
+				hl["@comment.important"] = { fg = c.bg, bg = c.warning, bold = true, italic = false }
 			end,
 		})
 		vim.cmd("colorscheme tokyonight")
