@@ -35,7 +35,6 @@
     fennel-ls
     lua54Packages.fennel
     lua54Packages.luarocks
-    fnlfmt
 
     discord
 

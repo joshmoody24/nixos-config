@@ -171,6 +171,7 @@ in
 
     # Fennel
     fennel-ls
+    fnlfmt
 
     typescript
     ast-grep
